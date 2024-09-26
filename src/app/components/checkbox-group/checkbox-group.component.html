@@ -1,0 +1,12 @@
+<div class="max-h-[225px] overflow-y-scroll w-full border-2 border-[#e4e4e4] rounded-md p-2.5 mb-2.5 mt-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    @for(item of getFilteredItems(); track item){
+        <div class="flex items-center">
+            <input name="industry_type" [formControl]="control" id="industry_type_{{item.value}}" type="checkbox" value="{{item.value}}" class="form-checkbox h-5 w-5 text-blue-600 cursor-pointer">
+            <label for="industry_type_{{item.value}}" class="text-[14px] leading-[1.42857143] font-sans text-black box-border ml-2">
+              {{ item.label }}
+            </label>
+          </div>
+    }
+    </div>
+  </div>
