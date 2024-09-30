@@ -3,7 +3,8 @@
 <!-- Body -->
 <div class="bg-white p-10 border border-gray-300 rounded mb-5 text-[#000]">
   <!-- (ngSubmit)="onEmployeeFormChange()" -->
-<form action="" [formGroup]="employeeForm" >
+  <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+
 <!-- Title -->
 <h3 class="text-center mt-0 mb-10 text-3xl font-bold text-gray-700 bg-gradient-to-r from-blue-400 to-green-500 bg-clip-text text-transparent transition duration-500 ease-in-out hover:from-purple-400 hover:to-green-300 hover:scale-110">
   Employer Registration Form
