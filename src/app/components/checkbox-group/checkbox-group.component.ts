@@ -13,6 +13,7 @@ export class CheckboxGroupComponent {
   @Input() selectedCategory: string = '';
   @Input() searchQuery: string = '';
   @Input() control: FormControl<string> = new FormControl()
+  
   // @Input() control!: FormControl;
 
   getFilteredItems() {

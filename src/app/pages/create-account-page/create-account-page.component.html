@@ -529,7 +529,7 @@
   <div class="flex flex-wrap -mx-4">
     <div class="w-full px-4">
         <div class="flex items-center">
-            <input name="DisabilitiesFacility" id="chkDisabilitiesFacility" value="1" type="checkbox" class="form-checkbox text-blue-600" [formControl]="facilitiesForDisabilitiesControl">
+            <input name="DisabilitiesFacility" id="chkDisabilitiesFacility" value="1" type="checkbox" h-5 w-5 class="form-checkbox text-blue-600" [formControl]="facilitiesForDisabilitiesControl">
             <label for="chkDisabilitiesFacility" class="ml-2 text-normal text-gray-800 font-bold">
                 Facilities for Person with Disabilities
             </label>
@@ -582,7 +582,7 @@
     <app-checkbox-group
     [items]="disabilities"
     [control]="formControlSignals()['disabilities']"
-    [selectedCategory]="selectedCategory">
+    >
   </app-checkbox-group>
       </div>
   }
