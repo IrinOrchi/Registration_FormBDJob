@@ -123,10 +123,7 @@ export class CreateAccountPageComponent {
 
   formValue: any;
   
-  onContinue() {
-    // Check if the form is valid before proceeding
-    this.formValue = this.employeeForm.value;
-  }
+  
   
   
   selectedCategory: string = '';
@@ -212,6 +209,30 @@ export class CreateAccountPageComponent {
   }
   
   
-  
+  onContinue() {
 
-}
+    if (this.employeeForm.valid) {
+
+      this.isPolicyAcceptedControl.setValue(true);
+      this.formValue = this.employeeForm.value;
+      console.log("Form submitted successfully!", this.formValue);
+
+    } else {
+
+      this.employeeForm.markAllAsTouched();
+
+      Object.keys(this.employeeForm.controls).forEach(field => {
+        const control = this.employeeForm.get(field);
+        if (control && control.invalid) {
+          const errors = control.errors;
+          console.log(`Field ${field} is invalid:`, errors);
+        }
+      });
+      
+      console.log("Form is invalid, please fill in all required fields.");
+    }
+  }
+  
+} 
+
+
