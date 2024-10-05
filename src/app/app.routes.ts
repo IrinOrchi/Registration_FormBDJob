@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
 import { CreateAccountPageComponent } from './pages/create-account-page/create-account-page.component';
-import { EmpFormComponent } from './pages/emp-form/emp-form.component';
+import {NidVerificationComponent} from './pages/nid-verification/nid-verification.component';
 
 export const routes: Routes = [
     {
         path:"",
-        redirectTo: 'register',
+        redirectTo: 'register/nidVerify',
         pathMatch: 'full'
     },
     {
@@ -14,6 +14,6 @@ export const routes: Routes = [
     },
     {
         path:'register/nidVerify',
-        component: EmpFormComponent
+        component: NidVerificationComponent
     }
 ];
