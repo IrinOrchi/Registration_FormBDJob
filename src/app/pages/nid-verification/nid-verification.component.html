@@ -1,7 +1,7 @@
 <app-header></app-header>
 
 <div class="job-board emp-reg-form">
-  <div class="border border-gray-200 rounded-lg w-full p-6 mx-auto my-10 bg-white">
+  <div class="border border-gray-200  p-6 mx-16 my-4 bg-white">
     <div class="flex flex-col bg-center justify-center">
       <div class="w-full">
         <!-- Form Title -->
@@ -12,7 +12,7 @@
         <!-- Form -->
         <form [formGroup]="nidForm" class="space-y-6">
           <!-- National ID Number and Input Field (Full Width) -->
-          <div class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0">
+          <div class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 ">
             <label for="nid" class="text-sm font-bold text-gray-700 w-full md:w-1/4">
               National ID Number <span class="text-red-500">*</span>
             </label>
@@ -23,12 +23,19 @@
               placeholder="Enter your NID number"
               class="w-full md:w-3/4 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
-            <div *ngIf="nid?.invalid && (nid?.dirty || nid?.touched)" class="text-red-500 text-sm w-full">
-              <div *ngIf="nid?.errors?.['required']">NID Number is required.</div>
-              <div *ngIf="nid?.errors?.['minlength']">NID must be at least 10 digits long.</div>
-              <div *ngIf="nid?.errors?.['maxlength']">NID cannot exceed 17 digits.</div>
-            </div>
           </div>
+
+          <div class="text-red-600 text-sm">
+            @if (nidForm.controls['nid'].touched &&  nidForm.controls['nid'].errors?.['required']) {
+            <span>NID Number is required.</span>
+            }
+            @else if (nidForm.controls['nid'].errors?.['minlength']) {
+              <span>NID must be at least 10 digits long.</span>
+            }
+            @else if (nidForm.controls['nid'].errors?.['maxlength']) {
+              <span>NID cannot exceed 17 digits.</span>
+            }
+        </div>
 
           <!-- Date of Birth and Input Field (Full Width) -->
           <div class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0">
@@ -41,10 +48,13 @@
               id="dob"
               class="w-full md:w-3/4 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
-            <div *ngIf="dob?.invalid && (dob?.dirty || dob?.touched)" class="text-red-500 text-sm w-full">
-              <div *ngIf="dob?.errors?.['required']">Date of Birth is required.</div>
-            </div>
           </div>
+
+          <div class="text-red-600 text-sm">
+            @if (nidForm.controls['dob'].touched &&  nidForm.controls['dob'].errors?.['required']) {
+            <span>DOB is required.</span>
+            }
+        </div>
 
           <!-- Capture Section (Shifted Left) -->
           <div class="flex flex-col md:flex-row items-start">

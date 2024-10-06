@@ -6,7 +6,6 @@ import {
   ViewChild,
   Inject,
   OnDestroy,
-  inject,
   OnInit,
 } from '@angular/core';
 import {
@@ -18,7 +17,7 @@ import {
 import { CommonModule, JsonPipe } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { HeaderComponent } from "../../components/header/header.component";
+import { HeaderComponent } from '../../components/header/header.component';
 
 @Component({
   selector: 'app-nid-verification',
@@ -163,20 +162,7 @@ export class NidVerificationComponent  implements OnDestroy, OnInit{
   onSubmit() {
     if (this.nidForm.valid) {
       let imgstr = this.capturedPhoto.split(',')[1];
-      // const reqBody: NidRequestBody = {
-      //   companyId: 131252,
-      //   dateofBirth: this.dob?.value,
-      //   nidNumber: this.nid?.value,
-      //   imageBase64: imgstr,
-      // };
-      // this.nidService.verifyNid(reqBody).subscribe({
-      //   next: () => {
-      //     console.log('success');
-      //   },
-      //   error: (err) => {
-      //     console.log(err);
-      //   },
-      // });
+     
     }
   }
   

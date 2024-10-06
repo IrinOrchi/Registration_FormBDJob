@@ -1,43 +1,88 @@
-<header class="flex items-center justify-between px-8 py-4 bg-white border-b border-gray-400 ">
-    <!-- Left Side - Navigation Links -->
-    <nav class="flex space-x-8 text-gray-700 font-medium">
-      <a href="#" class="hover:text-blue-600">Job Dashboard</a>
-      <a href="#" class="hover:text-blue-600">CV Bank</a>
-      <a href="#" class="hover:text-blue-600">Analytics</a>
-    </nav>
-  
-    <!-- Right Side - Credit and User Info -->
-    <div class="flex items-center space-x-6">
-      <!-- Credit Display -->
-      <div class="flex items-center space-x-1 text-gray-700">
-        <!-- Credit Icon (Updated with a circle icon similar to the image) -->
-        <i class="fa fa-coins"></i>
-        <span class="font-medium">Credit: 0</span>
-        <!-- Dropdown Icon for Credit (if needed) -->
-        <i class="fa fa-chevron-down text-gray-500"></i>
-      </div>
-  
-      <!-- Vertical Divider -->
-      <div class="border-l h-8 border-gray-300"></div>
-  
-      <!-- User Dropdown Section -->
-      <div class="relative flex items-center space-x-2">
-        <!-- Avatar (Circle Icon similar to the image) -->
-        <div class="w-8 h-8 rounded-full border border-blue-500 flex items-center justify-center">
-          <i class="fa fa-user-circle text-blue-500"></i>
-        </div>
-        <!-- Username and Dropdown Icon -->
-        <button class="flex items-center space-x-1 text-gray-700 hover:text-blue-600">
-          <span class="font-medium">abcd123e</span>
-          <i class="fa fa-chevron-down"></i>
-        </button>
-  
-        <!-- Dropdown Menu (Hidden by default) -->
-        <div class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 shadow-md hidden">
-          <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
-          <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</a>
+<header class="flex items-center justify-between px-8 py-4 bg-white border-b border-gray-400">
+  <!-- Left Side - Navigation Links -->
+  <nav class="flex space-x-8 text-gray-700 font-medium">
+    <a href="https://recruiter.bdjobs.com/dashboard" class="hover:text-blue-600">Job Dashboard</a>
+    <a href="https://corporate3.bdjobs.com/cv_search.asp?from=" class="hover:text-blue-600">CV Bank</a>
+    <a href="https://corporate3.bdjobs.com/Analytics/default.asp?from=" class="hover:text-blue-600">Analytics</a>
+  </nav>
+
+  <!-- Right Side - Credit System Button with Vertical Separator and User Dropdown -->
+  <div class="flex items-center space-x-4">
+    <!-- Credit System Button -->
+    <div class="relative inline-block text-left">
+      <button
+        class="inline-flex justify-normal w-full p-2 border border-gray-300 shadow-sm bg-white text-sm font-semibold text-gray-700 hover:bg-gray-50 focus:outline-none"
+        id="dropdownButton"
+        (click)="toggleDropdown()"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <img
+          src="https://recruiter.bdjobs.com/assets/images/credit-system.svg"
+          alt=""
+          class="w-10 h-5 mr-1 "
+        />
+        Credit:<span id="showCreditAmount">0</span>
+        <span class="2">▾</span>
+      </button>
+
+      <div
+        *ngIf="isDropdownOpen"
+        class="absolute z-10 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+        role="menu"
+        aria-orientation="vertical"
+        aria-labelledby="dropdownButton"
+      >
+        <div class="p-4 text-center">
+          <div *ngIf="!hasCredit">
+            <img src="https://corporate3.bdjobs.com/images/credit-empty.svg" alt="No credit" class="mx-auto">
+            <p class="mt-2">You have no credit</p>
+          </div>
+          <button
+            class="mt-4 w-full px-4 py-2 text-white bg-blue-600 rounded-md hover:bg-blue-700"
+            (click)="openModal('crdtSystem')"
+          >
+            Add Credit
+          </button>
         </div>
       </div>
     </div>
-  </header>
-  
+
+    <!-- Vertical Separator -->
+    <div class="mid_border_line hidden md:block h-6 border-l-2 border-blue-500"></div>
+
+    <!-- User Dropdown -->
+    <div class="relative inline-block text-left">
+      <div id="dropdownMenu1" (click)="toggleUserDropdown()" aria-haspopup="true" aria-expanded="false">
+        <div class="flex items-center cursor-pointer">
+          <!-- User/Company Logo Section -->
+          <div class="header_com_logo">
+            <div class="text-[14px] leading-[1.42857143] text-[#212121] font-sans cursor-pointer box-border mr-2 h-[35px] w-[35px] rounded-full border border-[#0e73a9]">
+              <!-- Content here -->
+            </div>
+            
+            
+          </div>
+          <span class="ml-2 acc-name">IrinOrchi</span>
+          <span class="caret ml-1 bar_text_top">▾</span>
+        </div>
+      </div>
+
+      <!-- User Dropdown Menu -->
+      <div *ngIf="isUserDropdownOpen" class="absolute right-0 z-10 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+        <ul class="py-2">
+          <li><a href="https://Corporate3.bdjobs.com/Billings.asp" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"><span class="icon-taka"></span> Billings</a></li>
+          <li><a href="https://Corporate3.bdjobs.com/ServiceHistory.asp" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Subscribed Services</a></li>
+          <li><a href="https://Corporate3.bdjobs.com/corporate_editaccount.asp" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edit Account</a></li>
+          <li><a href="https://Corporate3.bdjobs.com/MessageToApplicant/Message_Default.asp" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Communication</a></li>
+          <li><a href="https://Corporate3.bdjobs.com/support.asp" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Support</a></li>
+          <li><a href="https://Corporate3.bdjobs.com/CompanyUserManagementSetting.asp" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a></li>
+          <li><a href="https://Corporate3.bdjobs.com/loginInfo.asp" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Change Password</a></li>
+          <li><a href="https://Corporate3.bdjobs.com/CompanyUserManagement.asp" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">User Management</a></li>
+          <hr class="my-2">
+          <li><a href="https://Corporate3.bdjobs.com/logout.asp" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign Out</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</header>
