@@ -1,10 +1,12 @@
-import { Component, computed } from '@angular/core';
+import { Component, computed, OnInit } from '@angular/core';
 import { InputFieldComponent } from '../../components/input-field/input-field.component';
 import { SelectFieldComponent } from '../../components/select-field/select-field.component';
 import { FormGroup, FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 import { TextAreaComponent } from '../../components/text-area/text-area.component';
 import { CheckboxGroupComponent } from '../../components/checkbox-group/checkbox-group.component';
 import { JsonPipe, NgClass } from '@angular/common';
+import { CheckNamesService } from '../../Services/check-names.service';
+import { CompanyNameCheckRequest } from '../../Models/company';
 
 @Component({
   selector: 'app-create-account-page',
@@ -23,7 +25,9 @@ import { JsonPipe, NgClass } from '@angular/common';
   templateUrl: './create-account-page.component.html',
   styleUrls: ['./create-account-page.component.scss']
 })
-export class CreateAccountPageComponent {
+export class CreateAccountPageComponent  implements OnInit{
+
+
   isModalOpen = false;
 
   openModal() {
@@ -125,7 +129,6 @@ export class CreateAccountPageComponent {
   
   
   
-  
   selectedCategory: string = '';
   searchQuery: string = '';
 
@@ -197,7 +200,7 @@ export class CreateAccountPageComponent {
   }
   searchControl = new FormControl('');
 
-  constructor() {
+  constructor(private checkNamesService: CheckNamesService) {
     this.searchControl.valueChanges.subscribe(query => {
       this.onSearchQueryChange(query || ''); // Default null to an empty string
     });
@@ -207,10 +210,27 @@ export class CreateAccountPageComponent {
     console.log('Search query changed:', query);
     this.searchQuery = query;
   }
+
+  checkUniqueCompanyName(): boolean {
+
+    let checkCompanyName = '';
+
+
+    this.checkNamesService.checkUniqueCompanyName(checkCompanyName).subscribe({
+      next: (response) => {
+        console.log('Response from server:', response);
+        // Process the response here
+      },
+      error: (error) => {
+        console.error('Error occurred while checking company name:', error);
+      }
+    })
+
+    return false;
+  }
   
   
   onContinue() {
-
     if (this.employeeForm.valid) {
 
       this.isPolicyAcceptedControl.setValue(true);
