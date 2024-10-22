@@ -77,7 +77,52 @@
 
   <!-- Country Selection -->
    
+ <!-- Company Address Heading -->
+ <label for="company-address" class="form-label">Company Address<span style="color: red;">*</span></label>
 
+ <!-- Country Dropdown -->
+ <div class="form-group">
+   <select formControlName="country" class="form-control" (change)="onCountryChange()">
+     <option value="" disabled selected>Select Country</option>
+     <option *ngFor="let country of countries" [value]="country.OptionValue">{{ country.OptionText }}</option>
+   </select>
+ </div>
+
+ <!-- Conditional Fields for Bangladesh (District & Thana) -->
+ <div *ngIf="!outsideBd">
+   <!-- District Dropdown -->
+   <div class="form-group">
+     <select formControlName="district" class="form-control" [disabled]="!districts.length">
+       <option value="" disabled selected>Select District</option>
+       <option *ngFor="let district of districts" [value]="district.OptionValue">{{ district.OptionText }}</option>
+     </select>
+   </div>
+
+   <!-- Thana Dropdown -->
+   <div class="form-group">
+     <select formControlName="thana" class="form-control" [disabled]="!thanas.length">
+       <option value="" disabled selected>Select Thana</option>
+       <option *ngFor="let thana of thanas" [value]="thana.OptionValue">{{ thana.OptionText }}</option>
+     </select>
+   </div>
+ </div>
+
+ <!-- City Name Field for Countries Outside Bangladesh -->
+ <div *ngIf="outsideBd" class="form-group">
+   <input formControlName="cityName" type="text" class="form-control" placeholder="Write City Name">
+ </div>
+
+ <!-- Company Address Text Area (English) -->
+ <div class="form-group">
+   <textarea formControlName="companyAddress" class="form-control" rows="3" placeholder="Write Company Address"></textarea>
+ </div>
+
+ <!-- Company Address Text Area (Bangla) -->
+ <div class="form-group">
+   <textarea formControlName="companyAddressBangla" class="form-control" rows="3" placeholder="কোম্পানির ঠিকানা বাংলায় লিখুন"></textarea>
+ </div>
+</form>
+</div>
 
 
 <!-- <div class="max-h-[225px] overflow-y-scroll w-full border-2 border-[#e4e4e4] rounded-md p-2.5 mb-2.5 mt-6">

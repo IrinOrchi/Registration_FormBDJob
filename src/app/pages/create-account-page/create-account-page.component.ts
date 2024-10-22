@@ -1,16 +1,14 @@
-
 import { Component, computed, OnInit } from '@angular/core';
-import { FormGroup, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CheckNamesService } from '../../Services/check-names.service';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import { InputFieldComponent } from '../../components/input-field/input-field.component';
 import { SelectFieldComponent } from '../../components/select-field/select-field.component';
 import { TextAreaComponent } from '../../components/text-area/text-area.component';
 import { CheckboxGroupComponent } from '../../components/checkbox-group/checkbox-group.component';
-import { JsonPipe } from '@angular/common';
+import { JsonPipe, CommonModule } from '@angular/common';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { IndustryTypeResponseDTO, IndustryType } from '../../Models/company';
-import { CommonModule } from '@angular/common';
+import { IndustryTypeResponseDTO, IndustryType, LocationResponseDTO } from '../../Models/company';
 
 @Component({
   selector: 'app-create-account-page',
@@ -21,34 +19,47 @@ import { CommonModule } from '@angular/common';
     TextAreaComponent,
     CheckboxGroupComponent,
     ReactiveFormsModule,
-    JsonPipe, CommonModule,
+    JsonPipe, CommonModule
   ],
   templateUrl: './create-account-page.component.html',
   styleUrls: ['./create-account-page.component.scss']
 })
 export class CreateAccountPageComponent implements OnInit {
   industries: BehaviorSubject<IndustryType[]> = new BehaviorSubject<IndustryType[]>([]);
-  
-  // Form Group with Reactive Form
-    employeeForm: FormGroup = new FormGroup({
+  industryTypes: IndustryTypeResponseDTO[] = [];
+  filteredIndustryTypes: IndustryTypeResponseDTO[] = [];
+
+  countries: LocationResponseDTO[] = [];
+  districts: LocationResponseDTO[] = [];
+  thanas: LocationResponseDTO[] = [];
+  outsideBd: boolean = false;  // Whether the country is outside Bangladesh
+
+  // Form Group with Reactive Form for both use cases
+  employeeForm: FormGroup = new FormGroup({
     username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
     companyName: new FormControl('', [Validators.required]),
-    industryType: new FormControl('') 
+    industryType: new FormControl(''),
+    country: new FormControl('118'),  // Default country to Bangladesh ('118')
+    district: new FormControl(''),
+    thana: new FormControl(''),
+    cityName: new FormControl(''),
+    companyAddress: new FormControl(''),
+    companyAddressBangla: new FormControl('')
   });
 
+  // Signals for form control values
   usernameControl = computed(() => this.employeeForm.get('username') as FormControl<string>);
   companyNameControl = computed(() => this.employeeForm.get('companyName') as FormControl<string>);
   industryTypeControl = computed(() => this.employeeForm.get('industryType') as FormControl<string>);
+  countryControl = computed(() => this.employeeForm.get('country') as FormControl<string>);
+  districtControl = computed(() => this.employeeForm.get('district') as FormControl<string>);
+  thanaControl = computed(() => this.employeeForm.get('thana') as FormControl<string>);
 
   usernameExistsMessage: string = '';
   companyNameExistsMessage: string = '';
 
-  // Initialize as empty arrays to ensure they are iterable
-  industryTypes: IndustryTypeResponseDTO[] = [];
-  filteredIndustryTypes: IndustryTypeResponseDTO[] = [];
-  industriesData: IndustryType[] = [];
+  searchControl: FormControl = new FormControl(''); // Control for search input
 
-  searchControl: FormControl = new FormControl('');  // Form control for search input
   private usernameSubject: Subject<string> = new Subject();
   private companyNameSubject: Subject<string> = new Subject();
 
@@ -60,10 +71,27 @@ export class CreateAccountPageComponent implements OnInit {
     this.fetchIndustries();
     this.setupSearch();
     this.fetchIndustryTypes();
+    this.fetchCountries();
 
     // Bind the dropdown selection to filter the industry values
     this.employeeForm.get('industryType')?.valueChanges.subscribe(selectedIndustryId => {
       this.onIndustryTypeChange(selectedIndustryId);
+    });
+
+    this.employeeForm.get('country')?.valueChanges.subscribe((value: string) => {
+            if (value === '118') {
+              this.outsideBd = false;  
+              this.fetchDistricts();    
+            } else {
+              this.outsideBd = true;    
+            }
+          });
+
+    // Watch for district selection to fetch thanas
+    this.employeeForm.get('district')?.valueChanges.subscribe(districtId => {
+      if (districtId) {
+        this.fetchThanas(districtId);
+      }
     });
   }
 
@@ -89,6 +117,8 @@ export class CreateAccountPageComponent implements OnInit {
       });
   }
 
+
+  // Check for unique username (private)
   private checkUniqueUsername(username: string): void {
     this.checkNamesService.checkUniqueUserName(username).subscribe({
       next: (response) => {
@@ -101,6 +131,7 @@ export class CreateAccountPageComponent implements OnInit {
     });
   }
 
+  // Check for unique company name (private)
   private checkUniqueCompanyName(companyName: string): void {
     this.checkNamesService.checkUniqueCompanyName(companyName).subscribe({
       next: (response) => {
@@ -128,7 +159,7 @@ export class CreateAccountPageComponent implements OnInit {
       })
     ).subscribe({
       next: (industries: IndustryType[]) => {
-        this.industries.next(industries); // Push all industries to the dropdown initially
+        this.industries.next(industries); 
       },
       error: (err) => console.error('Error fetching industry data', err)
     });
@@ -151,31 +182,115 @@ export class CreateAccountPageComponent implements OnInit {
             
           } else {
             console.error('No industry types found in the response.');
-            this.industryTypes = []; // Clear industryTypes if no valid data found
+            this.industryTypes = []; 
           }
         } else {
           console.error('Unexpected error response:', response.error);
-          this.industryTypes = []; // Clear industryTypes on error
+          this.industryTypes = []; 
         }
       },
       error: (error: any) => {
         console.error('Error fetching industry types:', error);
-        this.industryTypes = []; // Clear industryTypes on fetch error
+        this.industryTypes = []; 
       }
     });
   }
-
   // Trigger filtering of industries based on dropdown selection
   onIndustryTypeChange(selectedIndustryId: string | number): void {
-    const parsedIndustryId = parseInt(selectedIndustryId as string, 10); // Ensure it is a number
+    const parsedIndustryId = parseInt(selectedIndustryId as string, 10); 
     if (!isNaN(parsedIndustryId)) {
-      this.fetchIndustryTypes(parsedIndustryId); // Fetch based on selected IndustryId
+      this.fetchIndustryTypes(parsedIndustryId); 
     } else {
-      // If no valid IndustryId, show all industry types
       this.filteredIndustryTypes = [...this.industryTypes];
     }
   }
 
+  // Fetch countries (Outside Bangladesh included)
+  private fetchCountries(): void {
+    const requestPayload = { OutsideBd: '1', DistrictId: '' };
+
+    this.checkNamesService.getLocations(requestPayload).subscribe({
+      next: (response: any) => {
+        console.log("Full response:", response);
+
+        if (response?.error === '0') {  
+          const countryData = response.bdDistrict || [];
+
+          if (Array.isArray(countryData) && countryData.length > 0) {
+            this.countries = countryData.map((item: any) => ({
+              OptionValue: item.optionValue,  
+              OptionText: item.optionText,
+            }));
+            this.employeeForm.get('country')?.setValue('118');
+          } else {
+            console.error('No countries found in the response.');
+            this.countries = [];  
+          }
+        } else {
+          console.error('Unexpected error response:', response?.error);
+          this.countries = []; 
+        }
+      },
+      error: (error: any) => {
+        console.error('Error fetching countries:', error);
+        this.countries = []; 
+      }
+    });
+  }
+
+// Fetch districts within Bangladesh
+  private fetchDistricts(): void {
+    const requestPayload = { OutsideBd: '0', DistrictId: '' };
+
+    this.checkNamesService.getLocations(requestPayload).subscribe({
+      next: (response: any) => {
+        if (response?.error === "0") {
+          const districtData = response.bdDistrict || [];
+          this.districts = districtData.map((item: any) => ({
+            OptionValue: item.optionValue,
+            OptionText: item.optionText,
+          }));
+          this.thanas = []; 
+        } else {
+          this.districts = [];
+        }
+      },
+      error: () => {
+        this.districts = [];
+      }
+    });
+  }
+
+// Fetch thanas for the selected district
+  private fetchThanas(districtId: string): void {
+    const requestPayload = { OutsideBd: '0', DistrictId: districtId };
+
+    this.checkNamesService.getLocations(requestPayload).subscribe({
+      next: (response: any) => {
+        if (response?.error === "0") {
+          const thanaData = response.bdDistrict || [];
+          this.thanas = thanaData.map((item: any) => ({
+            OptionValue: item.optionValue,
+            OptionText: item.optionText,
+          }));
+        } else {
+          this.thanas = [];
+        }
+      },
+      error: () => {
+        this.thanas = [];
+      }
+    });
+  }
+  onCountryChange() {
+    const selectedCountry = this.employeeForm.get('country')?.value;
+    this.outsideBd = selectedCountry !== '118';
+    if (this.outsideBd) {
+      this.employeeForm.get('district')?.setValue('');
+      this.employeeForm.get('thana')?.setValue('');
+    }
+  }
+ 
   setupSearch(): void {
     this.searchControl.valueChanges.pipe(debounceTime(300), distinctUntilChanged())
       .subscribe((query: string) => {
@@ -189,7 +304,7 @@ export class CreateAccountPageComponent implements OnInit {
 
   filterIndustryTypes(query: string): void {
     if (!query) {
-      this.filteredIndustryTypes = [...this.industryTypes]; // Show all if no query
+      this.filteredIndustryTypes = [...this.industryTypes]; 
     } else {
       const lowerQuery = query.toLowerCase();
       this.filteredIndustryTypes = this.industryTypes.filter(type =>
@@ -199,7 +314,7 @@ export class CreateAccountPageComponent implements OnInit {
   }
 
   onCategoryChange(event: any): void {
-    this.onIndustryTypeChange(event.target.value); // Trigger filtering on category change
+    this.onIndustryTypeChange(event.target.value); 
   }
 
   onContinue(): void {
@@ -211,146 +326,3 @@ export class CreateAccountPageComponent implements OnInit {
     }
   }
 }
-
-
-// import { FormBuilder, FormGroup } from '@angular/forms';
-// import { Component, OnInit } from '@angular/core';
-// import { LocationResponseDTO } from '../../Models/company';
-// import { CheckNamesService } from '../../Services/check-names.service';
-// import { ReactiveFormsModule } from '@angular/forms';
-// import { CommonModule } from '@angular/common';
-
-// @Component({
-//   selector: 'app-create-account-page',
-//   standalone: true,
-//   imports: [ReactiveFormsModule, CommonModule],
-//   templateUrl: './create-account-page.component.html',
-//   styleUrls: ['./create-account-page.component.scss']
-// })
-// export class CreateAccountPageComponent implements OnInit {
-
-//   accountForm!: FormGroup; 
-//   countries: LocationResponseDTO[] = [];
-//   districts: LocationResponseDTO[] = [];
-//   thanas: LocationResponseDTO[] = [];
-//   outsideBd: boolean = false;  
-
-//   constructor(private fb: FormBuilder, private checkNamesService: CheckNamesService) {
-   
-//     this.accountForm = this.fb.group({
-//       country: ['118'],  
-//       district: [''],
-//       thana: [''],
-//       cityName: [''],  
-//       companyAddress: [''],
-//       companyAddressBangla: ['']
-//     });
-//   }
-
-//   ngOnInit(): void {
-//     this.fetchCountries(); 
-
-//     // Listen to changes in the country dropdown
-//     this.accountForm.get('country')?.valueChanges.subscribe((value: string) => {
-//       if (value === '118') {
-//         this.outsideBd = false;  
-//         this.fetchDistricts();    
-//       } else {
-//         this.outsideBd = true;    
-//       }
-//     });
-
-//     // Listen to district selection to fetch related thanas
-//     this.accountForm.get('district')?.valueChanges.subscribe(districtId => {
-//       if (districtId) {
-//         this.fetchThanas(districtId);
-//       }
-//     });
-//   }
-
-//   // Fetch countries (Outside Bangladesh included)
-//   private fetchCountries(): void {
-//     const requestPayload = { OutsideBd: '1', DistrictId: '' };
-
-//     this.checkNamesService.getLocations(requestPayload).subscribe({
-//       next: (response: any) => {
-//         console.log("Full response:", response);
-
-//         if (response?.error === '0') {  
-//           const countryData = response.bdDistrict || [];
-
-//           if (Array.isArray(countryData) && countryData.length > 0) {
-//             this.countries = countryData.map((item: any) => ({
-//               OptionValue: item.optionValue,  
-//               OptionText: item.optionText,
-//             }));
-//             this.accountForm.get('country')?.setValue('118');
-//           } else {
-//             console.error('No countries found in the response.');
-//             this.countries = [];  
-//           }
-//         } else {
-//           console.error('Unexpected error response:', response?.error);
-//           this.countries = []; 
-//         }
-//       },
-//       error: (error: any) => {
-//         console.error('Error fetching countries:', error);
-//         this.countries = []; 
-//       }
-//     });
-//   }
-
-//   // Fetch districts within Bangladesh
-//   private fetchDistricts(): void {
-//     const requestPayload = { OutsideBd: '0', DistrictId: '' };
-
-//     this.checkNamesService.getLocations(requestPayload).subscribe({
-//       next: (response: any) => {
-//         if (response?.error === "0") {
-//           const districtData = response.bdDistrict || [];
-//           this.districts = districtData.map((item: any) => ({
-//             OptionValue: item.optionValue,
-//             OptionText: item.optionText,
-//           }));
-//           this.thanas = []; 
-//         } else {
-//           this.districts = [];
-//         }
-//       },
-//       error: () => {
-//         this.districts = [];
-//       }
-//     });
-//   }
-
-//   // Fetch thanas for the selected district
-//   private fetchThanas(districtId: string): void {
-//     const requestPayload = { OutsideBd: '0', DistrictId: districtId };
-
-//     this.checkNamesService.getLocations(requestPayload).subscribe({
-//       next: (response: any) => {
-//         if (response?.error === "0") {
-//           const thanaData = response.bdDistrict || [];
-//           this.thanas = thanaData.map((item: any) => ({
-//             OptionValue: item.optionValue,
-//             OptionText: item.optionText,
-//           }));
-//         } else {
-//           this.thanas = [];
-//         }
-//       },
-//       error: () => {
-//         this.thanas = [];
-//       }
-//     });
-//   }
-//   onCountryChange() {
-//     const selectedCountry = this.accountForm.get('country')?.value;
-//     this.outsideBd = selectedCountry !== '118';
-//     if (this.outsideBd) {
-//       this.accountForm.get('district')?.setValue('');
-//       this.accountForm.get('thana')?.setValue('');
-//     }
-//   }
-// }  

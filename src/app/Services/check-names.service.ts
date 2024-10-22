@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs'; 
-import { CheckNamesResponseDTO, CompanyNameCheckRequestDTO, IndustryTypeResponseDTO, IndustryTypeRequestDTO, IndustryType, LocationRequestDTO, LocationResponseDTO } from '../Models/company';
+import { CheckNamesResponseDTO, CompanyNameCheckRequestDTO, IndustryTypeResponseDTO, IndustryType, LocationRequestDTO, LocationResponseDTO, IndustryTypeRequestDTO } from '../Models/company';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CheckNamesService {
+ 
   private apiUrl = 'https://localhost:7240/api/Account/CheckNames'; 
   private industryApiUrl = 'https://localhost:7240/api/IndustryType/GetIndustryType'; 
   private industryIdApiUrl = 'https://localhost:7240/api/IndustryType/GetAllIndustrieIds';
-
+  private locationApiUrl = 'https://localhost:7119/api/Location/GetLocations'; // API for locations
 
   constructor(private http: HttpClient) {}
 
@@ -46,14 +47,15 @@ export class CheckNamesService {
       CompanyName: companyName
     };
 
-    return this.http.post<CheckNamesResponseDTO>(this.industryIdApiUrl, request).pipe(
+    return this.http.post<CheckNamesResponseDTO>(this.apiUrl, request).pipe(
       catchError((error) => {
         console.error('Error checking company name:', error);
         return throwError(() => new Error('Error checking company name'));
       })
     );
   }
-   // Fetch industry types from API using POST method
+
+  // Fetch industry types from API using POST method
   fetchIndustryTypes(IndustryId?: number): Observable<IndustryTypeResponseDTO[]> {
     const request: IndustryTypeRequestDTO = {
       IndustryId: IndustryId ?? undefined,  
@@ -69,8 +71,8 @@ export class CheckNamesService {
     );
   }
 
+  // Fetch industry names based on type
   fetchIndustryNamesByType(industryId: number): Observable<IndustryTypeResponseDTO[]> {
-    // Send the selected IndustryId
     const request: IndustryTypeRequestDTO = {
       IndustryId: industryId,  
       OrganizationText: '',   // Optional data if needed
@@ -84,18 +86,20 @@ export class CheckNamesService {
       })
     );
   }
- //Industry Ids
- getAllIndustryIds(): Observable<IndustryType[]> {
-  return this.http.get<any>(this.industryIdApiUrl).pipe(
-    catchError((error) => {
-      console.error('Error fetching industries:', error);
-      return throwError(() => new Error('Failed to fetch industries'));
-    })
-  );
-}
+
+  // Get all industry IDs
+  getAllIndustryIds(): Observable<IndustryType[]> {
+    return this.http.get<any>(this.industryIdApiUrl).pipe(
+      catchError((error) => {
+        console.error('Error fetching industries:', error);
+        return throwError(() => new Error('Failed to fetch industries'));
+      })
+    );
+  }
+
   // Method to get locations (districts, countries, or thanas)
   getLocations(requestPayload: LocationRequestDTO): Observable<LocationResponseDTO[]> {
-    return this.http.post<LocationResponseDTO[]>(this.apiUrl, requestPayload).pipe(
+    return this.http.post<LocationResponseDTO[]>(this.locationApiUrl, requestPayload).pipe(
       // Handle errors here
       catchError((error) => {
         console.error('Error fetching locations', error);
@@ -104,7 +108,7 @@ export class CheckNamesService {
     );
   }
 
-  // Helper method to create payload
+  // Helper method to create payload for locations
   private createRequestPayload(outsideBd: boolean, districtId: string = ''): LocationRequestDTO {
     return {
       OutsideBd: outsideBd ? '1' : '0',
@@ -125,51 +129,3 @@ export class CheckNamesService {
   }
 }
 
-
-
-// import { Injectable } from '@angular/core';
-// import { HttpClient } from '@angular/common/http';
-// import { Observable, throwError } from 'rxjs';
-// import { catchError } from 'rxjs/operators';
-// import { LocationRequestDTO, LocationResponseDTO } from '../Models/company';
-
-// @Injectable({
-//   providedIn: 'root',
-// })
-// export class CheckNamesService {
-//   // Use environment variable for the API URL
-//   private apiUrl = 'https://localhost:7119/api/Location/GetLocations'; // Replace with your actual API URL or use environments
-
-//   constructor(private http: HttpClient) {}
-
-//   // Method to get locations (districts, countries, or thanas)
-//   getLocations(requestPayload: LocationRequestDTO): Observable<LocationResponseDTO[]> {
-//     return this.http.post<LocationResponseDTO[]>(this.apiUrl, requestPayload).pipe(
-//       // Handle errors here
-//       catchError((error) => {
-//         console.error('Error fetching locations', error);
-//         return throwError(() => new Error('Error fetching locations'));
-//       })
-//     );
-//   }
-
-//   // Helper method to create payload
-//   private createRequestPayload(outsideBd: boolean, districtId: string = ''): LocationRequestDTO {
-//     return {
-//       OutsideBd: outsideBd ? '1' : '0',
-//       DistrictId: districtId,
-//     };
-//   }
-
-//   // Fetch all countries or districts based on outsideBd
-//   fetchDistrictsOrCountries(outsideBd: boolean): Observable<LocationResponseDTO[]> {
-//     const requestPayload = this.createRequestPayload(outsideBd);
-//     return this.getLocations(requestPayload);
-//   }
-
-//   // Fetch thanas based on districtId
-//   fetchThanas(districtId: string): Observable<LocationResponseDTO[]> {
-//     const requestPayload = this.createRequestPayload(false, districtId);
-//     return this.getLocations(requestPayload);
-//   }
-// }
