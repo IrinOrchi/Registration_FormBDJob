@@ -6,7 +6,7 @@ import { BeforeLoginNidComponent } from './pages/before-login-nid/before-login-n
 export const routes: Routes = [
     {
         path:"",
-        redirectTo: 'register/nidVerify',
+        redirectTo: 'register',
         pathMatch: 'full'
     },
     {

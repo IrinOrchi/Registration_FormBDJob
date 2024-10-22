@@ -1,22 +1,151 @@
-<!-- <pre>{{employeeForm.valid}}{{employeeForm.value | json}}</pre> -->
-<div class="text-base leading-6 font-sans bg-[#eee] text-black rounded-md px-36 mb-5">
-<!-- Body -->
+
 <div class="bg-white p-10 border border-gray-300 rounded mb-5 text-[#000]">
-  <!-- (ngSubmit)="onEmployeeFormChange()" -->
+  <form [formGroup]="employeeForm"> <!-- Bind the formGroup -->
+
+    <!-- Username Input Field -->
+    <app-input-field
+      label="Username"
+      name="txtUserName"
+      id="txtUserName"
+      [control]="usernameControl()"
+      placeholder="Type Username"
+      [value]="''"
+      [maxLength]="20"
+      [isRequired]="true"
+      errorMessage="Username is required">
+    </app-input-field>
+
+    <!-- Company Name Input Field -->
+    <app-input-field
+      label="Company Name"
+      name="txtCompanyName"
+      id="txtCompanyName"
+      [control]="companyNameControl()"
+      placeholder="Type Company Name"
+      [maxLength]="120"
+      [isRequired]="true"
+      [value]="''"
+      errorMessage="Company Name is required">
+    </app-input-field>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+      <!-- Industry Type Select Dropdown -->
+      <div class="col-span-2">
+        <label for="industryType">Industry Type</label>
+        <select formControlName="industryType" id="SelCat" 
+                class="w-full h-8 px-3 mt-3 text-sm text-gray-600 bg-white border border-gray-300 rounded-md shadow-inner transition-all ease-in-out duration-150 focus:ring-indigo-500 focus:border-indigo-500"
+                (change)="onCategoryChange($event)">
+          <option value="" disabled selected>Select Industry Type</option>
+          @for (industry of industries | async; track industry.IndustryId) {
+            <option [value]="industry?.IndustryId">{{ industry?.IndustryName }}</option>
+          }
+        </select>
+      </div>
+    
+    </div>
+    
+      <!-- Search Input -->
+      <div class="col-span-2">
+        <input [formControl]="searchControl"
+               class="block w-full h-[34px] py-[6px] px-[12px] mt-3 text-[14px] leading-[1.6] text-[#555] bg-white rounded border-2 border-[#e4e4e4] shadow-inner transition-colors focus:outline-none focus:ring focus:border-[#bdbdbd]" 
+               placeholder="Search Industry Type">
+      </div>
+    
+    <!-- Checkboxes for Industry Values -->
+    <div class="max-h-[225px] overflow-y-scroll w-full border-2 border-[#e4e4e4] rounded-md p-2.5 mb-2.5 mt-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        @if (filteredIndustryTypes.length > 0) {
+          @for (item of getTypes(); track item.IndustryValue) {
+            <div class="flex items-center">
+              <input 
+                name="industry_type" 
+                id="industry_type_{{item.IndustryValue}}" 
+                type="checkbox" 
+                [value]="item.IndustryValue"
+                class="form-checkbox h-5 w-5 text-blue-600 cursor-pointer">
+              <label 
+                for="industry_type_{{item.IndustryValue}}" 
+                class="text-[14px] leading-[1.42857143] font-sans text-black box-border ml-2">
+                {{ item.IndustryName }}
+              </label>
+            </div>
+          }
+        } 
+      </div>
+    </div>
+
+  <!-- Country Selection -->
+   
+
+
+
+<!-- <div class="max-h-[225px] overflow-y-scroll w-full border-2 border-[#e4e4e4] rounded-md p-2.5 mb-2.5 mt-6">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      @for (item of getTypes(); track item) {
+              <div class="flex items-center">
+                  <input name="industry_type" 
+                  id="industry_type_{{item.IndustryValue}}" 
+                  type="checkbox" value="{{item.IndustryValue}}"
+                  class="form-checkbox h-5 w-5 text-blue-600 cursor-pointer">
+                  <label for="industry_type_{{item.IndustryValue}}" 
+                  class="text-[14px] leading-[1.42857143] font-sans text-black box-border ml-2">
+                  {{ item.IndustryName }}
+                  </label>
+              </div>                   
+      }
+  </div>
+</div> -->
+
+<!-- <div class="max-h-[225px] overflow-y-scroll w-full border-2 border-[#e4e4e4] rounded-md p-2.5 mb-2.5 mt-6">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    
+    <div *ngFor="let item of getTypes();" class="flex items-center">
+      <input 
+        name="industry_type" 
+        id="industry_type_{{item.IndustryValue}}" 
+        type="checkbox" 
+        [value]="item.IndustryValue"
+        class="form-checkbox h-5 w-5 text-blue-600 cursor-pointer">
+      <label 
+        for="industry_type_{{item.IndustryValue}}" 
+        class="text-[14px] leading-[1.42857143] font-sans text-black box-border ml-2">
+        {{ item.IndustryName }}
+      </label>
+    </div>                 
+  </div>
+</div> -->
+
+
+
+
+
+
+
+
+<!-- 
+
+
+
+
+<pre>{{employeeForm.valid}}{{employeeForm.value | json}}</pre>
+<div class="text-base leading-6 font-sans bg-[#eee] text-black rounded-md px-36 mb-5">
+
+<div class="bg-white p-10 border border-gray-300 rounded mb-5 text-[#000]">
+
   <form [formGroup]="employeeForm" (ngSubmit)="onContinue()">
 
-<!-- Title -->
+
 <h3 class="text-center mt-0 mb-10 text-3xl font-bold text-gray-700 bg-gradient-to-r from-blue-400 to-green-500 bg-clip-text text-transparent transition duration-500 ease-in-out hover:from-purple-400 hover:to-green-300 hover:scale-110">
   Employer Registration Form
 </h3>
 
-<!-- Account Information -->
 <section class="my-6">
   <h3 class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-green-500 mt-0 mb-7 text-xl font-semibold transition duration-500 ease-in-out">
       Account Information
   </h3>
   <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-      <!-- Username -->
+
       <div class="col-span-1 transition-transform duration-300 hover:scale-105 hover:bg-blue-50 rounded-lg p-4 shadow-sm hover:shadow-lg">
         <app-input-field
           label="Username"
@@ -36,7 +165,6 @@
         </div>
         </div>
 
-        <!-- password -->
         <div class="col-span-1 transition-transform duration-300 hover:scale-105 hover:bg-blue-50 rounded-lg p-4 shadow-sm hover:shadow-lg">
           <app-input-field
             label="Password"
@@ -59,7 +187,6 @@
         </div>
         </div>
 
-        <!-- confirm password -->
         <div class="col-span-1 transition-transform duration-300 hover:scale-105 hover:bg-blue-50 rounded-lg p-4 shadow-sm hover:shadow-lg">
 
           <app-input-field
@@ -85,11 +212,11 @@
       </div>
 </section>
 <hr>
-<!-- Company Details Information -->
+
 <section class="my-6">
     <h3 class="text-[#337ab7] mt-0 mb-7 text-xl font-semibold">Company Details Information</h3>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <!-- comapny name english -->
+        
                   <div class="col-span-1">
                     <app-input-field
                     label="Company Name"
@@ -108,7 +235,7 @@
                     }
                 </div>
                   </div>
-                  <!-- company name bangla -->
+            
                   <div class="col-span-1">
                     <app-input-field
                     label="কোম্পানির নাম (বাংলায়)"
@@ -122,7 +249,7 @@
                     >
                   </app-input-field>
                   </div>
-                  <!-- Years of Establishment -->
+              
                   <div class="col-span-1">
                     <app-input-field
                     label="Year of Establishment"
@@ -141,7 +268,7 @@
                     }
                 </div>
                   </div>
-                  <!-- Company Size -->
+          
                   <div class="col-span-1">
 
 <app-select-field
@@ -175,7 +302,7 @@
       <span class="text-red-500">*</span>
   </h4>
   <div class="col-span-1">
-    <!-- [control]="formControlSignals()['country']" -->
+
     <app-select-field
   name="Country"
   id="Country"
@@ -211,13 +338,13 @@
   </div>
   @if (isBangladeshSelected===true) {
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <!-- District -->
-      <div class="col-span-1">
-        <app-select-field
-  name="cboCity"
-  id="cboCity"
-  [control]="formControlSignals()['district']"
-  [options]="[
+
+              <div class="col-span-1">
+                <app-select-field
+          name="cboCity"
+          id="cboCity"
+          [control]="formControlSignals()['district']"
+          [options]="[
           { value: '-1', label: 'Select District'},
           { value: 'Comilla', label: 'Comilla' },
           { value: 'Gazipur', label: 'Gazipur' },
@@ -232,25 +359,25 @@
 
   ]"
  
-  [isRequired]="false">
+          [isRequired]="false">
 
-</app-select-field>
-<div class="text-red-600">
-  @if (employeeForm.controls['district'].touched &&  employeeForm.controls['district'].errors?.['required']) {
-  <span>This is required</span>
-  }
-</div>
+        </app-select-field>
+        <div class="text-red-600">
+          @if (employeeForm.controls['district'].touched &&  employeeForm.controls['district'].errors?.['required']) {
+          <span>This is required</span>
+          }
+        </div>
 
       </div>
-      <!-- thana -->
+    
       <div class="col-span-1">
 
         <app-select-field
 
-  name="cboArea"
-  id="cboArea"
-  [control]="formControlSignals()['thana']"
-  [options]="[
+        name="cboArea"
+        id="cboArea"
+        [control]="formControlSignals()['thana']"
+        [options]="[
     
     { value: '-1', label: 'Select Thana'},
     { value: 'Dhanmondi', label: 'Dhanmondi' },
@@ -266,65 +393,68 @@
 
   ]"
   
-  errorMessage="Please select a company size."
-  [isRequired]="false">
+          errorMessage="Please select a company size."
+          [isRequired]="false">
 
-</app-select-field>
-<div class="text-red-600">
-  @if (employeeForm.controls['thana'].touched &&  employeeForm.controls['thana'].errors?.['required']) {
-  <span>This is required</span>
-  }
-</div>
-      </div>
-    </div>
-  }
-
-  @if(isBangladeshSelected===false){
-    <app-input-field
-    name="txtOutSideCity"
-    id="txtOutSideCity"
-    [control]="formControlSignals()['outSideCity']"
-    placeholder="Write City"
-    [value]="''"
-    [maxLength]="30"
-    [isRequired]="false"
-    >
-  </app-input-field>
-  }
-
-
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-    <div class="col-span-1">
-  <app-text-area
-  name="txtCompanyAddress"
-  id="txtCompanyAddress"
-  placeholder="Write Company Address"
-  [control]="formControlSignals()['companyAddress']"
-  [maxLength]="300"
-  [rows]="4"
-></app-text-area>
-<div class="text-red-600">
-  @if (employeeForm.controls['companyAddress'].touched &&  employeeForm.controls['companyAddress'].errors?.['required']) {
-  <span>This is required</span>
-  }
-</div>
-    </div>
-    <div class="col-span-1">
-      <app-text-area
-      name="txtCompanyAddressBng"
-      id="txtCompanyAddressBng"
-      [control]="formControlSignals()['companyAddressBangla']"
-      placeholder="কোম্পানীর ঠিকানা বাংলায় লিখুন"
-      [maxLength]="300"
-      [rows]="4"
-    ></app-text-area>
-    <div class="text-red-600">
-      @if (employeeForm.controls['companyAddressBangla'].touched &&  employeeForm.controls['companyAddressBangla'].errors?.['required']) {
-      <span>This is required</span>
-      }
-  </div>
+        </app-select-field>
+        <div class="text-red-600">
+          @if (employeeForm.controls['thana'].touched &&  employeeForm.controls['thana'].errors?.['required']) {
+          <span>This is required</span>
+          }
         </div>
-  </div>
+              </div>
+            </div>
+          }
+
+          @if(isBangladeshSelected===false){
+            <app-input-field
+            name="txtOutSideCity"
+            id="txtOutSideCity"
+            [control]="formControlSignals()['outSideCity']"
+            placeholder="Write City"
+            [value]="''"
+            [maxLength]="30"
+            [isRequired]="false"
+            >
+          </app-input-field>
+          }
+
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="col-span-1">
+        <app-text-area
+        name="txtCompanyAddress"
+        id="txtCompanyAddress"
+        placeholder="Write Company Address"
+        [control]="formControlSignals()['companyAddress']"
+        [maxLength]="300"
+        [rows]="4"
+      ></app-text-area>
+      <div class="text-red-600">
+        @if (employeeForm.controls['companyAddress'].touched &&  employeeForm.controls['companyAddress'].errors?.['required']) {
+        <span>This is required</span>
+        }
+      </div>
+          </div>
+          <div class="col-span-1">
+            <app-text-area
+            name="txtCompanyAddressBng"
+            id="txtCompanyAddressBng"
+            [control]="formControlSignals()['companyAddressBangla']"
+            placeholder="কোম্পানীর ঠিকানা বাংলায় লিখুন"
+            [maxLength]="300"
+            [rows]="4"
+          ></app-text-area>
+          <div class="text-red-600">
+            @if (employeeForm.controls['companyAddressBangla'].touched &&  employeeForm.controls['companyAddressBangla'].errors?.['required']) {
+            <span>This is required</span>
+            }
+          </div>
+                </div>
+          </div>
+
+
+
 
 <h4 class="mt-5 mb-[15px] text-[16px] font-semibold">
   Industry Type
@@ -353,7 +483,6 @@
 
       </select>
   </div>
-  <!-- Search Industry Type -->
   <div class="col-span-1">
       <input [formControl]="searchControl"
              class="block w-full h-[34px] py-[6px] px-[12px] mt-3 text-[14px] leading-[1.6] text-[#555] bg-white rounded border-2 border-[#e4e4e4] shadow-inner transition-colors transition-shadow focus:outline-none focus:ring focus:border-[#bdbdbd]" 
@@ -362,7 +491,6 @@
   </div>
 </div>
 
-<!-- Industrys wrap -->
 <div class="max-h-[225px] overflow-y-scroll w-full border-2 border-[#e4e4e4] rounded-md p-2.5 mb-2.5 mt-6">
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       @for (item of getTypes(); track item) {
@@ -376,9 +504,7 @@
       }
   </div>
 </div>
-
  
-<!-- Business Description -->
             <label for="txtDescription" class="text-black font-semibold inline-block w-full mt-3 max-w-full font-sans text-base mb-2.5 leading-[1.4286]">
               Business Description
             </label>
@@ -439,7 +565,6 @@
             <hr>
             
             
-<!-- Contact -->
 <section class="my-6">
   <h3 class="text-[#337ab7] mt-0 mb-7 text-xl font-semibold">Contact</h3>
 
@@ -522,11 +647,10 @@
   </div>
 </section>
 <hr>
-<!-- Accessibility Profile -->
+
  <section class="my-6">
   <h3 class="text-[#337ab7] mt-0 mb-7 text-xl font-semibold">Accessibility Profile for inclusion of Persons with Disabilities as Employees</h3>
 
-  <!-- checkbox -->
   <div class="flex flex-wrap -mx-4">
     <div class="w-full px-4">
         <div class="flex items-center">
@@ -596,7 +720,6 @@
 </div>
 
 <hr>
-<!-- Verification -->
 <section class="my-6">
   <p class="text-lg font-semibold mb-4">Verification Code</p>
 
@@ -645,7 +768,6 @@
     </div>            
   </div>
 </section>
-<!-- Continue Button -->
 
   <section class="mt-8">
     <div class="text-right">
@@ -664,4 +786,4 @@
 </div>
 <div class="mt-6">
   {{formValue| json}}
-</div>
+</div> -->
