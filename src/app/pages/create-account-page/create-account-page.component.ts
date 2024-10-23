@@ -6,7 +6,7 @@ import { InputFieldComponent } from '../../components/input-field/input-field.co
 import { SelectFieldComponent } from '../../components/select-field/select-field.component';
 import { TextAreaComponent } from '../../components/text-area/text-area.component';
 import { CheckboxGroupComponent } from '../../components/checkbox-group/checkbox-group.component';
-import { JsonPipe, CommonModule } from '@angular/common';
+import {  CommonModule } from '@angular/common';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { IndustryTypeResponseDTO, IndustryType, LocationResponseDTO } from '../../Models/company';
 
@@ -19,7 +19,7 @@ import { IndustryTypeResponseDTO, IndustryType, LocationResponseDTO } from '../.
     TextAreaComponent,
     CheckboxGroupComponent,
     ReactiveFormsModule,
-    JsonPipe, CommonModule
+     CommonModule
   ],
   templateUrl: './create-account-page.component.html',
   styleUrls: ['./create-account-page.component.scss']
@@ -32,10 +32,52 @@ export class CreateAccountPageComponent implements OnInit {
   countries: LocationResponseDTO[] = [];
   districts: LocationResponseDTO[] = [];
   thanas: LocationResponseDTO[] = [];
-  outsideBd: boolean = false;  // Whether the country is outside Bangladesh
+  outsideBd: boolean = false;  
 
-  // Form Group with Reactive Form for both use cases
+
+  facilitiesForDisabilitiesControl = new FormControl(false);
+
+  isPolicyAcceptedControl = new FormControl(false);
+
+  isPolicyAccepted: boolean = this.isPolicyAcceptedControl.value!;
+
+  
+  disabilities = [
+    { label: 'Accessible documentation and alternative formats', value: '1' },
+    { label: 'Accessible Washrooms / Toilets', value: '2' },
+    { label: 'Adapted Transport facility for Distant Travelling', value: '3' },
+    { label: 'Assistive Software, communication and computer devices', value: '4' },
+    { label: 'Available Flexible working shifts', value: '5' },
+    { label: 'Offering Work from home', value: '6' },
+    { label: 'Ramps or Lifts or Escalators for entry and move between floors', value: '7' },
+    { label: 'Reasonable Accommodation in Recruitment/interview procedures like sign language, oral/typed/video interview', value: '8' },
+    { label: 'Warning Indicators or Markers in place for hazards, staircase', value: '9' },
+    { label: 'Workstation or seating adaptations for easy use', value: '10' }
+  ];
+  //
+
   employeeForm: FormGroup = new FormGroup({
+    //new
+    facilitiesForDisabilities: this.facilitiesForDisabilitiesControl,
+    isPolicyAccepted: this.isPolicyAcceptedControl,
+    password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    confirmPassword: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    companyNameBangla: new FormControl(''),
+    yearsOfEstablishMent: new FormControl('', Validators.required),
+    companySize: new FormControl('-1', Validators.required),
+    outSideCity: new FormControl(''),
+    businessDesc: new FormControl(''),
+    tradeNo: new FormControl(''),
+    rlNo: new FormControl(''),
+    webUrl: new FormControl(''),
+    contactName: new FormControl('', [Validators.required]),
+    contactDesignation: new FormControl('', [Validators.required]),
+    contactEmail: new FormControl('', [Validators.required, Validators.email]),
+    contactMobile: new FormControl(''),
+    inclusionPolicy: new FormControl(''),
+    support: new FormControl(''),
+    disabilityWrap: new FormControl(''),
+    //
     username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
     companyName: new FormControl('', [Validators.required]),
     industryType: new FormControl(''),
@@ -54,6 +96,19 @@ export class CreateAccountPageComponent implements OnInit {
   countryControl = computed(() => this.employeeForm.get('country') as FormControl<string>);
   districtControl = computed(() => this.employeeForm.get('district') as FormControl<string>);
   thanaControl = computed(() => this.employeeForm.get('thana') as FormControl<string>);
+
+
+
+  // countryCoSignal = computed(()=> this.employeeForm.get('countryCo') as FormControl<string>)
+
+  formControlSignals = computed(() => {
+    const signals: { [key: string]: FormControl<any> } = {};
+    Object.keys(this.employeeForm.controls).forEach(key => {
+      signals[key] = this.employeeForm.get(key) as FormControl<any>;
+    });
+    return signals;
+  });
+
 
   usernameExistsMessage: string = '';
   companyNameExistsMessage: string = '';
@@ -317,12 +372,27 @@ export class CreateAccountPageComponent implements OnInit {
     this.onIndustryTypeChange(event.target.value); 
   }
 
-  onContinue(): void {
+  formValue : any
+  onContinue() {
+
     if (this.employeeForm.valid) {
-      console.log('Form submitted successfully!', this.employeeForm.value);
+
+      this.isPolicyAcceptedControl.setValue(true);
+      this.formValue = this.employeeForm.value;
+      console.log("Form submitted successfully!", this.formValue);
+
     } else {
+
       this.employeeForm.markAllAsTouched();
-      console.log('Form is invalid, please fill in all required fields.');
+
+      Object.keys(this.employeeForm.controls).forEach(field => {
+        const control = this.employeeForm.get(field);
+        if (control && control.invalid) {
+          const errors = control.errors;
+          console.log(`Field ${field} is invalid:`, errors);
+        }
+      });
+      
     }
-  }
+}
 }

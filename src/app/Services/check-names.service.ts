@@ -11,8 +11,7 @@ export class CheckNamesService {
   private apiUrl = 'https://localhost:7240/api/Account/CheckNames'; 
   private industryApiUrl = 'https://localhost:7240/api/IndustryType/GetIndustryType'; 
   private industryIdApiUrl = 'https://localhost:7240/api/IndustryType/GetAllIndustrieIds';
-  private locationApiUrl = 'https://localhost:7119/api/Location/GetLocations'; // API for locations
-
+  private locationApiUrl = 'https://localhost:7119/api/Location/GetLocations'; 
   constructor(private http: HttpClient) {}
 
   // Check for unique username
@@ -116,7 +115,6 @@ export class CheckNamesService {
     };
   }
 
-  // Fetch all countries or districts based on outsideBd
   fetchDistrictsOrCountries(outsideBd: boolean): Observable<LocationResponseDTO[]> {
     const requestPayload = this.createRequestPayload(outsideBd);
     return this.getLocations(requestPayload);
