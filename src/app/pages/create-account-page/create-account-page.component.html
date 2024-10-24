@@ -10,7 +10,7 @@
   <section class="my-6">
       <h3 class="text-[#337ab7] mt-0 mb-7 text-xl font-semibold">Account Information</h3>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <!-- username -->
+
           <div class="col-span-1">
             <app-input-field
               label="Username"
@@ -24,7 +24,7 @@
               errorMessage="Username is required">
             </app-input-field>
             <div class="text-red-600 ">
-              @if (employeeForm.controls['username'].touched &&  employeeForm.controls['username'].errors?.['required']) {
+              @if (isContinueClicked && employeeForm.controls['username'].errors?.['required']) {
               <span>Username is required</span>
               }
           </div>
@@ -67,10 +67,10 @@
               errorMessage="Password is required">
             </app-input-field>
             <div class="text-red-600">
-              @if (employeeForm.controls['password'].touched &&  employeeForm.controls['password'].errors?.['required']) {
+              @if (employeeForm.controls['confirmPassword'].touched &&  employeeForm.controls['confirmPassword'].errors?.['required']) {
               <span>Confirm Password is required</span>
               }
-              @else if (employeeForm.controls['password'].errors?.['minlength']) {
+              @else if (employeeForm.controls['confirmPassword'].errors?.['minlength']) {
                 <span>Minimum length should be 6</span>
               }
           </div>

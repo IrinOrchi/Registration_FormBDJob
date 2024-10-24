@@ -25,6 +25,10 @@ import { IndustryTypeResponseDTO, IndustryType, LocationResponseDTO } from '../.
   styleUrls: ['./create-account-page.component.scss']
 })
 export class CreateAccountPageComponent implements OnInit {
+
+  //new
+  fieldsOrder: string[] = [];
+
   industries: BehaviorSubject<IndustryType[]> = new BehaviorSubject<IndustryType[]>([]);
   industryTypes: IndustryTypeResponseDTO[] = [];
   filteredIndustryTypes: IndustryTypeResponseDTO[] = [];
@@ -378,26 +382,67 @@ export class CreateAccountPageComponent implements OnInit {
   }
 
   formValue : any
-  onContinue() {
 
-    if (this.employeeForm.valid) {
 
+currentValidationFieldIndex: number = 0;
+isContinueClicked: boolean = false;
+
+onContinue() {
+  this.isContinueClicked = true; // Set flag to true when the button is clicked
+
+  const fieldsOrder = [
+    'username', 
+    'password',
+    'confirmPassword',
+    'companyName',
+    'yearsOfEstablishMent',
+    'companySize',
+    'companyAddress',
+    'companyAddressBangla',
+    'contactName',
+    'contactDesignation',
+    'contactEmail'
+  ];
+
+  // Get the current field to be validated
+  const currentField = fieldsOrder[this.currentValidationFieldIndex];
+  const control = this.employeeForm.get(currentField);
+
+  if (this.employeeForm.valid) {
+    // If the form is fully valid, submit the form
+    this.isPolicyAcceptedControl.setValue(true);
+    this.formValue = this.employeeForm.value;
+    console.log("Form submitted successfully!", this.formValue);
+  } else if (control && control.invalid) {
+    // If the current field is invalid, mark it as touched and show its error
+    control.markAsTouched();
+
+    // Log the current field's validation errors
+    const errors = control.errors;
+    console.log(`Field ${currentField} is invalid:`, errors);
+
+    // Do not proceed to the next field until the current field is valid
+    // Return here to stop further execution until this field is valid
+    return;
+
+  } else {
+    // Move to the next field if the current one is valid
+    this.currentValidationFieldIndex++;
+
+    // Check if there are more fields to validate
+    if (this.currentValidationFieldIndex < fieldsOrder.length) {
+      // Mark the next field for validation
+      const nextField = fieldsOrder[this.currentValidationFieldIndex];
+      this.employeeForm.get(nextField)?.markAsTouched();
+    } else {
+      // If all fields are valid, submit the form
       this.isPolicyAcceptedControl.setValue(true);
       this.formValue = this.employeeForm.value;
-      console.log("Form submitted successfully!", this.formValue);
-
-    } else {
-
-      this.employeeForm.markAllAsTouched();
-
-      Object.keys(this.employeeForm.controls).forEach(field => {
-        const control = this.employeeForm.get(field);
-        if (control && control.invalid) {
-          const errors = control.errors;
-          console.log(`Field ${field} is invalid:`, errors);
-        }
-      });
-      
+      console.log("Form submitted successfully after validating all fields!", this.formValue);
     }
+  }
 }
+
+
+
 }
