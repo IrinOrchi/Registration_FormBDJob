@@ -87,7 +87,9 @@ export class CreateAccountPageComponent implements OnInit {
     cityName: new FormControl(''),
     companyAddress: new FormControl(''),
     companyAddressBangla: new FormControl('')
+
   });
+  
 
   // Signals for form control values
   usernameControl = computed(() => this.employeeForm.get('username') as FormControl<string>);
@@ -166,6 +168,8 @@ export class CreateAccountPageComponent implements OnInit {
       });
   }
 
+
+  
   setupCompanyNameCheck(): void {
     const companyNameControl = this.employeeForm.get('companyName') as FormControl;
 
@@ -178,24 +182,24 @@ export class CreateAccountPageComponent implements OnInit {
   }
 
 
-  // Check for unique username (private)
   private checkUniqueUsername(username: string): void {
     this.checkNamesService.checkUniqueUserName(username).subscribe({
       next: (response) => {
-        this.usernameExistsMessage = response.isUnique ? '' : 'Username already exists';
+        console.log('API Response:', response); 
+        this.usernameExistsMessage = response.message == 'Success!' ? '' : 'Username already exists';
       },
       error: (error) => {
         console.error('Error checking username:', error);
-        this.usernameExistsMessage = 'Error checking username';
+        this.usernameExistsMessage = 'This Username already exists. Try another.';
       }
     });
   }
-
-  // Check for unique company name (private)
+  
+  // Check for unique company name 
   private checkUniqueCompanyName(companyName: string): void {
     this.checkNamesService.checkUniqueCompanyName(companyName).subscribe({
       next: (response) => {
-        this.companyNameExistsMessage = response.isUnique ? '' : 'Company name already exists';
+        this.companyNameExistsMessage = response.message == 'Success!' ? '' : 'Company name already exists';
       },
       error: (error) => {
         console.error('Error checking company name:', error);

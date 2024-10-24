@@ -10,26 +10,29 @@
   <section class="my-6">
       <h3 class="text-[#337ab7] mt-0 mb-7 text-xl font-semibold">Account Information</h3>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <!-- username -->
-          <div class="col-span-1">
-            <app-input-field
-              label="Username"
-              name="txtUserName"
-              id="txtUserName"
-              [control]="usernameControl()"
-              placeholder="Type Username"
-              [value]="''"
-              [maxLength]="20"
-              [isRequired]="true"
-              errorMessage="Username is required">
-            </app-input-field>
-            <div class="text-red-600 ">
-              @if (employeeForm.controls['username'].touched &&  employeeForm.controls['username'].errors?.['required']) {
-              <span>Username is required</span>
-              }
-          </div>
-          </div>
+        <div class="col-span-1">
+  <app-input-field
+    label="Username"
+    name="txtUserName"
+    id="txtUserName"
+    [control]="usernameControl()"
+    placeholder="Type Username"
+    [value]="''"
+    [maxLength]="20"
+    [isRequired]="true"
+    errorMessage="Username is required">
+  </app-input-field>
   
+  <div class="text-red-600 mt-0.5">
+    @if (employeeForm.controls['username'].touched &&  employeeForm.controls['username'].errors?.['required']) {
+      <span>User Name is required</span>
+      }
+      @else if (usernameExistsMessage) {
+        {{usernameExistsMessage}}
+      }
+  </div>
+</div>
+
           <!-- password -->
           <div class="col-span-1">
             <app-input-field
@@ -55,7 +58,8 @@
   
           <!-- confirm password -->
           <div class="col-span-1">
-            <app-input-field
+           
+              <app-input-field
               label="Confirm Password"
               name="txtConfirmPassword"
               id="txtConfirmPassword"
@@ -68,12 +72,13 @@
             </app-input-field>
             <div class="text-red-600">
               @if (employeeForm.controls['password'].touched &&  employeeForm.controls['password'].errors?.['required']) {
-              <span>Confirm Password is required</span>
+              <span class="mt-18">Confirm Password is required</span>
               }
               @else if (employeeForm.controls['password'].errors?.['minlength']) {
-                <span>Minimum length should be 6</span>
+                <span >Minimum length should be 6</span>
               }
           </div>
+            
           </div>
         </div>
   </section>
@@ -98,6 +103,9 @@
                     <div class="text-red-600">
                       @if (employeeForm.controls['companyName'].touched &&  employeeForm.controls['companyName'].errors?.['required']) {
                       <span>Company Name is required</span>
+                      }
+                      @else if (companyNameExistsMessage) {
+                        {{companyNameExistsMessage}}
                       }
                   </div>
                     </div>

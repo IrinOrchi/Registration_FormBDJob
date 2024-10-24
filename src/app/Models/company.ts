@@ -6,7 +6,7 @@ export interface CompanyNameCheckRequestDTO {
 
 export interface CheckNamesResponseDTO {
     isUnique: boolean; 
-    Message: string; 
+    message: string; 
 }
 export interface IndustryTypeResponseDTO {
     IndustryValue: number;  
