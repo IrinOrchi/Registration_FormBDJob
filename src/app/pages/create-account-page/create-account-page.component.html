@@ -311,7 +311,9 @@
               id="industry_type_{{item.IndustryValue}}" 
               type="checkbox" 
               [value]="item.IndustryValue"
-              class="form-checkbox h-18 w-18 text-blue-600 cursor-pointer">
+              class="h-[16px] w-[16px] text-blue-600 cursor-pointer border-2 shadow-inner border-black/30 
+                     checked:bg-blue-600 checked:border-blue-600 checked:appearance-auto" 
+              style="min-width: 16px; min-height: 16px;">
             <label 
               for="industry_type_{{item.IndustryValue}}" 
               class="text-[14px] leading-[1.42857143] font-sans text-black box-border ml-2">
@@ -350,21 +352,14 @@
     </app-input-field>
     </div>
   
-    <div class="col-span-1 flex">
-      <span class="mt-8 h-8 inline-block align-middle text-center text-[14px] font-normal leading-none text-[#555] bg-[#eee] border border-solid border-[#ccc] rounded-l-md border-r-0 p-[6px_12px] whitespace-nowrap ">
-        RL -
-    </span>  
-      <app-input-field
-      label="RL No (Only for Recruiting Agency)"
-      name="rl_no"
-      id="rl_no"
-      [control]="formControlSignals()['rlNo']"
-      placeholder="Enter Number Only"
-      [value]="''"
-      [maxLength]="6"
-      [isRequired]="false"
-      >
-    </app-input-field>
+    <div class="col-span-1">
+      <div class="flex items-center">
+        <span class="mt-8 h-8 inline-block align-middle text-center text-[14px] font-normal leading-none text-[#555555] bg-[#eeeeee] border border-[#cccccc] rounded-l-md border-r-0 px-3 py-1 whitespace-nowrap">
+          RL -
+        </span>
+        <input type="number" name="rl_no"
+        id="rl_no" placeholder="Enter Number Only" maxlength="6" class="h-[34px] mt-8 px-3 py-1 text-[14px] leading-[1.42857143] text-[#555555] bg-white border-2 border-[#e4e4e4] rounded-r-md shadow-inner transition duration-150 ease-in-out w-full float-left">
+      </div>  
     </div>
   </div>
   
@@ -524,21 +519,26 @@
           </div>
       </div>
   
-    <div class="max-h-[225px] overflow-y-scroll w-full border-2 border-[#e4e4e4] rounded-md p-2.5 mb-2.5 mt-3">
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="max-h-[225px] overflow-y-scroll w-full border-2 border-[#e4e4e4] rounded-md p-2.5 mb-2.5 mt-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           @for (item of disabilities; track item) {
-              <div class="flex items-center">
-                  <input name="disability_type" [formControl]="formControlSignals()['disabilityWrap']" id="disability_type_{{item.value}}" type="checkbox" value="{{item.value}}" class="form-checkbox h-5 w-5 text-blue-600 cursor-pointer">
-                  <label for="industry_type_{{item.value}}" class="text-[14px] leading-[1.42857143] font-sans text-black box-border ml-2">
-                      {{ item.label }}
-                  </label>
-               </div>            
+            <div class="flex items-center">
+              <input name="disability_type" 
+                     [formControl]="formControlSignals()['disabilityWrap']" 
+                     id="disability_type_{{item.value}}" 
+                     type="checkbox" 
+                     value="{{item.value}}" 
+                     class="h-[16px] w-[16px] text-blue-600 cursor-pointer border-2 shadow-inner border-black/30 
+                            checked:bg-blue-600 checked:border-blue-600 checked:appearance-auto" 
+                     style="min-width: 16px; min-height: 16px;">
+              <label for="industry_type_{{item.value}}" class="text-[14px] leading-[1.42857143] font-sans text-black box-border ml-2">
+                {{ item.label }}
+              </label>
+            </div>            
           }
-          </div>
+        </div>
       </div>
-  
-  
-  
+      
   
   
   
