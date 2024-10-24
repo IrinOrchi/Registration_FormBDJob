@@ -12,6 +12,8 @@ export class CheckNamesService {
   private industryApiUrl = 'https://localhost:7240/api/IndustryType/GetIndustryType'; 
   private industryIdApiUrl = 'https://localhost:7240/api/IndustryType/GetAllIndustrieIds';
   private locationApiUrl = 'https://localhost:7119/api/Location/GetLocations'; 
+  private rlnoapiUrl = 'https://localhost:7240/api/RLNo/CheckRLNo';
+
   constructor(private http: HttpClient) {}
 
   // Check for unique username

@@ -23,9 +23,9 @@
               [isRequired]="true"
               errorMessage="Username is required">
             </app-input-field>
-            <div class="text-red-600">
+            <div class="text-red-600 ">
               @if (employeeForm.controls['username'].touched &&  employeeForm.controls['username'].errors?.['required']) {
-              <span>This is required</span>
+              <span>Username is required</span>
               }
           </div>
           </div>
@@ -45,7 +45,7 @@
             </app-input-field>
             <div class="text-red-600">
               @if (employeeForm.controls['password'].touched &&  employeeForm.controls['password'].errors?.['required']) {
-              <span>This is required</span>
+              <span>Password is required</span>
               }
               @else if (employeeForm.controls['password'].errors?.['minlength']) {
                 <span>Minimum length should be 6</span>
@@ -68,7 +68,7 @@
             </app-input-field>
             <div class="text-red-600">
               @if (employeeForm.controls['password'].touched &&  employeeForm.controls['password'].errors?.['required']) {
-              <span>This is required</span>
+              <span>Confirm Password is required</span>
               }
               @else if (employeeForm.controls['password'].errors?.['minlength']) {
                 <span>Minimum length should be 6</span>
@@ -97,7 +97,7 @@
                     </app-input-field>
                     <div class="text-red-600">
                       @if (employeeForm.controls['companyName'].touched &&  employeeForm.controls['companyName'].errors?.['required']) {
-                      <span>This is required</span>
+                      <span>Company Name is required</span>
                       }
                   </div>
                     </div>
@@ -181,7 +181,7 @@
       </select>
       <div class="text-red-600">
         <ng-container *ngIf="countryControl().touched && countryControl().hasError('required')">
-          <span>This field is required</span>
+          <span>This is required</span>
         </ng-container>
       </div>
     </div>
@@ -201,7 +201,7 @@
         </select>
         <div class="text-red-600">
           <ng-container *ngIf="districtControl().touched && districtControl().hasError('required')">
-            <span>This field is required</span>
+            <span>This  is required</span>
           </ng-container>
         </div>
       </div>
@@ -218,7 +218,7 @@
         </select>
         <div class="text-red-600">
           <ng-container *ngIf="thanaControl().touched && thanaControl().hasError('required')">
-            <span>This field is required</span>
+            <span>This is required</span>
           </ng-container>
         </div>
       </div>
@@ -354,11 +354,15 @@
   
     <div class="col-span-1">
       <div class="flex items-center">
-        <span class="mt-8 h-8 inline-block align-middle text-center text-[14px] font-normal leading-none text-[#555555] bg-[#eeeeee] border border-[#cccccc] rounded-l-md border-r-0 px-3 py-1 whitespace-nowrap">
+        
+        <span class="mt-8 h-8 inline-block align-middle text-center text-[14px] font-normal leading-none text-[#555555] bg-[#eeeeee] border-2 border-[#e4e4e4]  rounded-l-md border-r-0 px-3 py-1 whitespace-nowrap ">
           RL -
         </span>
-        <input type="number" name="rl_no"
-        id="rl_no" placeholder="Enter Number Only" maxlength="6" class="h-[34px] mt-8 px-3 py-1 text-[14px] leading-[1.42857143] text-[#555555] bg-white border-2 border-[#e4e4e4] rounded-r-md shadow-inner transition duration-150 ease-in-out w-full float-left">
+        <input
+        type="number"
+         name="rlNo"
+         formControlName="rlNo"
+        id="rlNo" placeholder="Enter Number Only" maxlength="6" class="block w-full h-[34px] px-3 py-2 align-middle mt-8 text-[14px] leading-[1.6] text-[#555] bg-white rounded-r border-2 border-[#e4e4e4] shadow-inner transition-colors focus:outline-none focus:ring focus:border-[#bdbdbd]">
       </div>  
     </div>
   </div>

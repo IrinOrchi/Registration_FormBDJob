@@ -96,6 +96,8 @@ export class CreateAccountPageComponent implements OnInit {
   countryControl = computed(() => this.employeeForm.get('country') as FormControl<string>);
   districtControl = computed(() => this.employeeForm.get('district') as FormControl<string>);
   thanaControl = computed(() => this.employeeForm.get('thana') as FormControl<string>);
+  rlnoControl = computed(() => this.employeeForm.get('rlno') as FormControl<string>);
+
 
 
 
@@ -112,6 +114,9 @@ export class CreateAccountPageComponent implements OnInit {
 
   usernameExistsMessage: string = '';
   companyNameExistsMessage: string = '';
+  responseError: string = ''; // Holds error messages
+  noResponse: boolean = false; // Flag to check if there's no response
+
 
   searchControl: FormControl = new FormControl(''); // Control for search input
 

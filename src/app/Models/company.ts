@@ -31,3 +31,13 @@ export interface IndustryTypeResponseDTO {
     IndustryId: number;
     IndustryName: string;
 }
+export interface RLNoRequestModel {
+  rlNo: string;
+}
+
+
+export interface RLNoResponseModel {
+  error: string;
+  rlNo: string;
+  companyName: string;
+}
