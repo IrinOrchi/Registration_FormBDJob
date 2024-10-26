@@ -127,5 +127,7 @@ export class CheckNamesService {
     const requestPayload = this.createRequestPayload(false, districtId);
     return this.getLocations(requestPayload);
   }
+
+  
 }
 
