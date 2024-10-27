@@ -248,34 +248,60 @@ export class CreateAccountPageComponent implements OnInit {
   
   verifyRLNo(): void {
     const rlNo: string = this.employeeForm.get('rlNo')?.value.toString();
-    console.log(rlNo);
+    const companyName: string = this.employeeForm.get('companyName')?.value.toString();
+  
   
     if (rlNo) {
       const rlRequest: RLNoRequestModel = { RLNo: rlNo };
+
+      const companyRequest: CompanyNameCheckRequestDTO = {
+        UserName: '', 
+        CheckFor: 'c',
+        CompanyName: companyName
+      };
+
+      console.log(companyRequest.CompanyName)
+      
   
+      // this.checkNamesService.verifyRLNo(rlRequest).subscribe({
+      //   next: (response: any) => {
+      //     console.log('RL No Response:', response.company_Name === companyRequest.CompanyName); 
+      //     console.log(response.company_Name)
+      //     if (response.error === '0' ) {
+      //       this.showError = false;
+      //       this.rlErrorMessage = '';
+      //       this.showErrorModal = false; 
+      //     } else {
+      //       this.showError = true;
+      //       this.showErrorModal = true;
+      //     }
+      //   },
+      //   error: () => {
+      //     this.showError = true;
+      //     this.showErrorModal = true;
+      //   }
+      // });
+
       this.checkNamesService.verifyRLNo(rlRequest).subscribe({
         next: (response: any) => {
-          console.log('RL No Response:', response); 
-          if (response.error === '0') {
+          console.log('RL No Response:', response); // Debugging statement
+          if (response.error === '0' && response.company_Name === companyRequest.CompanyName) {
             this.showError = false;
             this.rlErrorMessage = '';
-            this.showErrorModal = false; 
+            this.showErrorModal = false; // Hide modal on success
           } else {
             this.showError = true;
-            this.showErrorModal = true;
-            this.rlErrorMessage = 'RL Number verification failed';
+            this.showErrorModal = true; // Show modal on error
           }
         },
         error: () => {
           this.showError = true;
-          this.showErrorModal = true;
-          this.rlErrorMessage = 'Error verifying RL Number';
+          this.showErrorModal = true; // Show modal for error message
         }
       });
     } else {
       this.showError = true;
       this.showErrorModal = true; 
-      this.rlErrorMessage = 'RL Number is required';
     }
   }
   
