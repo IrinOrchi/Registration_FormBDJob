@@ -365,15 +365,21 @@
         
         <span class="mt-8 h-8 inline-block align-middle text-center text-[14px] font-normal leading-none text-[#555555] bg-[#eeeeee] border-2 border-[#e4e4e4]  rounded-l-md border-r-0 px-3 py-1 whitespace-nowrap ">
           RL -
-        </span>
+        </span>     
         <input
+        (blur) = "onRLNoBlur()"
         type="number"
          name="rlNo"
          formControlName="rlNo"
-        id="rlNo" placeholder="Enter Number Only" maxlength="6" class="block w-full h-[34px] px-3 py-2 align-middle mt-8 text-[14px] leading-[1.6] text-[#555] bg-white rounded-r border-2 border-[#e4e4e4] shadow-inner transition-colors focus:outline-none focus:ring focus:border-[#bdbdbd]">
+        id="rlNo" placeholder="Enter Number Only" maxlength="6" class="w-full h-[34px] px-3 py-2 align-middle mt-8 text-[14px] leading-[1.6] text-[#555] bg-white rounded-r border-2 border-[#e4e4e4] shadow-inner transition-colors focus:outline-none focus:ring focus:border-[#bdbdbd]" >
       </div>  
     </div>
   </div>
+
+        <!-- Modal component rendering -->
+<app-error-modal *ngIf="showErrorModal"></app-error-modal>
+<app-error-modal *ngIf="showErrorModal" (modalClosed)="showErrorModal = false"></app-error-modal>
+
   
   <app-input-field
   label="Website URL"

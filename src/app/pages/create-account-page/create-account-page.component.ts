@@ -8,7 +8,9 @@ import { TextAreaComponent } from '../../components/text-area/text-area.componen
 import { CheckboxGroupComponent } from '../../components/checkbox-group/checkbox-group.component';
 import {  CommonModule } from '@angular/common';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { IndustryTypeResponseDTO, IndustryType, LocationResponseDTO } from '../../Models/company';
+import { IndustryTypeResponseDTO, IndustryType, LocationResponseDTO, RLNoRequestModel, CompanyNameCheckRequestDTO } from '../../Models/company';
+import { ErrorModalComponent } from "../../components/error-modal/error-modal.component";
+// import { ErrorModalComponent } from '../../components/error-modal/error-modal.component';
 
 @Component({
   selector: 'app-create-account-page',
@@ -19,8 +21,9 @@ import { IndustryTypeResponseDTO, IndustryType, LocationResponseDTO } from '../.
     TextAreaComponent,
     CheckboxGroupComponent,
     ReactiveFormsModule,
-     CommonModule
-  ],
+    CommonModule,
+    ErrorModalComponent
+],
   templateUrl: './create-account-page.component.html',
   styleUrls: ['./create-account-page.component.scss']
 })
@@ -72,7 +75,6 @@ export class CreateAccountPageComponent implements OnInit {
     outSideCity: new FormControl(''),
     businessDesc: new FormControl(''),
     tradeNo: new FormControl(''),
-    rlNo: new FormControl(''),
     webUrl: new FormControl(''),
     contactName: new FormControl('', [Validators.required]),
     contactDesignation: new FormControl('', [Validators.required]),
@@ -85,12 +87,14 @@ export class CreateAccountPageComponent implements OnInit {
     username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
     companyName: new FormControl('', [Validators.required]),
     industryType: new FormControl(''),
-    country: new FormControl('118'),  // Default country to Bangladesh ('118')
+    country: new FormControl('118'),  
     district: new FormControl(''),
     thana: new FormControl(''),
     cityName: new FormControl(''),
     companyAddress: new FormControl(''),
-    companyAddressBangla: new FormControl('')
+    companyAddressBangla: new FormControl(''),
+    rlNo: new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$')])
+
 
   });
   
@@ -102,12 +106,8 @@ export class CreateAccountPageComponent implements OnInit {
   countryControl = computed(() => this.employeeForm.get('country') as FormControl<string>);
   districtControl = computed(() => this.employeeForm.get('district') as FormControl<string>);
   thanaControl = computed(() => this.employeeForm.get('thana') as FormControl<string>);
-  rlnoControl = computed(() => this.employeeForm.get('rlno') as FormControl<string>);
+  rlNoControl = computed(() => this.employeeForm.get('rlno') as FormControl<string>);
 
-
-
-
-  // countryCoSignal = computed(()=> this.employeeForm.get('countryCo') as FormControl<string>)
 
   formControlSignals = computed(() => {
     const signals: { [key: string]: FormControl<any> } = {};
@@ -120,11 +120,13 @@ export class CreateAccountPageComponent implements OnInit {
 
   usernameExistsMessage: string = '';
   companyNameExistsMessage: string = '';
-  responseError: string = ''; // Holds error messages
-  noResponse: boolean = false; // Flag to check if there's no response
+  isUniqueCompanyName: boolean = false;
+  rlErrorMessage: string = '';
+  showError: boolean = false;
+  showErrorModal: boolean = false; 
 
 
-  searchControl: FormControl = new FormControl(''); // Control for search input
+  searchControl: FormControl = new FormControl(''); 
 
   private usernameSubject: Subject<string> = new Subject();
   private companyNameSubject: Subject<string> = new Subject();
@@ -139,7 +141,7 @@ export class CreateAccountPageComponent implements OnInit {
     this.fetchIndustryTypes();
     this.fetchCountries();
 
-    // Bind the dropdown selection to filter the industry values
+
     this.employeeForm.get('industryType')?.valueChanges.subscribe(selectedIndustryId => {
       this.onIndustryTypeChange(selectedIndustryId);
     });
@@ -153,7 +155,6 @@ export class CreateAccountPageComponent implements OnInit {
             }
           });
 
-    // Watch for district selection to fetch thanas
     this.employeeForm.get('district')?.valueChanges.subscribe(districtId => {
       if (districtId) {
         this.fetchThanas(districtId);
@@ -203,7 +204,15 @@ export class CreateAccountPageComponent implements OnInit {
   private checkUniqueCompanyName(companyName: string): void {
     this.checkNamesService.checkUniqueCompanyName(companyName).subscribe({
       next: (response) => {
-        this.companyNameExistsMessage = response.message == 'Success!' ? '' : 'Company name already exists';
+        console.log('API Response:', response);
+        if (response.message == 'Success!') {
+          this.isUniqueCompanyName = true;
+          this.companyNameExistsMessage = '';
+        }
+        else{
+          this.isUniqueCompanyName = false;
+          this.companyNameExistsMessage = 'Company name already exists';
+        }
       },
       error: (error) => {
         console.error('Error checking company name:', error);
@@ -211,6 +220,70 @@ export class CreateAccountPageComponent implements OnInit {
       }
     });
   }
+
+  // private checkUniqueCompanyName(companyName: string): void {
+  //   this.checkNamesService.checkUniqueCompanyName(companyName).subscribe({
+  //     next: (response) => {
+  //       this.companyNameExistsMessage = response.message == 'Success!' ? '' : 'Company name already exists';
+  //     },
+  //     error: (error) => {
+  //       console.error('Error checking company name:', error);
+  //       this.companyNameExistsMessage = 'Error checking company name';
+  //     }
+  //   });
+  // }
+
+  // rl
+  onRLNoBlur(): void {
+    this.employeeForm.controls['rlNo'].markAsTouched();
+  
+    if (this.employeeForm.controls['rlNo'].valid) {
+      this.verifyRLNo();  // Call the RLNo verification independently
+    } else {
+      this.showError = true;
+      this.rlErrorMessage = 'RL Number is required';
+      this.showErrorModal = true; 
+    }
+  }
+  
+  verifyRLNo(): void {
+    const rlNo: string = this.employeeForm.get('rlNo')?.value.toString();
+    console.log(rlNo);
+  
+    if (rlNo) {
+      const rlRequest: RLNoRequestModel = { RLNo: rlNo };
+  
+      this.checkNamesService.verifyRLNo(rlRequest).subscribe({
+        next: (response: any) => {
+          console.log('RL No Response:', response); 
+          if (response.error === '0') {
+            this.showError = false;
+            this.rlErrorMessage = '';
+            this.showErrorModal = false; 
+          } else {
+            this.showError = true;
+            this.showErrorModal = true;
+            this.rlErrorMessage = 'RL Number verification failed';
+          }
+        },
+        error: () => {
+          this.showError = true;
+          this.showErrorModal = true;
+          this.rlErrorMessage = 'Error verifying RL Number';
+        }
+      });
+    } else {
+      this.showError = true;
+      this.showErrorModal = true; 
+      this.rlErrorMessage = 'RL Number is required';
+    }
+  }
+  
+  closeModal(): void {
+    this.showErrorModal = false; 
+  }
+  
+  
 
   // Fetch all industries
   fetchIndustries(): void {
@@ -385,6 +458,10 @@ export class CreateAccountPageComponent implements OnInit {
     this.onIndustryTypeChange(event.target.value); 
   }
 
+ 
+ 
+
+
   formValue : any
 
 
@@ -392,7 +469,7 @@ currentValidationFieldIndex: number = 0;
 isContinueClicked: boolean = false;
 
 onContinue() {
-  this.isContinueClicked = true; // Set flag to true when the button is clicked
+  this.isContinueClicked = true; 
 
   const fieldsOrder = [
     'username', 

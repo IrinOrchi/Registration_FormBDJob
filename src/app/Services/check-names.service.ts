@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs'; 
-import { CheckNamesResponseDTO, CompanyNameCheckRequestDTO, IndustryTypeResponseDTO, IndustryType, LocationRequestDTO, LocationResponseDTO, IndustryTypeRequestDTO } from '../Models/company';
+import { CheckNamesResponseDTO, CompanyNameCheckRequestDTO, IndustryTypeResponseDTO, IndustryType, LocationRequestDTO, LocationResponseDTO, IndustryTypeRequestDTO, RLNoRequestModel } from '../Models/company';
 
 @Injectable({
   providedIn: 'root',
@@ -76,8 +76,8 @@ export class CheckNamesService {
   fetchIndustryNamesByType(industryId: number): Observable<IndustryTypeResponseDTO[]> {
     const request: IndustryTypeRequestDTO = {
       IndustryId: industryId,  
-      OrganizationText: '',   // Optional data if needed
-      CorporateID: undefined  // Optional data if needed
+      OrganizationText: '',   
+      CorporateID: undefined  
     };
   
     return this.http.post<IndustryTypeResponseDTO[]>(this.industryApiUrl, request).pipe(
@@ -129,5 +129,14 @@ export class CheckNamesService {
   }
 
   
+  // Method to verify RL number
+  // verifyRLNo(request: RLNoRequestModel): Observable<any> {
+  //   return this.http.post(this.rlnoapiUrl, request);
+  // }
+
+  verifyRLNo(request: RLNoRequestModel): Observable<any> {
+    return this.http.post(this.rlnoapiUrl, request);
+  }
+ 
 }
 

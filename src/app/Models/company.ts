@@ -32,12 +32,12 @@ export interface IndustryTypeResponseDTO {
     IndustryName: string;
 }
 export interface RLNoRequestModel {
-  rlNo: string;
+  RLNo: string;
 }
 
 
 export interface RLNoResponseModel {
   error: string;
   rlNo: string;
-  companyName: string;
+  company_Name: string;
 }
