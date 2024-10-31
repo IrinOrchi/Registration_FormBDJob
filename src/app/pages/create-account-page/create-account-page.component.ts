@@ -10,7 +10,6 @@ import {  CommonModule } from '@angular/common';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { IndustryTypeResponseDTO, IndustryType, LocationResponseDTO, RLNoRequestModel, CompanyNameCheckRequestDTO } from '../../Models/company';
 import { ErrorModalComponent } from "../../components/error-modal/error-modal.component";
-// import { ErrorModalComponent } from '../../components/error-modal/error-modal.component';
 
 @Component({
   selector: 'app-create-account-page',
@@ -220,25 +219,12 @@ export class CreateAccountPageComponent implements OnInit {
       }
     });
   }
-
-  // private checkUniqueCompanyName(companyName: string): void {
-  //   this.checkNamesService.checkUniqueCompanyName(companyName).subscribe({
-  //     next: (response) => {
-  //       this.companyNameExistsMessage = response.message == 'Success!' ? '' : 'Company name already exists';
-  //     },
-  //     error: (error) => {
-  //       console.error('Error checking company name:', error);
-  //       this.companyNameExistsMessage = 'Error checking company name';
-  //     }
-  //   });
-  // }
-
   // rl
   onRLNoBlur(): void {
     this.employeeForm.controls['rlNo'].markAsTouched();
   
     if (this.employeeForm.controls['rlNo'].valid) {
-      this.verifyRLNo();  // Call the RLNo verification independently
+      this.verifyRLNo();  
     } else {
       this.showError = true;
       this.rlErrorMessage = 'RL Number is required';
@@ -284,14 +270,14 @@ export class CreateAccountPageComponent implements OnInit {
 
       this.checkNamesService.verifyRLNo(rlRequest).subscribe({
         next: (response: any) => {
-          console.log('RL No Response:', response); // Debugging statement
+          console.log('RL No Response:', response); 
           if (response.error === '0' && response.company_Name === companyRequest.CompanyName) {
             this.showError = false;
             this.rlErrorMessage = '';
-            this.showErrorModal = false; // Hide modal on success
+            this.showErrorModal = false; 
           } else {
             this.showError = true;
-            this.showErrorModal = true; // Show modal on error
+            this.showErrorModal = true; 
           }
         },
         error: () => {
@@ -484,12 +470,8 @@ export class CreateAccountPageComponent implements OnInit {
     this.onIndustryTypeChange(event.target.value); 
   }
 
- 
- 
 
-
-  formValue : any
-
+formValue : any
 
 currentValidationFieldIndex: number = 0;
 isContinueClicked: boolean = false;
@@ -511,38 +493,28 @@ onContinue() {
     'contactEmail'
   ];
 
-  // Get the current field to be validated
   const currentField = fieldsOrder[this.currentValidationFieldIndex];
   const control = this.employeeForm.get(currentField);
 
   if (this.employeeForm.valid) {
-    // If the form is fully valid, submit the form
     this.isPolicyAcceptedControl.setValue(true);
     this.formValue = this.employeeForm.value;
     console.log("Form submitted successfully!", this.formValue);
   } else if (control && control.invalid) {
-    // If the current field is invalid, mark it as touched and show its error
     control.markAsTouched();
 
-    // Log the current field's validation errors
     const errors = control.errors;
     console.log(`Field ${currentField} is invalid:`, errors);
 
-    // Do not proceed to the next field until the current field is valid
-    // Return here to stop further execution until this field is valid
     return;
 
   } else {
-    // Move to the next field if the current one is valid
     this.currentValidationFieldIndex++;
 
-    // Check if there are more fields to validate
     if (this.currentValidationFieldIndex < fieldsOrder.length) {
-      // Mark the next field for validation
       const nextField = fieldsOrder[this.currentValidationFieldIndex];
       this.employeeForm.get(nextField)?.markAsTouched();
     } else {
-      // If all fields are valid, submit the form
       this.isPolicyAcceptedControl.setValue(true);
       this.formValue = this.employeeForm.value;
       console.log("Form submitted successfully after validating all fields!", this.formValue);

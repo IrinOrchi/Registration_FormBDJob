@@ -5,3 +5,7 @@
     display: block; /* Ensure the error text is on its own line */
   }
   
+  .your-container {
+    @apply bg-[#F9FAFB] w-[1750px] h-[3022px];
+  }
+  

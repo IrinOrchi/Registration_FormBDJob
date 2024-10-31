@@ -1,21 +1,16 @@
-<div class="mb-[20px]" [id]="id">
-    <label [for]="id" class="block text-sm font-medium text-gray-700">
-      {{ label }}
-      @if (isRequired===true) {
-      <span class="text-red-600">*</span>
-      }
-    </label>
-    
-    <input
-      type="text"
-      class="block w-full h-[34px] py-[6px] px-[12px] mt-3 text-[14px] leading-[1.6] text-[#555] bg-white rounded border-2 border-[#e4e4e4] shadow-inner transition-colors focus:outline-none focus:ring focus:border-[#bdbdbd]"
-      [name]="name"
-      [id]="id"
-      [maxLength]="maxLength"
-      [placeholder]="placeholder"
-      [formControl]="control"
-      [required]="isRequired"
-    />
-  
-  </div>
+<div class="mb-4">
+  <label *ngIf="label" class="block text-sm font-medium text-gray-700 mb-1" [for]="id">
+    {{ label }} <span *ngIf="isRequired" class="text-red-500">*</span>
+  </label>
 
+  <input
+    type="text"
+    class="flex items-center gap-3 px-4 py-[14px] w-full rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
+    [name]="name"
+    [id]="id"
+    [maxLength]="maxLength"
+    [placeholder]="placeholder "
+    [formControl]="control"
+    [required]="isRequired"
+  />
+</div>

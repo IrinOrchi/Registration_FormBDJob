@@ -130,10 +130,6 @@ export class CheckNamesService {
 
   
   // Method to verify RL number
-  // verifyRLNo(request: RLNoRequestModel): Observable<any> {
-  //   return this.http.post(this.rlnoapiUrl, request);
-  // }
-
   verifyRLNo(request: RLNoRequestModel): Observable<any> {
     return this.http.post(this.rlnoapiUrl, request);
   }
