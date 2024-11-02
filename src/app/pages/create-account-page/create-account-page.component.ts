@@ -10,11 +10,14 @@ import {  CommonModule } from '@angular/common';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { IndustryTypeResponseDTO, IndustryType, LocationResponseDTO, RLNoRequestModel, CompanyNameCheckRequestDTO } from '../../Models/company';
 import { ErrorModalComponent } from "../../components/error-modal/error-modal.component";
+import { RadioGroupComponent } from '../../components/radio-group/radio-group.component';
+
 
 @Component({
   selector: 'app-create-account-page',
   standalone: true,
   imports: [
+    RadioGroupComponent,
     InputFieldComponent,
     SelectFieldComponent,
     TextAreaComponent,
@@ -107,6 +110,7 @@ export class CreateAccountPageComponent implements OnInit {
   thanaControl = computed(() => this.employeeForm.get('thana') as FormControl<string>);
   rlNoControl = computed(() => this.employeeForm.get('rlno') as FormControl<string>);
 
+  
 
   formControlSignals = computed(() => {
     const signals: { [key: string]: FormControl<any> } = {};

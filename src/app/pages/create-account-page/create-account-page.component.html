@@ -4,10 +4,6 @@
    class= "flex justify-between items-center p-8  shadow-lg"
 
     style="background: url('/assets/images/mid-header.svg') no-repeat; width: 1750px; height: 287px; flex-shrink: 0 ;"></div>
-    
-
-
-
   <form action="" [formGroup]="employeeForm" (ngSubmit)="onContinue()">
 
   <!-- Title -->
@@ -93,7 +89,7 @@
   <!-- Company Details Information -->
       <div class="flex flex-col sm:flex-row sm:gap-[21px]">
                     <!-- comapny name english -->
-                    <div class="col-span-1">
+                    <div class="flex-1">
                       <app-input-field
                       label="Company Name"
                       name="txtCompanyName"
@@ -150,60 +146,139 @@
                 
                 </div>
 
-                <div class="col-span-1">
-                  <!-- Country Dropdown -->
-                  <select
-                    id="country"
-                    class="block w-full h-[34px] py-[6px] px-[12px] mt-3 text-[14px] leading-[1.6] text-[#555] bg-white rounded-[8px] border border-[#DAE5EC] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] transition-colors focus:outline-none focus:ring focus:border-[#bdbdbd]"
-                    [formControl]="countryControl()"
-                    (change)="onCountryChange()"
-                  >
-                    <option value="" disabled>Select Country</option>
-                    <option *ngFor="let country of countries" [value]="country.OptionValue">{{ country.OptionText }}</option>
-                  </select>
-                  <div class="text-red-600">
-                    <ng-container *ngIf="countryControl().touched && countryControl().hasError('required')">
+                
+                
+    <app-radio-group
+    label="Number of Employees"
+    [options]="['1-25', '26-50', '51-100', '101-500', '501-1000', '1000+']"
+    [isRequired]="true"></app-radio-group>
+
+    <h2 class="block text-sm font-semibold text-gray-700 mt-4  mb-2">
+      Company Address
+      <span class="text-red-500">*</span>
+  </h2>
+  
+  <div class="flex flex-col sm:flex-row sm:gap-[21px]">
+      <!-- Country Dropdown -->
+      <div class="flex-1">
+          <select
+              id="country"
+              class="flex w-[400px] p-[14px] justify-between items-center rounded-lg border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]"
+              [formControl]="countryControl()"
+              (change)="onCountryChange()"
+          >
+              <option value="" disabled>Select Country</option>
+              <option *ngFor="let country of countries" [value]="country.OptionValue">{{ country.OptionText }}</option>
+          </select>
+          <div class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+              <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+              </svg>
+          </div>
+          <div class="text-red-600 mt-1">
+              <ng-container *ngIf="countryControl().touched && countryControl().hasError('required')">
+                  <span class="error-message">This is required</span>
+              </ng-container>
+          </div>
+      </div>
+  
+      <!-- District and Thana Dropdowns (Visible if outsideBd is false) -->
+      <div *ngIf="!outsideBd" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <!-- District Dropdown -->
+          <div class="flex-1">
+              <select
+                  id="district"
+                  class="flex w-[400px] p-[14px] justify-between items-center rounded-lg border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]"
+                  [formControl]="districtControl()"
+                  [disabled]="districts.length === 0"
+              >
+                  <option value="" disabled>Select District</option>
+                  <option *ngFor="let district of districts" [value]="district.OptionValue">{{ district.OptionText }}</option>
+              </select>
+              <div class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                  <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+              </div>
+              <div class="text-red-600 mt-1">
+                  <ng-container *ngIf="districtControl().touched && districtControl().hasError('required')">
                       <span class="error-message">This is required</span>
-                    </ng-container>
-                  </div>
-                </div>
-                
-                <!-- District and Thana Dropdowns (Visible if outsideBd is false) -->
-                <div *ngIf="!outsideBd" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                  <!-- District Dropdown -->
-                  <div class="col-span-1">
-                    <select
-                      id="district"
-                      class="block w-full h-[34px] py-[6px] px-[12px] mt-3 text-[14px] leading-[1.6] text-[#555] bg-white rounded-[8px] border border-[#DAE5EC] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] transition-colors focus:outline-none focus:ring focus:border-[#bdbdbd]"
-                      [formControl]="districtControl()"
-                      [disabled]="districts.length === 0"
-                    >
-                      <option value="" disabled>Select District</option>
-                      <option *ngFor="let district of districts" [value]="district.OptionValue">{{ district.OptionText }}</option>
-                    </select>
-                    <div class="text-red-600">
-                      <ng-container *ngIf="districtControl().touched && districtControl().hasError('required')">
-                        <span class="error-message">This is required</span>
-                      </ng-container>
-                    </div>
-                  </div>
-                
-                  <!-- Thana Dropdown -->
-                  <div class="col-span-1">
-                    <select
-                      class="block w-full h-[34px] py-[6px] px-[12px] mt-3 text-[14px] leading-[1.6] text-[#555] bg-white rounded-[8px] border border-[#DAE5EC] shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] transition-colors focus:outline-none focus:ring focus:border-[#bdbdbd]"
-                      [formControl]="thanaControl()"
-                      [disabled]="thanas.length === 0"
-                    >
-                      <option value="" disabled>Select Thana</option>
-                      <option *ngFor="let thana of thanas" [value]="thana.OptionValue">{{ thana.OptionText }}</option>
-                    </select>
-                    <div class="text-red-600">
-                      <ng-container *ngIf="thanaControl().touched && thanaControl().hasError('required')">
-                        <span class="error-message">This is required</span>
-                      </ng-container>
-                    </div>
-                  </div>
-                </div>
-                
-    
+                  </ng-container>
+              </div>
+          </div>
+  
+          <!-- Thana Dropdown -->
+          <div class="flex-1 ">
+              <select
+                  class="flex w-[400px] p-[14px] justify-between items-center rounded-lg border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]"
+                  [formControl]="thanaControl()"
+                  [disabled]="thanas.length === 0"
+              >
+                  <option value="" disabled>Select Thana</option>
+                  <option *ngFor="let thana of thanas" [value]="thana.OptionValue">{{ thana.OptionText }}</option>
+              </select>
+              <div class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                  <svg class="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+              </div>
+              <div class="text-red-600 mt-1">
+                  <ng-container *ngIf="thanaControl().touched && thanaControl().hasError('required')">
+                      <span class="error-message">This is required</span>
+                  </ng-container>
+              </div>
+          </div>
+      </div>
+  
+
+  <!-- City Input Field (Visible if outsideBd is true) -->
+  <div *ngIf="outsideBd" class=" flex-1">
+    <input
+      type="text"
+      id="city"
+      placeholder="Type City Name"
+      class="flex  w-[400px] p-[14px] justify-between items-center rounded-lg -ml-48 border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]"
+      [formControl]="formControlSignals()['cityName']"
+      maxlength="30"
+    />
+    <div class="text-red-600">
+      <!-- <ng-container *ngIf="cityName().touched && cityNameControl().hasError('required')">
+        <span>This field is required</span>
+      </ng-container> -->
+    </div>
+  </div>
+</div>
+  
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+  <div class="col-span-1">
+<app-text-area
+name="txtCompanyAddress"
+id="txtCompanyAddress"
+placeholder="Write Company Detail Address In English"
+[control]="formControlSignals()['companyAddress']"
+[maxLength]="300"
+[rows]="4"
+></app-text-area>
+<div class="text-red-600">
+@if (employeeForm.controls['companyAddress'].touched &&  employeeForm.controls['companyAddress'].errors?.['required']) {
+<span class="error-message">This is required</span>
+}
+</div>
+  </div>
+  <div class="col-span-1">
+    <app-text-area
+    name="txtCompanyAddressBng"
+    id="txtCompanyAddressBng"
+    [control]="formControlSignals()['companyAddressBangla']"
+    placeholder="Write Company Detail Address In Bangla"
+    [maxLength]="300"
+    [rows]="4"
+  ></app-text-area>
+  <div class="text-red-600">
+    @if (employeeForm.controls['companyAddressBangla'].touched &&  employeeForm.controls['companyAddressBangla'].errors?.['required']) {
+    <span class="error-message">This is required</span>
+    }
+</div>
+      </div>
+</div>
+  
