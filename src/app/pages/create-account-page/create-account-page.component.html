@@ -273,11 +273,11 @@
     </select>
   </div>
 
-  <div class="flex flex-col items-start gap-6 self-stretch w-full max-h-[100px] overflow-y-scroll rounded-lg border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)] p-6 mt-6 mb-2.5">
+  <div class="flex flex-col items-start gap-6 self-stretch max-w-full overflow-y-scroll rounded-lg border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)] p-6 mt-6 mb-2.5">
 
     <div>
         <input [formControl]="searchControl"
-               class=" w-full p-[18px] px-[16px] justify-between items-center self-stretch rounded-[8px] border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" 
+               class="flex w-full p-[18px] px-[18px] justify-between items-center self-stretch rounded-[8px] border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" 
                placeholder="Search Industry Type">
       </div>
 
@@ -305,6 +305,60 @@
     </div>
   </div>
   
+ 
+  <h2 class="block text-sm font-semibold text-gray-700 mt-4 mb-2">
+    Business Description <span class="text-red-500">*</span>
+  </h2>     
+  
+  <app-text-area
+  name="txtDescription"
+  id="txtDescription"
+  [control]="formControlSignals()['businessDesc']"
+  placeholder="Write Business Description"
+  [rows]="4"
+  ></app-text-area>
+  
+  <div class="flex flex-col sm:flex-row sm:gap-6">
+    <div class="flex-1">
+      <app-input-field
+      label="Business/ Trade License No"
+      name="business_license_no"
+      [control]="formControlSignals()['tradeNo']"
+      id="business_license_no"
+      placeholder="Business/ Trade License No"
+      [value]="''"
+      [maxLength]="30"
+      [isRequired]="false"
+      >
+    </app-input-field>
+    </div>
     
-  
-  
+    
+    <div class="flex-1">    
+          <app-input-field
+            label="Business/ Trade License No"
+            (blur)="onRLNoBlur()"
+            (input)="onInputChange($event)"
+            name="rlNo"
+            formControlName="rlNo"
+            id="rlNo"
+            placeholder="Enter Number Only"
+            maxlength="6"
+          />
+        </div>
+      <div class="flex-1">
+            <app-input-field
+            label="Website URL"
+            name="website_url"
+            id="website_url"
+            [control]="formControlSignals()['webUrl']"
+            placeholder="Type Website URL"
+            [value]="''"
+            [maxLength]="50"
+            [isRequired]="false"
+            >
+            </app-input-field>           
+        </div>   
+  </div>
+      </div>
+   

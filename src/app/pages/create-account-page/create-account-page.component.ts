@@ -480,6 +480,11 @@ formValue : any
 currentValidationFieldIndex: number = 0;
 isContinueClicked: boolean = false;
 
+onInputChange(event: Event) {
+  const input = event.target as HTMLInputElement;
+  input.value = input.value.replace(/[^0-9]/g, '');
+}
+
 onContinue() {
   this.isContinueClicked = true; 
 
