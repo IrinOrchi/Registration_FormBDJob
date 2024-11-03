@@ -361,4 +361,86 @@
         </div>   
   </div>
       </div>
-   
+
+      <div class="max-w-7xl p-6 mx-auto flex-col mt-6 items-start gap-5 rounded-2xl bg-white shadow-lg">
+        <h2 class="flex items-center mb-4 text-lg font-semibold text-blue-700">
+          <span class="icon icon-phone mr-2"></span> Fill in the contact info for whom we may reach out
+        </h2>
+
+        <!-- Contact -->
+  
+    <div class=" flex flex-cols-1 sm:flex-cols-2 gap-4">
+      <div class="flex-1">
+        <app-input-field
+        label="Contact Person's Name"
+        name="txtContactPerson"
+        id="txtContactPerson"
+        [control]="formControlSignals()['contactName']"
+        placeholder="Type contact person's name"
+        [value]="''"
+        [maxLength]="100"
+        [isRequired]="true"
+        >
+      </app-input-field>
+      <div class="text-red-600 mt-0">
+        @if (employeeForm.controls['contactName'].touched &&  employeeForm.controls['contactName'].errors?.['required']) {
+        <span class="error-message">This is required</span>
+        }
+    </div>
+      </div>
+      <div class="flex-1">
+        <app-input-field
+        label="Contact Person's Designation"
+        name="txtDesignation"
+        id="txtDesignation"
+        [control]="formControlSignals()['contactDesignation']"
+        placeholder="Type contact person's designation"
+        [value]="''"
+        [maxLength]="100"
+        [isRequired]="true"
+        >
+      </app-input-field>
+      <div class="text-red-600">
+        @if (employeeForm.controls['contactDesignation'].touched &&  employeeForm.controls['contactDesignation'].errors?.['required']) {
+        <span class="error-message">This is required</span>
+        }
+    </div>
+      </div>
+    </div>
+  
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div class="flex-1">
+        <app-input-field
+        label="Contact Person's Email"
+        name="txtContactEmail"
+        id="txtContactEmail"
+        [control]="formControlSignals()['contactEmail']"
+        placeholder="Type contact person's email"
+        [value]="''"
+        [maxLength]="45"
+        [isRequired]="true"
+        >
+      </app-input-field>
+      <div class="text-red-600">
+        @if (employeeForm.controls['contactEmail'].touched &&  employeeForm.controls['contactEmail'].errors?.['required']) {
+        <span class="error-message">This is required</span>
+        }
+        @else if (employeeForm.controls['contactEmail'].errors?.['email']) {
+          <span class="error-message">Please enter a valid email address</span>
+        }
+    </div>
+      </div>
+      <div class="flex-1">
+        <app-input-field
+        label="Contact Person's Mobile"
+        name="txtContactMobile"
+        id="txtContactMobile"
+        [control]="formControlSignals()['contactMobile']"
+        placeholder="Mobile number"
+        [value]="''"
+        [maxLength]="13"
+        [isRequired]="false"
+        >
+      </app-input-field>
+      </div>
+    </div>
