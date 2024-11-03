@@ -127,6 +127,7 @@ export class CreateAccountPageComponent implements OnInit {
   rlErrorMessage: string = '';
   showError: boolean = false;
   showErrorModal: boolean = false; 
+  showAll = false;
 
 
   searchControl: FormControl = new FormControl(''); 
@@ -483,6 +484,9 @@ isContinueClicked: boolean = false;
 onInputChange(event: Event) {
   const input = event.target as HTMLInputElement;
   input.value = input.value.replace(/[^0-9]/g, '');
+}
+toggleShowAll() {
+  this.showAll = !this.showAll;
 }
 
 onContinue() {

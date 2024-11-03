@@ -8,4 +8,10 @@
   .your-container {
     @apply bg-[#F9FAFB] w-[1750px] h-[3022px];
   }
-  
+  .industry-list {
+    max-height: 150px;
+    overflow-y: auto;
+  }
+  .industry-list.show-all {
+    max-height: none;
+  }

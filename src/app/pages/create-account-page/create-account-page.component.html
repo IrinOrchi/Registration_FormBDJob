@@ -224,7 +224,7 @@
                 maxlength="30">
            
               </div>
-           </ng-container>
+          </ng-container>
         </div>
   
         <!-- Company Address Fields -->
@@ -260,7 +260,8 @@
  
         <h2 class="block text-sm font-semibold text-gray-700 mt-4 mb-2">
             Industry Type <span class="text-red-500">*</span>
-          </h2>     
+          </h2>  
+             
       <!-- Industry Type Select Dropdown -->
 <div class="col-span-1 ">
     <select formControlName="industryType" id="SelCat" 
@@ -277,12 +278,12 @@
 
     <div>
         <input [formControl]="searchControl"
-               class="flex w-full p-[18px] px-[18px] justify-between items-center self-stretch rounded-[8px] border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" 
+               class="flex w-[1151px] p-[14px] px-[16px] justify-between items-center self-stretch rounded-[8px] border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" 
                placeholder="Search Industry Type">
       </div>
 
 
-    <div class="grid grid-cols-3 h-24 p-[24px]  items-start gap-[24px] self-stretch ">
+    <div class="grid grid-cols-3 h-24 p-[24px]  items-start gap-[24px] self-stretch  industry-list ">
       @if (filteredIndustryTypes.length > 0) {
         @for (item of getTypes(); track item.IndustryValue) {
           <div class="flex items-center">
@@ -303,6 +304,14 @@
         }
       } 
     </div>
+     <!-- Show More Button -->
+     @if (!showAll) {
+        <button 
+          class="text-blue-600 text-sm font-semibold mt-2 focus:outline-none underline industry-list" 
+          (click)="toggleShowAll()">
+          See more
+        </button>
+      }
   </div>
   
  
@@ -408,7 +417,7 @@
       </div>
     </div>
   
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div class="flex flex-cols-1 sm:flex-cols-2 gap-4">
       <div class="flex-1">
         <app-input-field
         label="Contact Person's Email"
