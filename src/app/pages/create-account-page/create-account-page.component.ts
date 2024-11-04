@@ -85,6 +85,7 @@ export class CreateAccountPageComponent implements OnInit {
     inclusionPolicy: new FormControl(''),
     support: new FormControl(''),
     disabilityWrap: new FormControl(''),
+    training: new FormControl(''),
     //
     username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
     companyName: new FormControl('', [Validators.required]),

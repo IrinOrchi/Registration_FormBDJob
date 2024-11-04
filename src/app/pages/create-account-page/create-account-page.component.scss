@@ -29,3 +29,34 @@
   letter-spacing: 0.02em; 
   font-family: 'Inter', sans-serif;
 }
+
+.custom-radio{
+.custom-radio-button {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #DAE5EC;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.custom-radio-button::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  background: white;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+
+.radio-input:checked + .custom-radio-button {
+  border-color: #2563EB;
+  background: #0F6DDB;
+}
+
+.radio-input:checked + .custom-radio-button::after {
+  background: white;
+}
+}
