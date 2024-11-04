@@ -128,6 +128,7 @@ export class CreateAccountPageComponent implements OnInit {
   showError: boolean = false;
   showErrorModal: boolean = false; 
   showAll = false;
+  
 
 
   searchControl: FormControl = new FormControl(''); 
