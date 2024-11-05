@@ -161,7 +161,7 @@
           <div class="flex-1">
             <select
               id="country"
-              class="gap-3 px-4 py-[14px] w-[400px] rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
+              class="gap-3 px-4 py-[14px] w-[388px] rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
               [formControl]="countryControl()"
               (change)="onCountryChange()">
               <option value="" disabled>Select Country</option> 
@@ -183,7 +183,7 @@
             <div class="flex-1 mb-4">
               <select
                 id="district"
-                class=" gap-3 px-4 py-[14px] w-[400px] rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
+                class=" gap-3 px-4 py-[14px] w-[388px] rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
                 [formControl]="districtControl()"
                 [disabled]="districts.length === 0">
                 <option value="" disabled>Select District</option> 
@@ -229,7 +229,7 @@
                 type="text"
                 id="city"
                 placeholder="Type City Name"
-                class="w-[400px] h-[50px] -ml-52 p-[14px] px-[16px] gap-[10px] rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
+                class="w-[388px] h-[50px] -ml-52 p-[14px] px-[16px] gap-[10px] rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
                 [formControl]="formControlSignals()['cityName']"
                 maxlength="30">
             </div>
@@ -601,9 +601,7 @@
               </div>
 
   <div class="max-w-7xl p-6 mx-auto flex-col -mt-0 items-start gap-5 rounded-2xl bg-white border border-[#DAE5EC]">
-    <h3 class="text-[#212121] font-inter text-[20px] font-semibold leading-[30px] mb-2">
-      Pricing Policy of Bdjobs.com recruitment services
-    </h3>  
+   <app-pricing-policy></app-pricing-policy>
     <div class="flex mt-3">
       <div class="flex items-center">
         <input name="policy_accept" 
@@ -619,6 +617,8 @@
         </label>
       </div>
     </div>            
+  </div>
+  </form>
   </div>
 
   

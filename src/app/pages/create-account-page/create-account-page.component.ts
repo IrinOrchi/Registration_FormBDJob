@@ -11,12 +11,14 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { IndustryTypeResponseDTO, IndustryType, LocationResponseDTO, RLNoRequestModel, CompanyNameCheckRequestDTO } from '../../Models/company';
 import { ErrorModalComponent } from "../../components/error-modal/error-modal.component";
 import { RadioGroupComponent } from '../../components/radio-group/radio-group.component';
+import { PricingPolicyComponent } from '../../components/pricing-policy/pricing-policy.component';
 
 
 @Component({
   selector: 'app-create-account-page',
   standalone: true,
   imports: [
+    PricingPolicyComponent,
     RadioGroupComponent,
     InputFieldComponent,
     SelectFieldComponent,

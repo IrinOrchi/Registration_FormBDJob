@@ -1,0 +1,83 @@
+<div class="flex items-center justify-between">
+    <h3 class="text-[#212121] font-inter text-[20px] font-semibold leading-[30px] mb-2">
+      Pricing Policy of Bdjobs.com recruitment services
+    </h3>
+    
+    <button (click)="toggleContent()" class="flex items-center">
+      <span *ngIf="isContentVisible" class=" icon icon-minus"></span>
+      <span *ngIf="!isContentVisible" class="icon icon-plus"></span>
+    </button>
+  </div>
+  
+  <div *ngIf="isContentVisible" class="mt-4">
+    <!-- Converted inline styles to Tailwind for the Pricing Section -->
+    <div class="w-[970px] h-[88px]  flex-col justify-start items-start gap-2 inline-flex">
+      <div class="w-full text-[#0F6DDB] text-[24px] font-inter font-semibold leading-[36px]">
+        Standard Listing
+      </div>
+      <div class="flex justify-start items-end gap-1">
+        <div class="text-center">
+          <span class="text-[#212121] text-[36px] font-inter font-semibold">Tk 2,850 </span>
+          <span class="text-[#212121] text-[16px] font-inter font-medium">Per job + 5% VAT</span>
+        </div>
+      </div>
+    </div>
+  
+  <div class="w-[970px] text-[#212121] text-[16px] font-inter font-medium leading-[24px] break-words mt-2">
+    Jobs displayed in Category / Classified section for 30 days
+  </div>
+
+  <div class="border-t border-[#DAE5EC] w-full my-4"></div>
+ <!-- Content Section -->
+ <div class="flex flex-col gap-2">
+    <div class="text-[#0F6DDB] text-[24px] font-inter font-semibold leading-[36px]">
+      Premium
+    </div>
+    <div class="flex gap-1 items-end">
+      <span class="text-[#212121] text-[36px] font-inter font-semibold">Tk 3,900 </span>
+      <span class="text-[#212121] text-[16px] font-inter font-medium">Per job + 5% VAT</span>
+    </div>
+    <div class="w-[970px] text-[#212121] text-[16px] font-inter font-medium leading-[24px] break-words mt-2">
+      Jobs displayed in Category / Classified section with Logo and different background colour to make your Jobs stand-out among thousands of jobs listed on the site.
+    </div>
+  </div>
+
+
+<div class="border-t border-[#DAE5EC] w-full my-4"></div>
+ <!-- Text Section -->
+ <div class="flex flex-col justify-start items-start gap-2">
+    <div class="flex flex-col justify-start items-start h-[36px] gap-4">
+      <div class="text-[#0F6DDB] text-[24px] font-inter font-semibold leading-[36px] break-words">
+        Hot Jobs
+      </div>
+    </div>
+    <div class="w-[970px] text-[16px] font-inter font-medium leading-[24px] break-words">
+      <span class="text-[#212121]">Display your company logo and position name on the homepage of </span>
+      <a href="https://www.bdjobs.com/" target="_blank" class="text-[#0F6DDB] underline">www.bdjobs.com</a>
+      <span class="text-[#212121]"> - linked with a custom-designed web page for your job announcements. These jobs will also be displayed in the classified section as Stand-out jobs.</span>
+    </div>
+  </div>
+
+
+  <div class="border-t border-[#DAE5EC] w-full my-4"></div>
+
+  <!-- Text Section -->
+  <div class="flex flex-col justify-start items-start gap-2">
+    <div class="flex flex-col justify-start items-start h-[36px] gap-4">
+      <div class="text-[#0F6DDB] text-[24px] font-inter font-semibold leading-[36px] break-words">
+        CV Bank Access Service
+      </div>
+    </div>
+    <div class="w-[970px] text-[16px] font-inter font-medium leading-[24px] break-words">
+      <span class="text-[#212121]">Get direct access to the </span>
+      <span class="text-[#0F6DDB] font-semibold">largest Database of the Professionals</span>
+      <span class="text-[#212121]"> of the country. We are currently hosting more than </span>
+      <span class="text-[#0F6DDB] font-semibold">2,300,000</span>
+      <span class="text-[#212121]"> CVs of different professionals.</span>
+    </div>
+  </div>
+</div>
+
+
+
+  
