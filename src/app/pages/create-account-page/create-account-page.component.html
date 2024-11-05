@@ -161,7 +161,7 @@
           <div class="flex-1">
             <select
               id="country"
-              class="flex items-center gap-3 px-4 py-[14px] w-full rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
+              class="gap-3 px-4 py-[14px] w-[400px] rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
               [formControl]="countryControl()"
               (change)="onCountryChange()">
               <option value="" disabled>Select Country</option> 
@@ -183,7 +183,7 @@
             <div class="flex-1 mb-4">
               <select
                 id="district"
-                class="flex items-center gap-3 px-4 py-[14px] w-full rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
+                class=" gap-3 px-4 py-[14px] w-[400px] rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
                 [formControl]="districtControl()"
                 [disabled]="districts.length === 0">
                 <option value="" disabled>Select District</option> 
@@ -204,7 +204,7 @@
             <div class="flex-1">
               <select
                 id="thana"
-                class="flex items-center gap-3 px-4 py-[14px] w-full rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
+                class="gap-3 px-4 py-[14px] w-[388px] rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
                 [formControl]="thanaControl()"
                 [disabled]="thanas.length === 0">
                 <option value="" disabled>Select Thana</option>
@@ -229,7 +229,7 @@
                 type="text"
                 id="city"
                 placeholder="Type City Name"
-                class="flex items-center gap-3 px-4 py-[14px] w-full rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
+                class="w-[400px] h-[50px] -ml-52 p-[14px] px-[16px] gap-[10px] rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
                 [formControl]="formControlSignals()['cityName']"
                 maxlength="30">
             </div>
@@ -283,7 +283,7 @@
     </select>
   </div>
 
-  <div class="flex flex-col items-start gap-6 self-stretch max-w-full overflow-y-scroll rounded-lg border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)] p-6 mt-6 mb-2.5">
+  <div class="flex flex-col items-start gap-6 self-stretch h-[282px] w-[1242px] overflow-y-scroll rounded-lg border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)] p-6 mt-6 mb-2.5">
     <div>
         <input [formControl]="searchControl"
                class="flex w-[1151px] p-[14px] px-[16px] justify-between items-center self-stretch rounded-[8px] border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" 
@@ -291,8 +291,8 @@
       </div>
                 <!-- Industry List Display -->
               <div 
-              class="grid grid-cols-3 h-24 p-[24px] items-start gap-[24px] self-stretch industry-list" 
-              [class.expanded]="showAll"              
+              class="grid grid-cols-3 p-[36px] items-start gap-[24px] self-stretch industry-list" 
+              [class.expanded]="showAll"
               >
               @if (filteredIndustryTypes.length > 0) {
                 @for ( item of getTypes(); track item.IndustryValue) {
@@ -308,7 +308,7 @@
                     >
                     <label 
                       for="industry_type_{{item.IndustryValue}}" 
-                      class="ml-2 text-sm font-sans text-black leading-[1.42857143]"
+                      class="ml-2 text-sm font-inter text-black leading-[1.42857143]"
                     >
                       {{ item.IndustryName }}
                     </label>
@@ -326,6 +326,7 @@
                 </button>
               }
   </div>
+  
           <h2 class="block text-sm font-semibold text-gray-700 mt-4 mb-2">
             Business Description <span class="text-red-500">*</span>
           </h2>     
