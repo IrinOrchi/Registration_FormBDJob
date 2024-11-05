@@ -8,13 +8,7 @@
   .your-container {
     @apply bg-[#F9FAFB] w-[1750px] h-[3022px];
   }
-  .industry-list {
-    max-height: 150px;
-    overflow-y: auto;
-  }
-  .industry-list.show-all {
-    max-height: none;
-  }
+
   .row {
     background-image: url('/public/assets/images/disability.svg'); 
     background-size: contain;
@@ -30,33 +24,13 @@
   font-family: 'Inter', sans-serif;
 }
 
-.custom-radio{
-.custom-radio-button {
-  width: 16px;
-  height: 16px;
-  border: 1px solid #DAE5EC;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+.industry-list {
+  max-height: 150px; /* Initial max height */
+  overflow-y: hidden; /* Hidden scroll initially */
+  transition: max-height 0.3s ease-in-out;
 }
 
-.custom-radio-button::after {
-  content: "";
-  width: 7px;
-  height: 7px;
-  background: white;
-  border-radius: 50%;
-  transition: background 0.2s;
-}
-
-.radio-input:checked + .custom-radio-button {
-  border-color: #2563EB;
-  background: #0F6DDB;
-}
-
-.radio-input:checked + .custom-radio-button::after {
-  background: white;
-}
+.industry-list.expanded {
+  max-height: 400px; /* Expanded max height */
+  overflow-y: auto; /* Enable scroll when expanded */
 }

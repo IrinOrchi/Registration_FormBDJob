@@ -156,77 +156,86 @@
           Company Address <span class="text-red-500">*</span>
         </h2>
   
-        <!-- Country and Region Selection -->
-        <div class="flex flex-col sm:flex-row sm:gap-6">
-          
+        <div class="flex flex-col sm:flex-row sm:gap-6">     
           <!-- Country Dropdown -->
           <div class="flex-1">
             <select
               id="country"
-              class="flex w-[400px] p-[14px] rounded-lg border border-[#DAE5EC] bg-white shadow-sm"
+              class="flex items-center gap-3 px-4 py-[14px] w-full rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
               [formControl]="countryControl()"
               (change)="onCountryChange()">
-              <option value="" disabled>Select Country</option>
-              <option *ngFor="let country of countries" [value]="country.OptionValue">{{ country.OptionText }}</option>
+              <option value="" disabled>Select Country</option> 
+              @for (country of countries; track country) {
+                <option [value]="country.OptionValue">
+                  {{ country.OptionText }}
+                </option>
+              }
             </select>
             <div class="text-red-600 mt-1">
-              @if(countryControl().touched && countryControl().hasError('required')) {
+              @if (countryControl().touched && countryControl().hasError('required')) {
                 <span class="error-message">This is required</span>
               }
             </div>
           </div>
-  
-          <!-- District and Thana (Conditional) -->
-          <ng-container *ngIf="!outsideBd">
+        
+          @if (!outsideBd) {
             <!-- District -->
-            <div class="flex-1">
+            <div class="flex-1 mb-4">
               <select
                 id="district"
-                class="flex w-[400px] p-[14px] rounded-lg border border-[#DAE5EC] bg-white shadow-sm"
+                class="flex items-center gap-3 px-4 py-[14px] w-full rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
                 [formControl]="districtControl()"
                 [disabled]="districts.length === 0">
-                <option value="" disabled>Select District</option>
-                <option *ngFor="let district of districts" [value]="district.OptionValue">{{ district.OptionText }}</option>
+                <option value="" disabled>Select District</option> 
+                @for (district of districts; track district) {
+                  <option [value]="district.OptionValue">
+                    {{ district.OptionText }}
+                  </option>
+                }
               </select>
               <div class="text-red-600 mt-1">
-                @if(districtControl().touched && districtControl().hasError('required')) {
+                @if (districtControl().touched && districtControl().hasError('required')) {
                   <span class="error-message">This is required</span>
                 }
               </div>
             </div>
-  
+        
             <!-- Thana -->
             <div class="flex-1">
               <select
-                class="flex w-[400px] p-[14px] rounded-lg border border-[#DAE5EC] bg-white shadow-sm"
+                id="thana"
+                class="flex items-center gap-3 px-4 py-[14px] w-full rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
                 [formControl]="thanaControl()"
                 [disabled]="thanas.length === 0">
                 <option value="" disabled>Select Thana</option>
-                <option *ngFor="let thana of thanas" [value]="thana.OptionValue">{{ thana.OptionText }}</option>
+                @for (thana of thanas; track thana) {
+                  <option [value]="thana.OptionValue">
+                    {{ thana.OptionText }}
+                  </option>
+                }
               </select>
               <div class="text-red-600 mt-1">
-                @if(thanaControl().touched && thanaControl().hasError('required')) {
+                @if (thanaControl().touched && thanaControl().hasError('required')) {
                   <span class="error-message">This is required</span>
                 }
               </div>
             </div>
-          </ng-container>
-  
+          }
+        
           <!-- City Input Field (if outsideBd is true) -->
-          <ng-container *ngIf="outsideBd">
+          @if (outsideBd) {
             <div class="flex-1">
               <input
                 type="text"
                 id="city"
                 placeholder="Type City Name"
-                class="flex w-[400px] p-[14px] rounded-lg border border-[#DAE5EC] bg-white shadow-sm"
+                class="flex items-center gap-3 px-4 py-[14px] w-full rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
                 [formControl]="formControlSignals()['cityName']"
                 maxlength="30">
-           
-              </div>
-          </ng-container>
+            </div>
+          }
         </div>
-  
+        
         <!-- Company Address Fields -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
           <div class="col-span-1">
@@ -244,7 +253,7 @@
               }
             </div>
           </div>
-  
+        
           <div class="col-span-1">
             <app-text-area
               name="txtCompanyAddressBng"
@@ -256,8 +265,8 @@
             </app-text-area>
           </div>
         </div>
-  
- 
+
+        <!-- Industry Type -->
         <h2 class="block text-sm font-semibold text-gray-700 mt-4 mb-2">
             Industry Type <span class="text-red-500">*</span>
           </h2>  
@@ -275,185 +284,187 @@
   </div>
 
   <div class="flex flex-col items-start gap-6 self-stretch max-w-full overflow-y-scroll rounded-lg border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)] p-6 mt-6 mb-2.5">
-
     <div>
         <input [formControl]="searchControl"
                class="flex w-[1151px] p-[14px] px-[16px] justify-between items-center self-stretch rounded-[8px] border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)]" 
                placeholder="Search Industry Type">
       </div>
+                <!-- Industry List Display -->
+              <div 
+              class="grid grid-cols-3 h-24 p-[24px] items-start gap-[24px] self-stretch industry-list" 
+              [class.expanded]="showAll"              
+              >
+              @if (filteredIndustryTypes.length > 0) {
+                @for ( item of getTypes(); track item.IndustryValue) {
+                  <div class="flex items-center">
+                    <input 
+                      name="industry_type" 
+                      id="industry_type_{{item.IndustryValue}}" 
+                      type="checkbox" 
+                      [value]="item.IndustryValue" 
+                      (change)="onCategoryChange($event)"
+                      class="h-4 w-4 text-blue-600 cursor-pointer border border-black/30 shadow-inner 
+                            checked:bg-blue-600 checked:border-blue-600" 
+                    >
+                    <label 
+                      for="industry_type_{{item.IndustryValue}}" 
+                      class="ml-2 text-sm font-sans text-black leading-[1.42857143]"
+                    >
+                      {{ item.IndustryName }}
+                    </label>
+                  </div>
+                }
+              }
+              </div>
 
-
-    <div class="grid grid-cols-3 h-24 p-[24px]  items-start gap-[24px] self-stretch  industry-list ">
-      @if (filteredIndustryTypes.length > 0) {
-        @for (item of getTypes(); track item.IndustryValue) {
-          <div class="flex items-center">
-            <input 
-              name="industry_type" 
-              id="industry_type_{{item.IndustryValue}}" 
-              type="checkbox" 
-              [value]="item.IndustryValue"
-              class="h-4 w-4 text-blue-600 cursor-pointer border border-black/30 shadow-inner 
-                     checked:bg-blue-600 checked:border-blue-600" 
-            >
-            <label 
-              for="industry_type_{{item.IndustryValue}}" 
-              class="ml-2 text-sm font-sans text-black leading-[1.42857143]">
-              {{ item.IndustryName }}
-            </label>
+              @if (!showAll) {
+                <button 
+                  class="text-blue-600 text-sm font-semibold mt-2 focus:outline-none underline" 
+                  (click)="toggleShowAll()"
+                >
+                  See more
+                </button>
+              }
+  </div>
+          <h2 class="block text-sm font-semibold text-gray-700 mt-4 mb-2">
+            Business Description <span class="text-red-500">*</span>
+          </h2>     
+          
+          <app-text-area
+          name="txtDescription"
+          id="txtDescription"
+          [control]="formControlSignals()['businessDesc']"
+          placeholder="Write Business Description"
+          [rows]="4"
+          ></app-text-area>
+          
+          <div class="flex flex-col sm:flex-row sm:gap-6">
+            <div class="flex-1">
+              <app-input-field
+              label="Business/ Trade License No"
+              name="business_license_no"
+              [control]="formControlSignals()['tradeNo']"
+              id="business_license_no"
+              placeholder="Business/ Trade License No"
+              [value]="''"
+              [maxLength]="30"
+              [isRequired]="false"
+              >
+            </app-input-field>
+            </div>
+            
+            
+            <div class="flex-1">    
+                  <app-input-field
+                    label="Business/ Trade License No"
+                    (blur)="onRLNoBlur()"
+                    (input)="onInputChange($event)"
+                    name="rlNo"
+                    formControlName="rlNo"
+                    id="rlNo"
+                    placeholder="Enter Number Only"
+                    maxlength="6"
+                  />
+                </div>
+              <div class="flex-1">
+                    <app-input-field
+                    label="Website URL"
+                    name="website_url"
+                    id="website_url"
+                    [control]="formControlSignals()['webUrl']"
+                    placeholder="Type Website URL"
+                    [value]="''"
+                    [maxLength]="50"
+                    [isRequired]="false"
+                    >
+                    </app-input-field>           
+                </div>   
           </div>
-        }
-      } 
-    </div>
-     <!-- Show More Button -->
-     @if (!showAll) {
-        <button 
-          class="text-blue-600 text-sm font-semibold mt-2 focus:outline-none underline industry-list" 
-          (click)="toggleShowAll()">
-          See more
-        </button>
-      }
-  </div>
-  
- 
-  <h2 class="block text-sm font-semibold text-gray-700 mt-4 mb-2">
-    Business Description <span class="text-red-500">*</span>
-  </h2>     
-  
-  <app-text-area
-  name="txtDescription"
-  id="txtDescription"
-  [control]="formControlSignals()['businessDesc']"
-  placeholder="Write Business Description"
-  [rows]="4"
-  ></app-text-area>
-  
-  <div class="flex flex-col sm:flex-row sm:gap-6">
-    <div class="flex-1">
-      <app-input-field
-      label="Business/ Trade License No"
-      name="business_license_no"
-      [control]="formControlSignals()['tradeNo']"
-      id="business_license_no"
-      placeholder="Business/ Trade License No"
-      [value]="''"
-      [maxLength]="30"
-      [isRequired]="false"
-      >
-    </app-input-field>
-    </div>
-    
-    
-    <div class="flex-1">    
-          <app-input-field
-            label="Business/ Trade License No"
-            (blur)="onRLNoBlur()"
-            (input)="onInputChange($event)"
-            name="rlNo"
-            formControlName="rlNo"
-            id="rlNo"
-            placeholder="Enter Number Only"
-            maxlength="6"
-          />
-        </div>
-      <div class="flex-1">
-            <app-input-field
-            label="Website URL"
-            name="website_url"
-            id="website_url"
-            [control]="formControlSignals()['webUrl']"
-            placeholder="Type Website URL"
-            [value]="''"
-            [maxLength]="50"
-            [isRequired]="false"
-            >
-            </app-input-field>           
-        </div>   
-  </div>
-      </div>
+              </div>
 
-      <div class="max-w-7xl p-6 mx-auto flex-col mt-6 items-start gap-5 rounded-2xl bg-white shadow-lg">
-        <h2 class="flex items-center mb-4 text-lg font-semibold text-blue-700">
-          <span class="icon icon-phone mr-2"></span> Fill in the contact info for whom we may reach out
-        </h2>
+              <div class="max-w-7xl p-6 mx-auto flex-col mt-6 items-start gap-5 rounded-2xl bg-white shadow-lg">
+                <h2 class="flex items-center mb-4 text-lg font-semibold text-blue-700">
+                  <span class="icon icon-phone mr-2"></span> Fill in the contact info for whom we may reach out
+                </h2>
 
-        <!-- Contact -->
-  
-    <div class=" flex flex-cols-1 sm:flex-cols-2 gap-4">
-      <div class="flex-1">
-        <app-input-field
-        label="Contact Person's Name"
-        name="txtContactPerson"
-        id="txtContactPerson"
-        [control]="formControlSignals()['contactName']"
-        placeholder="Type contact person's name"
-        [value]="''"
-        [maxLength]="100"
-        [isRequired]="true"
-        >
-      </app-input-field>
-      <div class="text-red-600 mt-0">
-        @if (employeeForm.controls['contactName'].touched &&  employeeForm.controls['contactName'].errors?.['required']) {
-        <span class="error-message">This is required</span>
-        }
-    </div>
-      </div>
-      <div class="flex-1">
-        <app-input-field
-        label="Contact Person's Designation"
-        name="txtDesignation"
-        id="txtDesignation"
-        [control]="formControlSignals()['contactDesignation']"
-        placeholder="Type contact person's designation"
-        [value]="''"
-        [maxLength]="100"
-        [isRequired]="true"
-        >
-      </app-input-field>
-      <div class="text-red-600">
-        @if (employeeForm.controls['contactDesignation'].touched &&  employeeForm.controls['contactDesignation'].errors?.['required']) {
-        <span class="error-message">This is required</span>
-        }
-    </div>
-      </div>
-    </div>
-  
-    <div class="flex flex-cols-1 sm:flex-cols-2 gap-4">
-      <div class="flex-1">
-        <app-input-field
-        label="Contact Person's Email"
-        name="txtContactEmail"
-        id="txtContactEmail"
-        [control]="formControlSignals()['contactEmail']"
-        placeholder="Type contact person's email"
-        [value]="''"
-        [maxLength]="45"
-        [isRequired]="true"
-        >
-      </app-input-field>
-      <div class="text-red-600">
-        @if (employeeForm.controls['contactEmail'].touched &&  employeeForm.controls['contactEmail'].errors?.['required']) {
-        <span class="error-message">This is required</span>
-        }
-        @else if (employeeForm.controls['contactEmail'].errors?.['email']) {
-          <span class="error-message">Please enter a valid email address</span>
-        }
-    </div>
-      </div>
-      <div class="flex-1">
-        <app-input-field
-        label="Contact Person's Mobile"
-        name="txtContactMobile"
-        id="txtContactMobile"
-        [control]="formControlSignals()['contactMobile']"
-        placeholder="Mobile number"
-        [value]="''"
-        [maxLength]="13"
-        [isRequired]="false"
-        >
-      </app-input-field>
-      </div>
-    </div>
-      </div>
+                <!-- Contact -->
+          
+            <div class=" flex flex-cols-1 sm:flex-cols-2 gap-4">
+              <div class="flex-1">
+                <app-input-field
+                label="Contact Person's Name"
+                name="txtContactPerson"
+                id="txtContactPerson"
+                [control]="formControlSignals()['contactName']"
+                placeholder="Type contact person's name"
+                [value]="''"
+                [maxLength]="100"
+                [isRequired]="true"
+                >
+              </app-input-field>
+              <div class="text-red-600 mt-0">
+                @if (employeeForm.controls['contactName'].touched &&  employeeForm.controls['contactName'].errors?.['required']) {
+                <span class="error-message">This is required</span>
+                }
+            </div>
+              </div>
+              <div class="flex-1">
+                <app-input-field
+                label="Contact Person's Designation"
+                name="txtDesignation"
+                id="txtDesignation"
+                [control]="formControlSignals()['contactDesignation']"
+                placeholder="Type contact person's designation"
+                [value]="''"
+                [maxLength]="100"
+                [isRequired]="true"
+                >
+              </app-input-field>
+              <div class="text-red-600">
+                @if (employeeForm.controls['contactDesignation'].touched &&  employeeForm.controls['contactDesignation'].errors?.['required']) {
+                <span class="error-message">This is required</span>
+                }
+            </div>
+              </div>
+            </div>
+          
+            <div class="flex flex-cols-1 sm:flex-cols-2 gap-4">
+              <div class="flex-1">
+                <app-input-field
+                label="Contact Person's Email"
+                name="txtContactEmail"
+                id="txtContactEmail"
+                [control]="formControlSignals()['contactEmail']"
+                placeholder="Type contact person's email"
+                [value]="''"
+                [maxLength]="45"
+                [isRequired]="true"
+                >
+              </app-input-field>
+              <div class="text-red-600">
+                @if (employeeForm.controls['contactEmail'].touched &&  employeeForm.controls['contactEmail'].errors?.['required']) {
+                <span class="error-message">This is required</span>
+                }
+                @else if (employeeForm.controls['contactEmail'].errors?.['email']) {
+                  <span class="error-message">Please enter a valid email address</span>
+                }
+            </div>
+              </div>
+              <div class="flex-1">
+                <app-input-field
+                label="Contact Person's Mobile"
+                name="txtContactMobile"
+                id="txtContactMobile"
+                [control]="formControlSignals()['contactMobile']"
+                placeholder="Mobile number"
+                [value]="''"
+                [maxLength]="13"
+                [isRequired]="false"
+                >
+              </app-input-field>
+              </div>
+            </div>
+              </div>
 
  <div class="max-w-7xl p-6 mx-auto flex-col mt-6 items-start gap-5 rounded-2xl bg-white border border-[#DAE5EC]">
 
@@ -609,16 +620,4 @@
     </div>            
   </div>
 
-   <!-- Continue Button -->
-
-    <div class="flex ml-60">
-      <button 
-              [disabled]="!isPolicyAcceptedControl.value" 
-              class="box-border m-0 font-inherit overflow-visible text-center  font-normal leading-normal align-middle whitespace-nowrap touch-manipulation select-none border border-transparent rounded inline-flex items-center bg-green-700 text-white text-lg px-5 py-3 shadow-md transition duration-300 ease-linear"
-              [ngClass]="{'cursor-not-allowed opacity-65': !isPolicyAcceptedControl.value}">
-        Continue 
-      </button>
-    </div>          
-<div class="mt-6">
-  {{formValue| json}}
-</div>
+  

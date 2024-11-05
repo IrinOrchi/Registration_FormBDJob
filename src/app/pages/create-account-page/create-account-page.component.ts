@@ -128,8 +128,7 @@ export class CreateAccountPageComponent implements OnInit {
   rlErrorMessage: string = '';
   showError: boolean = false;
   showErrorModal: boolean = false; 
-  showAll = false;
-  
+  showAll: boolean = false;  
 
 
   searchControl: FormControl = new FormControl(''); 
