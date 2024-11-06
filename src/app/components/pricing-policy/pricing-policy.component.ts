@@ -9,10 +9,16 @@ import { Component } from '@angular/core';
   styleUrl: './pricing-policy.component.scss'
 })
   export class PricingPolicyComponent {
-    isContentVisible = false; // State to manage visibility of the content
+    visibility: { [key: string]: boolean } = {
+      pricingPolicy: false,
+      standardListing: false,
+      premium: false,
+      hotJobs: false,
+      cvBankAccess: false
+    };
   
-    toggleContent() {
-      this.isContentVisible = !this.isContentVisible; // Toggle the state
+    toggleContent(section: string): void {
+      this.visibility[section] = !this.visibility[section];
     }
   }
 
