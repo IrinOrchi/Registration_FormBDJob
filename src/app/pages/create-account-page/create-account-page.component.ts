@@ -33,6 +33,10 @@ import { PricingPolicyComponent } from '../../components/pricing-policy/pricing-
 })
 export class CreateAccountPageComponent implements OnInit {
 
+  selectedCountry: LocationResponseDTO | null = null;
+  searchTerm = new FormControl('');
+  isOpen: boolean = false;
+
   //new
   fieldsOrder: string[] = [];
 
@@ -44,6 +48,247 @@ export class CreateAccountPageComponent implements OnInit {
   districts: LocationResponseDTO[] = [];
   thanas: LocationResponseDTO[] = [];
   outsideBd: boolean = false;  
+
+   filePath: { [key: string]: string } = {
+
+    "Afghanistan": "assets/images/Flags/Afghanistan (AF).svg",
+    "Albania": "assets/images/Flags/Albania (AL).svg",
+    "Algeria": "assets/images/Flags/Algeria (DZ).svg",
+    "American Samoa": "assets/images/Flags/American Samoa (AS).svg",
+    "Andorra": "assets/images/Flags/Andorra (AD).svg",
+    "Angola": "assets/images/Flags/Angola (AO).svg",
+    "Anguilla": "assets/images/Flags/Anguilla (AI).svg",
+    "Antarctica": "assets/images/Flags/Antarctica (AQ).svg",
+    "Antigua": "assets/images/Flags/Antigua and Barbuda (AG).svg",
+    "Argentina": "assets/images/Flags/Argentina (AR).svg",
+    "Armenia": "assets/images/Flags/Armenia (AM).svg",
+    "Aruba": "assets/images/Flags/Aruba (AW).svg",
+    "Australia": "assets/images/Flags/Australia (AU).svg",
+    "Austria": "assets/images/Flags/Austria (AT).svg",
+    "Azerbaijan": "assets/images/Flags/Azerbaijan (AZ).svg",
+    "Bahamas": "assets/images/Flags/Bahamas (BS).svg",
+    "Bahrain": "assets/images/Flags/Bahrain (BH).svg",
+    "Bangladesh": "assets/images/Flags/Bangladesh (BD).svg",
+    "Barbados": "assets/images/Flags/Barbados (BB).svg",
+    "Belarus": "assets/images/Flags/Belarus (BY).svg",
+    "Belgium": "assets/images/Flags/Belgium (BE).svg",
+    "Belize": "assets/images/Flags/Belize (BZ).svg",
+    "Benin": "assets/images/Flags/Benin (BJ).svg",
+    "Bermuda": "assets/images/Flags/Bermuda (BM).svg",
+    "British Virgin Islands" : "assets/images/Flags/Virgin Islands (British) (VG).svg",
+    "Bhutan": "assets/images/Flags/Bhutan (BT).svg",
+    "Bolivia": "assets/images/Flags/Bolivia (BO).svg",
+    "Bosnia and Herzegovina": "assets/images/Flags/Bosnia and Herzegovina (BA).svg",
+    "Botswana": "assets/images/Flags/Botswana (BW).svg",
+    "Brazil": "assets/images/Flags/Brazil (BR).svg",
+    "British Indian Ocean Territory": "assets/images/Flags/British Indian Ocean Territory (IO).svg",
+    "Brunei": "assets/images/Flags/Brunei Darussalam (BN).svg",
+    "Bulgaria": "assets/images/Flags/Bulgaria (BG).svg",
+    "Burkina Faso": "assets/images/Flags/Burkina Faso (BF).svg",
+    "Burundi": "assets/images/Flags/Burundi (BI).svg",
+    "Cambodia": "assets/images/Flags/Cambodia (KH).svg",
+    "Cameroon": "assets/images/Flags/Cameroon (CM).svg",
+    "Canada": "assets/images/Flags/Canada (CA).svg",
+    "Central African Republic": "assets/images/Flags/Central African Republic (CF).svg",
+    "Chile": "assets/images/Flags/Chile (CL).svg",
+    "China": "assets/images/Flags/China (CN).svg",
+    "Colombia": "assets/images/Flags/Colombia (CO).svg",
+    "Comoros": "assets/images/Flags/Comoros (KM).svg",
+    "Congo": "assets/images/Flags/Congo (CG).svg",
+    "Congo (Zaire)": "assets/images/Flags/Democratic Republic of the Congo (CD).svg",
+    "Cook Islands": "assets/images/Flags/Cook Islands (CK).svg",
+    "Costa Rica": "assets/images/Flags/Costa Rica (CR).svg",
+    "Cote d'Ivoire (Ivory Coast)": "assets/images/Flags/Côte d'Ivoire (CI).svg",
+    "Croatia": "assets/images/Flags/Croatia (HR).svg",
+    "Cuba": "assets/images/Flags/Cuba (CU).svg",
+    "Cyprus": "assets/images/Flags/Cyprus (CY).svg",
+    "Czech Republic": "assets/images/Flags/Czech Republic (CZ).svg",
+    "Democratic Republic of the Congo": "assets/images/Flags/Democratic Republic of the Congo (CD).svg",
+    "Denmark": "assets/images/Flags/Denmark (DK).svg",
+    "Djibouti": "assets/images/Flags/Djibouti (DJ).svg",
+    "Dominica": "assets/images/Flags/Dominica (DM).svg",
+    "Dominican Republic": "assets/images/Flags/Dominican Republic (DO).svg",
+    "Ecuador": "assets/images/Flags/Ecuador (EC).svg",
+    "Egypt": "assets/images/Flags/Egypt (EG).svg",
+    "El Salvador": "assets/images/Flags/El Salvador (SV).svg",
+    "England": "assets/images/Flags/England (GB-ENG).svg",
+    "Equatorial Guinea": "assets/images/Flags/Equatorial Guinea (GQ).svg",
+    "Eritrea": "assets/images/Flags/Eritrea (ER).svg",
+    "Eswatini": "assets/images/Flags/Eswatini (SZ).svg",
+    "Ethiopia": "assets/images/Flags/Ethiopia (ET).svg",
+    "Falkland Islands": "assets/images/Flags/Falkland Islands (FK).svg",
+    "Federated States of Micronesia": "assets/images/Flags/Federated States of Micronesia (FM).svg",
+    "Fiji": "assets/images/Flags/Fiji (FJ).svg",
+    "Finland": "assets/images/Flags/Finland (FI).svg",
+    "France": "assets/images/Flags/France (FR).svg",
+    "French Guiana": "assets/images/Flags/French Guiana (GF).svg",
+    "French Polynesia": "assets/images/Flags/French Polynesia (PF).svg",
+    "Gabon": "assets/images/Flags/Gabon (GA).svg",
+    "The Gambia": "assets/images/Flags/Gambia (GM).svg",
+    "Georgia": "assets/images/Flags/Georgia (GE).svg",
+    "Germany": "assets/images/Flags/Germany (DE).svg",
+    "Ghana": "assets/images/Flags/Ghana (GH).svg",
+    "Gibraltar": "assets/images/Flags/Gibraltar (GI).svg",
+    "Greece": "assets/images/Flags/Greece (GR).svg",
+    "Greenland": "assets/images/Flags/Greenland (GL).svg",
+    "Grenada": "assets/images/Flags/Grenada (GD).svg",
+    "Guadeloupe": "assets/images/Flags/Guadeloupe (GP).svg",
+    "Guam": "assets/images/Flags/Guam (GU).svg",
+    "Guatemala": "assets/images/Flags/Guatemala (GT).svg",
+    "Guinea": "assets/images/Flags/Guinea (GN).svg",
+    "Guinea-Bissau": "assets/images/Flags/Guinea-Bissau (GW).svg",
+    "Guyana": "assets/images/Flags/Guyana (GY).svg",
+    "Haiti": "assets/images/Flags/Haiti (HT).svg",
+    "The Holy See": "assets/images/Flags/Holy See (VA).svg",
+    "Honduras": "assets/images/Flags/Honduras (HN).svg",
+    "Hong Kong": "assets/images/Flags/Hong Kong (HK).svg",
+    "Hungary": "assets/images/Flags/Hungary (HU).svg",
+    "Iceland": "assets/images/Flags/Iceland (IS).svg",
+    "India": "assets/images/Flags/India (IN).svg",
+    "Indonesia": "assets/images/Flags/Indonesia (ID).svg",
+    "Iran": "assets/images/Flags/Iran (IR).svg",
+    "Iraq": "assets/images/Flags/Iraq (IQ).svg",
+    "Ireland": "assets/images/Flags/Ireland (IE).svg",
+    "Israel": "assets/images/Flags/Israel (IL).svg",
+    "Italy": "assets/images/Flags/Italy (IT).svg",
+    "Jamaica": "assets/images/Flags/Jamaica (JM).svg",
+    "Japan": "assets/images/Flags/Japan (JP).svg",
+    "Jersey": "assets/images/Flags/Jersey (JE).svg",
+    "Jordan": "assets/images/Flags/Jordan (JO).svg",
+    "Kazakhstan": "assets/images/Flags/Kazakhstan (KZ).svg",
+    "Kenya": "assets/images/Flags/Kenya (KE).svg",
+    "Kiribati": "assets/images/Flags/Kiribati (KI).svg",
+    "Kuwait": "assets/images/Flags/Kuwait (KW).svg",
+    "Kyrgyzstan": "assets/images/Flags/Kyrgyzstan (KG).svg",
+    "Laos": "assets/images/Flags/Laos (LA).svg",
+    "Latvia": "assets/images/Flags/Latvia (LV).svg",
+    "Lebanon": "assets/images/Flags/Lebanon (LB).svg",
+    "Lesotho": "assets/images/Flags/Lesotho (LS).svg",
+    "Liberia": "assets/images/Flags/Liberia (LR).svg",
+    "Libya": "assets/images/Flags/Libya (LY).svg",
+    "Liechtenstein": "assets/images/Flags/Liechtenstein (LI).svg",
+    "Lithuania": "assets/images/Flags/Lithuania (LT).svg",
+    "Luxembourg": "assets/images/Flags/Luxembourg (LU).svg",
+    "Macau": "assets/images/Flags/Macau (MO).svg",
+    "Madagascar": "assets/images/Flags/Madagascar (MG).svg",
+    "Malawi": "assets/images/Flags/Malawi (MW).svg",
+    "Malaysia": "assets/images/Flags/Malaysia (MY).svg",
+    "Maldives": "assets/images/Flags/Maldives (MV).svg",
+    "Mali": "assets/images/Flags/Mali (ML).svg",
+    "Malta": "assets/images/Flags/Malta (MT).svg",
+    "Marshall Islands": "assets/images/Flags/Marshall Islands (MH).svg",
+    "Martinique": "assets/images/Flags/Martinique (MQ).svg",
+    "Mauritania": "assets/images/Flags/Mauritania (MR).svg",
+    "Mauritius": "assets/images/Flags/Mauritius (MU).svg",
+    "Mayotte": "assets/images/Flags/Mayotte (YT).svg",
+    "Mexico": "assets/images/Flags/Mexico (MX).svg",
+    "Micronesia": "assets/images/Flags/Micronesia (FM).svg",
+    "Moldova": "assets/images/Flags/Moldova (MD).svg",
+    "Monaco": "assets/images/Flags/Monaco (MC).svg",
+    "Mongolia": "assets/images/Flags/Mongolia (MN).svg",
+    "Montenegro": "assets/images/Flags/Montenegro (ME).svg",
+    "Montserrat": "assets/images/Flags/Montserrat (MS).svg",
+    "Morocco": "assets/images/Flags/Morocco (MA).svg",
+    "Mozambique": "assets/images/Flags/Mozambique (MZ).svg",
+    "Myanmar": "assets/images/Flags/Myanmar (MM).svg",
+    "Namibia": "assets/images/Flags/Namibia (NA).svg",
+    "Nauru": "assets/images/Flags/Nauru (NR).svg",
+    "Nepal": "assets/images/Flags/Nepal (NP).svg",
+    "Netherlands": "assets/images/Flags/Netherlands (NL).svg",
+    "New Zealand": "assets/images/Flags/New Zealand (NZ).svg",
+    "Nicaragua": "assets/images/Flags/Nicaragua (NI).svg",
+    "Niger": "assets/images/Flags/Niger (NE).svg",
+    "Nigeria": "assets/images/Flags/Nigeria (NG).svg",
+    "Niue": "assets/images/Flags/Niue (NU).svg",
+    "Norfolk Island": "assets/images/Flags/Norfolk Island (NF).svg",
+    "North Macedonia": "assets/images/Flags/North Macedonia (MK).svg",
+    "Macedonia": "assets/images/Flags/Macedonia (MK).svg",
+    "Northern Mariana Islands": "assets/images/Flags/Northern Mariana Islands (MP).svg",
+    "Norway": "assets/images/Flags/Norway (NO).svg",
+    "Oman": "assets/images/Flags/Oman (OM).svg",
+    "Pakistan": "assets/images/Flags/Pakistan (PK).svg",
+    "Palau": "assets/images/Flags/Palau (PW).svg",
+    "Panama": "assets/images/Flags/Panama (PA).svg",
+    "Papua New Guinea": "assets/images/Flags/Papua New Guinea (PG).svg",
+    "Paraguay": "assets/images/Flags/Paraguay (PY).svg",
+    "Peru": "assets/images/Flags/Peru (PE).svg",
+    "North Korea": "assets/images/Flags/North Korea (KP).svg",
+    "New Caledonia": "assets/images/Flags/New Caledonia (NC).svg",
+    "Philippines": "assets/images/Flags/Philippines (PH).svg",
+    "Pitcairn Islands": "assets/images/Flags/Pitcairn (PN).svg",
+    "Poland": "assets/images/Flags/Poland (PL).svg",
+    "Portugal": "assets/images/Flags/Portugal (PT).svg",
+    "Puerto Rico": "assets/images/Flags/Puerto Rico (PR).svg",
+    "Qatar": "assets/images/Flags/Qatar (QA).svg",
+    "Réunion": "assets/images/Flags/Réunion (RE).svg",
+    "Romania": "assets/images/Flags/Romania (RO).svg",
+    "Russia": "assets/images/Flags/Russia (RU).svg",
+    "Rwanda": "assets/images/Flags/Rwanda (RW).svg",
+    "Saint Barthélemy": "assets/images/Flags/Saint Barthélemy (BL).svg",
+    "Saint Helena, Ascension and Tristan da Cunha": "assets/images/Flags/Saint Helena, Ascension and Tristan da Cunha (SH).svg",
+    "Saint Kitts and Nevis": "assets/images/Flags/Saint Kitts and Nevis (KN).svg",
+    "Saint Lucia": "assets/images/Flags/Saint Lucia (LC).svg",
+    "Saint Martin": "assets/images/Flags/Saint Martin (MF).svg",
+    "Saint Pierre and Miquelon": "assets/images/Flags/Saint Pierre and Miquelon (PM).svg",
+    "Saint Vincent and the Grenadines": "assets/images/Flags/Saint Vincent and the Grenadines (VC).svg",
+    "Samoa": "assets/images/Flags/Samoa (WS).svg",
+    "San Marino": "assets/images/Flags/San Marino (SM).svg",
+    "Sao Tome and Principe": "assets/images/Flags/Sao Tome and Principe (ST).svg",
+    "Saudi Arabia": "assets/images/Flags/Saudi Arabia (SA).svg",
+    "Senegal": "assets/images/Flags/Senegal (SN).svg",
+    "Serbia": "assets/images/Flags/Serbia (RS).svg",
+    "Seychelles": "assets/images/Flags/Seychelles (SC).svg",
+    "Sierra Leone": "assets/images/Flags/Sierra Leone (SL).svg",
+    "Singapore": "assets/images/Flags/Singapore (SG).svg",
+    "Sint Eustatius": "assets/images/Flags/Sint Eustatius (SX).svg",
+    "Sint Maarten": "assets/images/Flags/Sint Maarten (SX).svg",
+    "Slovakia": "assets/images/Flags/Slovakia (SK).svg",
+    "Slovenia": "assets/images/Flags/Slovenia (SI).svg",
+    "Solomon Islands": "assets/images/Flags/Solomon Islands (SB).svg",
+    "Somalia": "assets/images/Flags/Somalia (SO).svg",
+    "South Africa": "assets/images/Flags/South Africa (ZA).svg",
+    "South Korea": "assets/images/Flags/South Korea (KR).svg",
+    "South Sudan": "assets/images/Flags/South Sudan (SS).svg",
+    "Spain": "assets/images/Flags/Spain (ES).svg",
+    "Sri Lanka": "assets/images/Flags/Sri Lanka (LK).svg",
+    "Sudan": "assets/images/Flags/Sudan (SD).svg",
+    "Suriname": "assets/images/Flags/Suriname (SR).svg",
+    "Svalbard": "assets/images/Flags/Svalbard (SJ).svg",
+    "Sweden": "assets/images/Flags/Sweden (SE).svg",
+    "Switzerland": "assets/images/Flags/Switzerland (CH).svg",
+    "Syria": "assets/images/Flags/Syria (SY).svg",
+    "Taiwan": "assets/images/Flags/Taiwan (TW).svg",
+    "Tajikistan": "assets/images/Flags/Tajikistan (TJ).svg",
+    "Tanzania": "assets/images/Flags/Tanzania (TZ).svg",
+    "Thailand": "assets/images/Flags/Thailand (TH).svg",
+    "Timor-Leste": "assets/images/Flags/Timor-Leste (TL).svg",
+    "Togo": "assets/images/Flags/Togo (TG).svg",
+    "Tokelau": "assets/images/Flags/Tokelau (TK).svg",
+    "Tonga": "assets/images/Flags/Tonga (TO).svg",
+    "Trinidad and Tobago": "assets/images/Flags/Trinidad and Tobago (TT).svg",
+    "Tunisia": "assets/images/Flags/Tunisia (TN).svg",
+    "Turkey": "assets/images/Flags/Turkey (TR).svg",
+    "Turkmenistan": "assets/images/Flags/Turkmenistan (TM).svg",
+    "Turks and Caicos Islands": "assets/images/Flags/Turks and Caicos Islands (TC).svg",
+    "Tuvalu": "assets/images/Flags/Tuvalu (TV).svg",
+    "Uganda": "assets/images/Flags/Uganda (UG).svg",
+    "Ukraine": "assets/images/Flags/Ukraine (UA).svg",
+    "United Arab Emirates": "assets/images/Flags/United Arab Emirates (AE).svg",
+    "United Kingdom": "assets/images/Flags/United Kingdom (GB).svg",
+    "United States": "assets/images/Flags/United States of America (US).svg",
+    "Uruguay": "assets/images/Flags/Uruguay (UY).svg",
+    "Uzbekistan": "assets/images/Flags/Uzbekistan (UZ).svg",
+    "Vanuatu": "assets/images/Flags/Vanuatu (VU).svg",
+    "Vatican City": "assets/images/Flags/Vatican City (VA).svg",
+    "Venezuela": "assets/images/Flags/Venezuela (VE).svg",
+    "Vietnam": "assets/images/Flags/Vietnam (VN).svg",
+    "Western Sahara": "assets/images/Flags/Western Sahara (EH).svg",
+    "Yemen": "assets/images/Flags/Yemen (YE).svg",
+    "Zambia": "assets/images/Flags/Zambia (ZM).svg",
+    "Zimbabwe": "assets/images/Flags/Zimbabwe (ZW).svg"
+  
+  
+};
 
 
   facilitiesForDisabilitiesControl = new FormControl(false);
@@ -147,6 +392,9 @@ export class CreateAccountPageComponent implements OnInit {
     this.setupSearch();
     this.fetchIndustryTypes();
     this.fetchCountries();
+    this.fetchCountries();
+    this.searchTerm.valueChanges.subscribe(() => this.filterCountries());
+    
 
 
     this.employeeForm.get('industryType')?.valueChanges.subscribe(selectedIndustryId => {
@@ -167,6 +415,11 @@ export class CreateAccountPageComponent implements OnInit {
         this.fetchThanas(districtId);
       }
     });
+  }
+  filterCountries(): LocationResponseDTO[] {
+    return this.countries.filter(country => 
+      country.OptionText.toLowerCase().includes(this.searchTerm.value?.toLowerCase() || '')
+    );
   }
 
   setupUsernameCheck(): void {
@@ -293,10 +546,10 @@ export class CreateAccountPageComponent implements OnInit {
           this.showErrorModal = true; // Show modal for error message
         }
       });
-    } else {
-      this.showError = true;
-      this.showErrorModal = true; 
-    }
+          } else {
+            this.showError = true;
+            this.showErrorModal = true; 
+          }
   }
   
   closeModal(): void {
@@ -381,6 +634,8 @@ export class CreateAccountPageComponent implements OnInit {
             this.countries = countryData.map((item: any) => ({
               OptionValue: item.optionValue,  
               OptionText: item.optionText,
+              flagPath: this.filePath[item.optionText] || '' 
+
             }));
             this.employeeForm.get('country')?.setValue('118');
           } else {
@@ -421,6 +676,28 @@ export class CreateAccountPageComponent implements OnInit {
       }
     });
   }
+  toggleDropdown() {
+    this.isOpen = !this.isOpen;
+  }
+
+  selectCountry(country: LocationResponseDTO) {
+    this.selectedCountry = country;
+    this.isOpen = false;
+    this.searchTerm.setValue('');
+  }
+
+  get filteredCountries() {
+    return this.filterCountries();
+  }
+
+ public getFlagSvg(country: LocationResponseDTO): string {
+    const filePath = country.flagPath;
+      `<img src="${filePath}" alt="flag" width="24" height="24" />`
+    return filePath;
+  
+  }
+
+
 
 // Fetch thanas for the selected district
   private fetchThanas(districtId: string): void {

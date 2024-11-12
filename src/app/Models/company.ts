@@ -21,6 +21,8 @@ export interface IndustryTypeResponseDTO {
   export interface LocationResponseDTO {
     OptionValue: string;
     OptionText: string;
+    flagPath: string;
+
   }
   
   export interface LocationRequestDTO {

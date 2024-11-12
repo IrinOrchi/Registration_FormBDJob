@@ -34,3 +34,9 @@
   max-height: 400px; /* Expanded max height */
   overflow-y: auto; /* Enable scroll when expanded */
 }
+.custom-select option {
+  padding-left: 30px; /* Adjust as needed for flag width */
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: 20px 20px; /* Adjust flag size */
+}
