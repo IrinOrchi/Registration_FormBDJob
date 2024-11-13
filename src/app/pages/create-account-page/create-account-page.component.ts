@@ -291,6 +291,8 @@ export class CreateAccountPageComponent implements OnInit {
 };
 
 
+
+
   facilitiesForDisabilitiesControl = new FormControl(false);
 
   isPolicyAcceptedControl = new FormControl(false);
@@ -376,6 +378,7 @@ export class CreateAccountPageComponent implements OnInit {
   showError: boolean = false;
   showErrorModal: boolean = false; 
   showAll: boolean = false;  
+  
 
 
   searchControl: FormControl = new FormControl(''); 
@@ -394,6 +397,11 @@ export class CreateAccountPageComponent implements OnInit {
     this.fetchCountries();
     this.fetchCountries();
     this.searchTerm.valueChanges.subscribe(() => this.filterCountries());
+    this.selectedCountry = {
+      OptionText: 'Bangladesh',
+      OptionValue: '118',
+      flagPath: this.filePath['Bangladesh']
+    };
     
 
 
@@ -720,14 +728,14 @@ export class CreateAccountPageComponent implements OnInit {
       }
     });
   }
-  onCountryChange() {
-    const selectedCountry = this.employeeForm.get('country')?.value;
-    this.outsideBd = selectedCountry !== '118';
-    if (this.outsideBd) {
-      this.employeeForm.get('district')?.setValue('');
-      this.employeeForm.get('thana')?.setValue('');
-    }
-  }
+  // onCountryChange() {
+  //   const selectedCountry = this.employeeForm.get('country')?.value;
+  //   this.outsideBd = selectedCountry !== '118';
+  //   if (this.outsideBd) {
+  //     this.employeeForm.get('district')?.setValue('');
+  //     this.employeeForm.get('thana')?.setValue('');
+  //   }
+  // }
  
   setupSearch(): void {
     this.searchControl.valueChanges.pipe(debounceTime(300), distinctUntilChanged())
