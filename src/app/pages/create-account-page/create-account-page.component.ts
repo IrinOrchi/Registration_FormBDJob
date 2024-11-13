@@ -12,6 +12,7 @@ import { IndustryTypeResponseDTO, IndustryType, LocationResponseDTO, RLNoRequest
 import { ErrorModalComponent } from "../../components/error-modal/error-modal.component";
 import { RadioGroupComponent } from '../../components/radio-group/radio-group.component';
 import { PricingPolicyComponent } from '../../components/pricing-policy/pricing-policy.component';
+import { MathCaptchaComponent } from "../../components/math-captcha/math-captcha.component";
 
 
 @Component({
@@ -26,7 +27,8 @@ import { PricingPolicyComponent } from '../../components/pricing-policy/pricing-
     CheckboxGroupComponent,
     ReactiveFormsModule,
     CommonModule,
-    ErrorModalComponent
+    ErrorModalComponent,
+    MathCaptchaComponent
 ],
   templateUrl: './create-account-page.component.html',
   styleUrls: ['./create-account-page.component.scss']
