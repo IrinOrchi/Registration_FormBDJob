@@ -1,5 +1,5 @@
 
-<div class="bg-[#F9FAFB] w-[1750px] h-[3022px]">
+<div class="bg-[#F9FAFB] w-[1750px] h-[7022px]">
     <!-- Header Section -->
     <div class="flex justify-between items-center p-8 shadow-lg"
          style="background: url('/assets/images/mid-header.svg') no-repeat; width: 1750px; height: 287px; flex-shrink: 0;"></div>
@@ -494,9 +494,17 @@
                 placeholder="Mobile number"
                 [value]="''"
                 [maxLength]="13"
-                [isRequired]="false"
+                [isRequired]="true"
                 >
               </app-input-field>
+              <div class="text-red-600">
+                @if (employeeForm.controls['contactMobile'].touched &&  employeeForm.controls['contactMobile'].errors?.['required']) {
+                <span class="error-message">This is required</span>
+                }
+                @else if (employeeForm.controls['contactMobile'].errors?.['mobile']) {
+                  <span class="error-message">Please enter a valid email address</span>
+                }
+            </div>          
               </div>
             </div>
               </div>
