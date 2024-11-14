@@ -12,12 +12,7 @@ import { IndustryTypeResponseDTO, IndustryType, LocationResponseDTO, RLNoRequest
 import { ErrorModalComponent } from "../../components/error-modal/error-modal.component";
 import { RadioGroupComponent } from '../../components/radio-group/radio-group.component';
 import { PricingPolicyComponent } from '../../components/pricing-policy/pricing-policy.component';
-<<<<<<< HEAD
 import { MathCaptchaComponent } from '../../components/math-captcha/math-captcha.component';
-=======
-import { MathCaptchaComponent } from "../../components/math-captcha/math-captcha.component";
->>>>>>> 0fee8ff05e43f977b412215d624409d474f21744
-
 
 @Component({
   selector: 'app-create-account-page',
