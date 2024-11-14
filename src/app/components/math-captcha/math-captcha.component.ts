@@ -7,7 +7,11 @@ import { InputFieldComponent } from '../input-field/input-field.component';
 @Component({
   selector: 'app-math-captcha',
   standalone: true,
+<<<<<<< HEAD
   imports: [ReactiveFormsModule, CommonModule, InputFieldComponent],
+=======
+  imports: [ReactiveFormsModule, CommonModule,InputFieldComponent],
+>>>>>>> 0fee8ff05e43f977b412215d624409d474f21744
   templateUrl: './math-captcha.component.html',
   styleUrls: ['./math-captcha.component.scss']
 })
@@ -16,10 +20,14 @@ export class MathCaptchaComponent implements OnInit {
   operand2 = signal(this.randomNumber());
   operator = signal(this.randomOperator());
 
+<<<<<<< HEAD
   expressionDisplay = computed(() => {
     const operatorSymbol = this.operator() === '/' ? '÷' : this.operator();
     return `${this.operand1()} ${operatorSymbol} ${this.operand2()}`;
   });
+=======
+  expressionDisplay = computed(() => `${this.operand1()} ${this.operator()} ${this.operand2()}`);
+>>>>>>> 0fee8ff05e43f977b412215d624409d474f21744
   captchaAnswer = computed(() => this.evaluateCaptcha());
   captchaInput = new FormControl('', [Validators.required]);
 
@@ -32,10 +40,13 @@ export class MathCaptchaComponent implements OnInit {
       .subscribe((userAnswer) => {
         this.validateAnswerOnChange(userAnswer);
       });
+<<<<<<< HEAD
   }
   isCaptchaValid(): boolean {
     const userAnswer = Number(this.captchaInput.value);
     return !isNaN(userAnswer) && userAnswer === this.captchaAnswer();
+=======
+>>>>>>> 0fee8ff05e43f977b412215d624409d474f21744
   }
 
   generateCaptcha() {
@@ -45,17 +56,24 @@ export class MathCaptchaComponent implements OnInit {
       const [op1, op2] = [this.randomNumber(), this.randomNumber()].sort((a, b) => b - a);
       this.operand1.set(op1);
       this.operand2.set(op2);
+<<<<<<< HEAD
     } else if (this.operator() === '*') {
       const [op1, op2] = [this.randomNumber(), this.randomNumber()].sort((a, b) => b - a);
       this.operand1.set(op1);
       this.operand2.set(op2);
+=======
+>>>>>>> 0fee8ff05e43f977b412215d624409d474f21744
     } else if (this.operator() === '/') {
       let op1 = this.randomNumber();
       let op2 = this.randomNumber();
       while (op2 === 0) {
         op2 = this.randomNumber();
       }
+<<<<<<< HEAD
       if (op1 < op2) [op1, op2] = [op2, op1]; 
+=======
+      if (op1 < op2) [op1, op2] = [op2, op1];
+>>>>>>> 0fee8ff05e43f977b412215d624409d474f21744
       this.operand1.set(op1);
       this.operand2.set(op2);
     } else {
@@ -91,28 +109,48 @@ export class MathCaptchaComponent implements OnInit {
 
   // Validate answer on input change without setting errors
   private validateAnswerOnChange(userAnswer: string | null | undefined) {
+<<<<<<< HEAD
     if (userAnswer && userAnswer.trim() !== '') {
       const answer = Number(userAnswer);
       if (answer === this.captchaAnswer()) {
         this.captchaInput.setErrors(null);
+=======
+    if (userAnswer && userAnswer.trim() !== '') { 
+      const answer = Number(userAnswer);
+      if (answer === this.captchaAnswer()) {
+        this.captchaInput.setErrors(null); 
+>>>>>>> 0fee8ff05e43f977b412215d624409d474f21744
       }
     }
   }
 
   // Validate on blur to set errors and show the error message
   validateAnswerOnBlur(userAnswer: string | null | undefined) {
+<<<<<<< HEAD
     if (userAnswer && userAnswer.trim() !== '') {
       const answer = Number(userAnswer);
       if (answer === this.captchaAnswer()) {
         this.captchaInput.setErrors(null);
       } else {
         this.captchaInput.setErrors({ incorrect: true });
+=======
+    if (userAnswer && userAnswer.trim() !== '') { 
+      const answer = Number(userAnswer); 
+      if (answer === this.captchaAnswer()) {
+        this.captchaInput.setErrors(null);
+      } else {
+        this.captchaInput.setErrors({ incorrect: true }); 
+>>>>>>> 0fee8ff05e43f977b412215d624409d474f21744
       }
     } else {
       this.captchaInput.setErrors(null);
     }
   }
 
+<<<<<<< HEAD
+=======
+  // Error message to display
+>>>>>>> 0fee8ff05e43f977b412215d624409d474f21744
   get captchaErrorMessage() {
     if (this.captchaInput.hasError('incorrect')) {
       return 'Incorrect answer, please try again.';
