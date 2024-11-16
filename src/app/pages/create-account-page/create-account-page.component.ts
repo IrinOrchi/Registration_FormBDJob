@@ -296,11 +296,11 @@ export class CreateAccountPageComponent implements OnInit {
 };
 
 countrie = [
-  { name: 'Afghanistan', code: 'AF', phoneCode: '+93' },
-  { name: 'Albania', code: 'AL', phoneCode: '+355' },
-  { name: 'Algeria', code: 'DZ', phoneCode: '+213' },
-  { name: 'American Samoa', code: 'AS', phoneCode: '+1' },
-  { name: 'Anguilla', code: 'AI', phoneCode: '+1' },
+{ name: 'Afghanistan', code: 'AF', phoneCode: '+93' },
+{ name: 'Albania', code: 'AL', phoneCode: '+355' },
+{ name: 'Algeria', code: 'DZ', phoneCode: '+213' },
+{ name: 'American Samoa', code: 'AS', phoneCode: '+1' },
+{ name: 'Anguilla', code: 'AI', phoneCode: '+1' },
 { name: 'Antarctica', code: 'AQ', phoneCode: '+672' },
 { name: 'Antigua and Barbuda', code: 'AG', phoneCode: '+1' },
 { name: 'Argentina', code: 'AR', phoneCode: '+54' },
@@ -527,14 +527,8 @@ currentCountry = { name: 'Bangladesh', code: 'BD', phoneCode: '+880' };
 currentFlagPath = this.filePath['Bangladesh'];
 filteredCountriesList = this.countrie;
 
-
-
-
-
   facilitiesForDisabilitiesControl = new FormControl(false);
-
   isPolicyAcceptedControl = new FormControl(false);
-
   isPolicyAccepted: boolean = this.isPolicyAcceptedControl.value!;
 
   
@@ -649,13 +643,9 @@ filteredCountriesList = this.countrie;
     };
     this.currentCountry = { name: 'Bangladesh', code: 'BD', phoneCode: '+880' };
     this.currentFlagPath = this.filePath['Bangladesh'];
-    
-
-
     this.employeeForm.get('industryType')?.valueChanges.subscribe(selectedIndustryId => {
       this.onIndustryTypeChange(selectedIndustryId);
     });
-
     this.employeeForm.get('country')?.valueChanges.subscribe((value: string) => {
             if (value === '118') {
               this.outsideBd = false;  
@@ -664,7 +654,6 @@ filteredCountriesList = this.countrie;
               this.outsideBd = true;    
             }
           });
-
     this.employeeForm.get('district')?.valueChanges.subscribe(districtId => {
       if (districtId) {
         this.fetchThanas(districtId);
@@ -677,7 +666,6 @@ filteredCountriesList = this.countrie;
     );
   }
 
-  
    setupUsernameCheck(): void {
     const usernameControl = this.employeeForm.get('username') as FormControl;
 
@@ -695,7 +683,6 @@ filteredCountriesList = this.countrie;
       country.name.toLowerCase().includes(query)
     );
   }
-  
   setupCompanyNameCheck(): void {
     const companyNameControl = this.employeeForm.get('companyName') as FormControl;
 
@@ -706,8 +693,6 @@ filteredCountriesList = this.countrie;
         this.checkUniqueCompanyName(value);
       });
   }
-
-
   private checkUniqueUsername(username: string): void {
     this.checkNamesService.checkUniqueUserName(username).subscribe({
       next: (response) => {
@@ -753,12 +738,9 @@ filteredCountriesList = this.countrie;
       this.showErrorModal = true; 
     }
   }
-  
   verifyRLNo(): void {
     const rlNo: string = this.employeeForm.get('rlNo')?.value.toString();
-    const companyName: string = this.employeeForm.get('companyName')?.value.toString();
-  
-  
+    const companyName: string = this.employeeForm.get('companyName')?.value.toString(); 
     if (rlNo) {
       const rlRequest: RLNoRequestModel = { RLNo: rlNo };
 
@@ -769,26 +751,6 @@ filteredCountriesList = this.countrie;
       };
 
       console.log(companyRequest.CompanyName)
-      
-  
-      // this.checkNamesService.verifyRLNo(rlRequest).subscribe({
-      //   next: (response: any) => {
-      //     console.log('RL No Response:', response.company_Name === companyRequest.CompanyName); 
-      //     console.log(response.company_Name)
-      //     if (response.error === '0' ) {
-      //       this.showError = false;
-      //       this.rlErrorMessage = '';
-      //       this.showErrorModal = false; 
-      //     } else {
-      //       this.showError = true;
-      //       this.showErrorModal = true;
-      //     }
-      //   },
-      //   error: () => {
-      //     this.showError = true;
-      //     this.showErrorModal = true;
-      //   }
-      // });
 
       this.checkNamesService.verifyRLNo(rlRequest).subscribe({
         next: (response: any) => {
@@ -812,13 +774,9 @@ filteredCountriesList = this.countrie;
             this.showErrorModal = true; 
           }
   }
-  
   closeModal(): void {
     this.showErrorModal = false; 
   }
-  
-  
-
   // Fetch all industries
   fetchIndustries(): void {
     this.checkNamesService.getAllIndustryIds().pipe(
@@ -957,9 +915,6 @@ filteredCountriesList = this.countrie;
     return filePath;
   
   }
-
-
-
 // Fetch thanas for the selected district
   private fetchThanas(districtId: string): void {
     const requestPayload = { OutsideBd: '0', DistrictId: districtId };
@@ -981,14 +936,6 @@ filteredCountriesList = this.countrie;
       }
     });
   }
-  // onCountryChange() {
-  //   const selectedCountry = this.employeeForm.get('country')?.value;
-  //   this.outsideBd = selectedCountry !== '118';
-  //   if (this.outsideBd) {
-  //     this.employeeForm.get('district')?.setValue('');
-  //     this.employeeForm.get('thana')?.setValue('');
-  //   }
-  // }
  
   setupSearch(): void {
     this.searchControl.valueChanges.pipe(debounceTime(300), distinctUntilChanged())
@@ -1028,9 +975,7 @@ filteredCountriesList = this.countrie;
     this.currentFlagPath = country ? this.filePath[country.name] : '';
   }
 
-
 formValue : any
-
 currentValidationFieldIndex: number = 0;
 isContinueClicked: boolean = false;
 
@@ -1092,7 +1037,4 @@ onContinue() {
     }
   }
 }
-
-
-
 }

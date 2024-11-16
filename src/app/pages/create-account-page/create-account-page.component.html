@@ -45,6 +45,7 @@
               placeholder="Type Password"
               [maxLength]="8"
               [isRequired]="true"
+              type="password"
               errorMessage="Password is required">
             </app-input-field>
             <div class="text-red-600">
@@ -52,7 +53,7 @@
                 <span class="error-message">Password is required</span>
               }
               @else if(employeeForm.controls['password'].errors?.['minlength']) {
-                <span class="error-message">Minimum length should be 6</span>
+                <span class="error-message">Minimum length should be 8</span>
               }
             </div>
           </div>
@@ -67,6 +68,7 @@
               placeholder="Retype password"
               [maxLength]="8"
               [isRequired]="true"
+              type="password" 
               errorMessage="Confirm Password is required">
             </app-input-field>
             <div class="text-red-600">
@@ -74,7 +76,7 @@
                 <span class="error-message">Confirm Password is required</span>
               }
               @else if(employeeForm.controls['confirmPassword'].errors?.['minlength']) {
-                <span class="error-message">Minimum length should be 6</span>
+                <span class="error-message">Minimum length should be 8</span>
               }
             </div>
           </div>
@@ -358,8 +360,6 @@
                 </button>
               }
   </div>
-
-  
   
           <h2 class="block text-sm font-semibold text-gray-700 mt-4 mb-2">
             Business Description <span class="text-red-500">*</span>

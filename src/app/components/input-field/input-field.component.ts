@@ -18,5 +18,6 @@ export class InputFieldComponent {
   @Input() errorMessage: string = '';
   @Input() maxLength: number = 20;
   @Input() isRequired!: boolean;
+  @Input() type: string = 'text';
   @Input() control: FormControl<string> = new FormControl()
 }
