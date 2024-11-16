@@ -13,20 +13,31 @@
 
 @if (visibility['pricingPolicy']) {
   <div class="mt-4">
-    <!-- Standard Listing Section -->
-    <div class="flex flex-col w-full">
-      <div class="flex items-center justify-between w-full">
-        <div class="text-[#0F6DDB] text-[24px] font-inter font-semibold leading-[36px]">
-          Standard Listing
-        </div>
-        <button (click)="toggleContent('standardListing')" class="flex items-center">
-          @if (visibility['standardListing']) {
-            <span class="icon icon-minus"></span>
-          } @else {
-            <span class="icon icon-plus"></span>
-          }
-        </button>
-      </div>
+
+  <!-- Standard Listing Section -->
+<div class="flex flex-col w-full">
+  <div class="flex items-center justify-start w-full gap-2"> 
+ 
+    <div class="relative text-[#0F6DDB]">
+      <i class="icon icon-cv text-[24px]"></i> 
+    </div>
+
+    <div class="text-[#0F6DDB] text-[24px] font-inter font-semibold leading-[36px]">
+      Standard Listing
+    </div>
+
+   
+    <button
+      (click)="toggleContent('standardListing')"
+      class="flex items-center ml-auto"> 
+      @if (visibility['standardListing']) {
+        <span class="icon icon-minus"></span>
+      } @else {
+        <span class="icon icon-plus"></span>
+      }
+    </button>
+  </div>
+
 
       <div class="flex items-end gap-1 mt-2">
         <span class="text-[#212121] text-[36px] font-inter font-semibold">Tk 2,850</span>
@@ -63,11 +74,15 @@
 <div class="border-t border-[#DAE5EC] w-full my-4"></div>
 
 <!-- Premium Section -->
-<div class="flex items-center justify-between w-full">
+<div class="flex items-center justify-between w-full gap-2">
+  
+  <div class="relative text-[#0F6DDB]">
+    <i class="icon icon-cv text-[24px]"></i> 
+  </div>
   <div class="text-[#0F6DDB] text-[24px] font-inter font-semibold leading-[36px]">
     Premium
   </div>
-  <button (click)="toggleContent('premium')" class="flex items-center">
+  <button (click)="toggleContent('premium')" class="flex items-center ml-auto">
     @if (visibility['premium']) {
       <span class="icon icon-minus"></span>
     } @else {
@@ -88,6 +103,9 @@
   <div class="gap-4 mt-6">
     <div class="w-full max-w-[970px] h-[88px] flex flex-col justify-start items-start gap-2">
       <div class="w-full text-[#0F6DDB] text-[24px] font-inter font-semibold leading-[36px] flex items-center gap-2">
+        <div class="relative text-[#0F6DDB]">
+          <i class="icon icon-cv text-[24px]"></i> 
+        </div>
         <span>Premium Plus</span>
         <div class="bg-[#FFF1F3] px-2 py-[2px] rounded-[12px] text-[#C01048] text-[12px] font-inter font-semibold">
           NEW
@@ -127,11 +145,14 @@
 <div class="border-t border-[#DAE5EC] w-full my-4"></div>
 
 <!-- Hot Jobs Section -->
-<div class="flex items-center justify-between w-full">
+<div class="flex items-center justify-between w-full gap-2">
+  <div class="relative text-[#0F6DDB]">
+    <i class="icon icon-cv text-[24px]"></i> 
+  </div>
   <div class="text-[#0F6DDB] text-[24px] font-inter font-semibold leading-[36px]">
     Hot Jobs
   </div>
-  <button (click)="toggleContent('hotJobs')" class="flex items-center">
+  <button (click)="toggleContent('hotJobs')" class="flex items-center ml-auto">
     @if (visibility['hotJobs']) {
       <span class="icon icon-minus"></span>
     } @else {
@@ -157,11 +178,14 @@
 <div class="border-t border-[#DAE5EC] w-full my-4"></div>
 
 <!-- CV Bank Access Section -->
-<div class="flex items-center justify-between w-full">
+<div class="flex items-center justify-between w-full gap-2">
+  <div class="relative text-[#0F6DDB]">
+    <i class="icon icon-cv-bank text-[24px]"></i> 
+  </div>
   <div class="text-[#0F6DDB] text-[24px] font-inter font-semibold leading-[36px]">
     CV Bank Access Service
   </div>
-  <button (click)="toggleContent('cvBankAccess')" class="flex items-center">
+  <button (click)="toggleContent('cvBankAccess')" class="flex items-center ml-auto">
     @if (visibility['cvBankAccess']) {
       <span class="icon icon-minus"></span>
     } @else {

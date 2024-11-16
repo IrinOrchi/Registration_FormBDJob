@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed } from '@angular/core';
+import { Component, OnInit, signal, computed } from '@angular/core';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -42,7 +42,7 @@ export class MathCaptchaComponent implements OnInit {
     this.operator.set(this.randomOperator());
 
     if (this.operator() === '-') {
-      const [op1, op2] = [this.randomNumber(), this.randomNumber()].sort((a, b) => b - a);
+      const [op1, op2] = [this.randomNumber(), this.randomNumber()];
       this.operand1.set(op1);
       this.operand2.set(op2);
     } else if (this.operator() === '*') {
@@ -115,7 +115,7 @@ export class MathCaptchaComponent implements OnInit {
 
   get captchaErrorMessage() {
     if (this.captchaInput.hasError('incorrect')) {
-      return 'Incorrect answer, please try again.';
+      return 'Incorrect Validation Code, please try again.';
     }
     return '';
   }
