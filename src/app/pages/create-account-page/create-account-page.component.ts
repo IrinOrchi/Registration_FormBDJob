@@ -53,6 +53,8 @@ export class CreateAccountPageComponent implements OnInit {
   districts: LocationResponseDTO[] = [];
   thanas: LocationResponseDTO[] = [];
   outsideBd: boolean = false;  
+  selectedIndustries: { IndustryValue: number; IndustryName: string }[] = [];
+
 
    filePath: { [key: string]: string } = {
 
@@ -837,6 +839,36 @@ filteredCountriesList = this.countrie;
       this.filteredIndustryTypes = [...this.industryTypes];
     }
   }
+ 
+
+  onIndustryCheckboxChange(
+    event: Event,
+    item: { IndustryValue: number; IndustryName: string }
+  ): void {
+    const checkbox = event.target as HTMLInputElement;
+    if (checkbox.checked) {
+      this.selectedIndustries.push(item);
+    } else {
+      this.selectedIndustries = this.selectedIndustries.filter(
+        (industry) => industry.IndustryValue !== item.IndustryValue
+      );
+    }
+  }
+
+  removeIndustry(industry: { IndustryValue: number; IndustryName: string }): void {
+    this.selectedIndustries = this.selectedIndustries.filter(
+      (selected) => selected.IndustryValue !== industry.IndustryValue
+    );
+
+    // Uncheck the corresponding checkbox
+    const checkbox = document.getElementById(
+      `industry_type_${industry.IndustryValue}`
+    ) as HTMLInputElement;
+    if (checkbox) {
+      checkbox.checked = false;
+    }
+  }
+
 
   // Fetch countries (Outside Bangladesh included)
   private fetchCountries(): void {

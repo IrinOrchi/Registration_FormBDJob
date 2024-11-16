@@ -34,8 +34,8 @@ export class MathCaptchaComponent implements OnInit {
       });
   }
   isCaptchaValid(): boolean {
-    const userAnswer = Number(this.captchaInput.value);
-    return !isNaN(userAnswer) && userAnswer === this.captchaAnswer();
+    const userAnswer = parseFloat(this.captchaInput.value ?? '');
+    return !isNaN(userAnswer) && Math.abs(userAnswer - this.captchaAnswer()) < 0.01; 
   }
 
   generateCaptcha() {
@@ -46,7 +46,7 @@ export class MathCaptchaComponent implements OnInit {
       this.operand1.set(op1);
       this.operand2.set(op2);
     } else if (this.operator() === '*') {
-      const [op1, op2] = [this.randomNumber(), this.randomNumber()].sort((a, b) => b - a);
+      const [op1, op2] = [this.randomNumber(), this.randomNumber()].sort((a, b) => a - b);
       this.operand1.set(op1);
       this.operand2.set(op2);
     } else if (this.operator() === '/') {
@@ -84,7 +84,7 @@ export class MathCaptchaComponent implements OnInit {
       case '+': return op1 + op2;
       case '-': return op1 - op2;
       case '*': return op1 * op2;
-      case '/': return Math.floor(op1 / op2);
+      case '/': return parseFloat((op1 / op2).toFixed(2));
       default: return 0;
     }
   }
@@ -93,7 +93,7 @@ export class MathCaptchaComponent implements OnInit {
   private validateAnswerOnChange(userAnswer: string | null | undefined) {
     if (userAnswer && userAnswer.trim() !== '') {
       const answer = Number(userAnswer);
-      if (answer === this.captchaAnswer()) {
+      if (!isNaN(answer) && Math.abs(answer - this.captchaAnswer()) < 0.01) {
         this.captchaInput.setErrors(null);
       }
     }
@@ -102,8 +102,8 @@ export class MathCaptchaComponent implements OnInit {
   // Validate on blur to set errors and show the error message
   validateAnswerOnBlur(userAnswer: string | null | undefined) {
     if (userAnswer && userAnswer.trim() !== '') {
-      const answer = Number(userAnswer);
-      if (answer === this.captchaAnswer()) {
+      const answer = parseFloat(userAnswer);
+      if (!isNaN(answer) && Math.abs(answer - this.captchaAnswer()) < 0.01) {
         this.captchaInput.setErrors(null);
       } else {
         this.captchaInput.setErrors({ incorrect: true });
