@@ -363,22 +363,21 @@
               }
   </div>
   <div class="mt-4 flex flex-wrap gap-2">
-    <span
-      *ngFor="let industry of selectedIndustries"
-      class="flex items-center bg-[#E5E7EB] text-[#212121] text-[14px] font-inter px-3 py-1 rounded-full shadow-sm"
-    >
-      {{ industry.IndustryName }}
-      <button
-        type="button"
-        class="ml-2 text-blue-500 hover:text-blue-700 focus:outline-none"
-        (click)="removeIndustry(industry)"
+    @for (industry of selectedIndustries; track industry.IndustryValue) {
+      <span
+        class="flex items-center bg-[#F3F4F6] text-[#212121] text-[14px] font-inter px-3 py-1 rounded-full shadow-sm"
       >
-        &times;
-      </button>
-    </span>
+        {{ industry.IndustryName }}
+        <button
+          type="button"
+          class="ml-2 text-[#212121] bg-[#E5E7EB] w-4 h-4 rounded-full flex items-center justify-center hover:bg-gray-300 focus:outline-none"
+          (click)="removeIndustry(industry)"
+        >
+          &times;
+        </button>
+      </span>
+    }
   </div>
-
-  
           <h2 class="block text-sm font-semibold text-gray-700 mt-4 mb-2">
             Business Description <span class="text-red-500">*</span>
           </h2>     
