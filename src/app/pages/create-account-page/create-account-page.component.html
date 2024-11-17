@@ -409,18 +409,31 @@
             </div>
             
             
-            <div class="flex-1">    
-                  <app-input-field
-                    label="RL No."
-                    (blur)="onRLNoBlur()"
-                    (input)="onInputChange($event)"
-                    name="rlNo"
-                    formControlName="rlNo"
-                    id="rlNo"
-                    placeholder="Enter Number Only"
-                    maxlength="6"
-                  />
-                </div>
+            <div class="flex-1">
+              <label for="rlNo" class="block text-sm font-semibold text-gray-700 mb-1">
+                RL No.
+              </label>
+              <input
+                class="px-12 py-[14px] w-full rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
+                (blur)="onRLNoBlur()"
+                (input)="onInputChange($event)"
+                name="rlNo"
+                formControlName="rlNo"
+                id="rlNo"
+                placeholder="Enter Number Only"
+                maxlength="6"
+              />
+            </div>  
+            @if (showErrorModal){
+
+            <app-error-modal></app-error-modal>
+          }
+            @if (showErrorModal){
+              <app-error-modal (modalClosed)="showErrorModal = false"></app-error-modal>
+          }
+            
+                        
+
               <div class="flex-1">
                     <app-input-field
                     label="Website URL"

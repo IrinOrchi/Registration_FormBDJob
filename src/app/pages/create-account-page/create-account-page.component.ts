@@ -768,7 +768,7 @@ filteredCountriesList = this.countrie;
         },
         error: () => {
           this.showError = true;
-          this.showErrorModal = true; // Show modal for error message
+          this.showErrorModal = true; 
         }
       });
           } else {
@@ -784,10 +784,12 @@ filteredCountriesList = this.countrie;
     this.checkNamesService.getAllIndustryIds().pipe(
       map((response: any) => {
         if (response.error === '0') {
-          return response.industryIds.map((industry: any) => ({
+          const industries = response.industryIds.map((industry: any) => ({
             IndustryId: industry.industryId,
             IndustryName: industry.industryName
           }));
+          industries.push({ IndustryId: -10, IndustryName: 'Others' }); 
+          return industries;
         } else {
           throw new Error('Failed to fetch industries due to error in response');
         }
@@ -800,36 +802,37 @@ filteredCountriesList = this.countrie;
     });
   }
 
-   //Industry
+   // Fetch industry types based on selected IndustryId
+private fetchIndustryTypes(industryId: number = 0): void {
+  this.checkNamesService.fetchIndustryTypes(industryId).subscribe({
+    next: (response: any) => {
+      if (response.error === '0') {
+        const industryData = response.industryType || []; 
   
-   private fetchIndustryTypes(industryId: number = 0): void {
-    this.checkNamesService.fetchIndustryTypes(industryId).subscribe({
-      next: (response: any) => {
-        if (response.error === "0") {
-          const industryData = response.industryType || []; 
-  
-          if (Array.isArray(industryData) && industryData.length > 0) {
-            this.industryTypes = industryData.map((item: any) => ({
-              IndustryValue: item.industryValue,
-              IndustryName: item.industryName
-            }));
-            this.filteredIndustryTypes = [...this.industryTypes];
-            
-          } else {
-            console.error('No industry types found in the response.');
-            this.industryTypes = []; 
-          }
+        if (Array.isArray(industryData) && industryData.length > 0) {
+          this.industryTypes = industryData.map((item: any) => ({
+            IndustryValue: item.industryValue,
+            IndustryName: item.industryName
+          }));
+          this.filteredIndustryTypes = [...this.industryTypes];
         } else {
-          console.error('Unexpected error response:', response.error);
+          console.warn(
+            `No industry types found for IndustryId: ${industryId}.`
+          );
           this.industryTypes = []; 
         }
-      },
-      error: (error: any) => {
-        console.error('Error fetching industry types:', error);
+      } else {
+        console.error('Unexpected error response:', response.error);
         this.industryTypes = []; 
       }
-    });
-  }
+    },
+    error: (error: any) => {
+      console.error('Error fetching industry types:', error);
+      this.industryTypes = []; 
+    }
+  });
+}
+
   // Trigger filtering of industries based on dropdown selection
   onIndustryTypeChange(selectedIndustryId: string | number): void {
     const parsedIndustryId = parseInt(selectedIndustryId as string, 10); 
@@ -840,7 +843,6 @@ filteredCountriesList = this.countrie;
     }
   }
  
-
   onIndustryCheckboxChange(
     event: Event,
     item: { IndustryValue: number; IndustryName: string }
