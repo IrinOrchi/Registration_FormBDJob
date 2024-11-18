@@ -431,9 +431,6 @@
             @if (showErrorModal){
               <app-error-modal (modalClosed)="showErrorModal = false"></app-error-modal>
           }
-            
-                        
-
               <div class="flex-1">
                     <app-input-field
                     label="Website URL"
@@ -532,7 +529,7 @@
                   <div class="relative flex items-center">
                     <button 
                       id="dropdown-phone-button" 
-                      class="flex-shrink-0 z-10 inline-flex items-center py-2 px-3 text-[16px] font-inter text-gray-900 bg-white border-r border-gray-300 hover:bg-gray-100 focus:ring-2 focus:ring-gray-200 focus:outline-none"
+                      class="flex items-center py-2 px-3 text-[16px] font-inter text-gray-900 bg-white border-r border-gray-300 hover:bg-gray-100 focus:ring-2 focus:ring-gray-200 focus:outline-none"
                       type="button"
                       (click)="toggleDropdown()"
                     >
@@ -639,7 +636,9 @@
                     <span class="ml-1 question">No</span>
                 </label>
             </fieldset>
-        
+
+   @if (formControlSignals()['inclusionPolicy'].value === '2') 
+              {    
                 <fieldset class="mb-4">
                     <legend class="text-[#212121] font-inter text-[16px] font-semibold leading-[24px]">Would you like to have any support for implementing?</legend>
                     <label class="radio-inline mr-4" for="disabilityInclusRadPol3">
@@ -651,6 +650,7 @@
                         <span class="ml-1 question">No</span>
                     </label>
                 </fieldset>  
+              }
                 
                 <fieldset class="mb-4">
                   <legend class="text-[#212121] font-inter text-[16px] font-semibold leading-[24px]">Do you provide Disability Inclusion Training for your Employees?</legend>

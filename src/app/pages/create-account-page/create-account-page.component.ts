@@ -670,7 +670,6 @@ filteredCountriesList = this.countrie;
 
    setupUsernameCheck(): void {
     const usernameControl = this.employeeForm.get('username') as FormControl;
-
     usernameControl.valueChanges
       .pipe(debounceTime(300), distinctUntilChanged())
       .subscribe((value) => {
