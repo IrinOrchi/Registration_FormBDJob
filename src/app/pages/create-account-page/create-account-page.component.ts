@@ -34,6 +34,7 @@ import { MathCaptchaComponent } from '../../components/math-captcha/math-captcha
   styleUrls: ['./create-account-page.component.scss']
 })
 export class CreateAccountPageComponent implements OnInit {
+  
 
   @ViewChild(MathCaptchaComponent) captchaComponent!: MathCaptchaComponent;
   isCaptchaValid = false;

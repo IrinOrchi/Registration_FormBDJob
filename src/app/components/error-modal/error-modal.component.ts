@@ -11,6 +11,6 @@ export class ErrorModalComponent {
   @Output() modalClosed = new EventEmitter<void>();
 
   closeModal(): void {
-    this.modalClosed.emit(); // Emit an event to close the modal
+    this.modalClosed.emit();
   }
 }
