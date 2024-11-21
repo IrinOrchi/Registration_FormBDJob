@@ -14,6 +14,7 @@ import { RadioGroupComponent } from '../../components/radio-group/radio-group.co
 import { PricingPolicyComponent } from '../../components/pricing-policy/pricing-policy.component';
 import { MathCaptchaComponent } from '../../components/math-captcha/math-captcha.component';
 import { filePath,countrie ,disabilities} from '../../constants/file-path.constants';
+import { AddIndustryModalComponent } from "../../components/add-industry-modal/add-industry-modal.component";
 
 @Component({
   selector: 'app-create-account-page',
@@ -29,7 +30,8 @@ import { filePath,countrie ,disabilities} from '../../constants/file-path.consta
     ReactiveFormsModule,
     CommonModule,
     ErrorModalComponent,
-    MathCaptchaComponent
+    MathCaptchaComponent,
+    AddIndustryModalComponent
 ],
   templateUrl: './create-account-page.component.html',
   styleUrls: ['./create-account-page.component.scss']
@@ -46,6 +48,8 @@ export class CreateAccountPageComponent implements OnInit {
   selectedCountry: LocationResponseDTO | null = null;
   searchTerm = new FormControl('');
   isOpen: boolean = false;
+  showAddIndustryButton: boolean = false; 
+  
 
 
   fieldsOrder: string[] = [];
@@ -126,7 +130,7 @@ filteredCountriesList = this.countrie;
   showError: boolean = false;
   showErrorModal: boolean = false; 
   showAll: boolean = false;  
-  
+  showAddIndustryModal = false;
 
 
   searchControl: FormControl = new FormControl(''); 
@@ -207,6 +211,8 @@ filteredCountriesList = this.countrie;
         this.checkUniqueCompanyName(value);
       });
   }
+  
+  
   private checkUniqueUsername(username: string): void {
     this.checkNamesService.checkUniqueUserName(username).subscribe({
       next: (response) => {
@@ -300,6 +306,7 @@ filteredCountriesList = this.countrie;
             IndustryId: industry.industryId,
             IndustryName: industry.industryName
           }));
+          
           industries.push({ IndustryId: -10, IndustryName: 'Others' }); 
           return industries;
         } else {
@@ -315,7 +322,13 @@ filteredCountriesList = this.countrie;
   }
 
    // Fetch industry types based on selected IndustryId
-private fetchIndustryTypes(industryId: number = 0): void {
+private fetchIndustryTypes(industryId: number = -1 ): void {
+  this.showAddIndustryButton = false;
+
+  if (industryId === -1) {
+    console.log('Default "All" selected; hiding the button.');
+    return; 
+  }
   this.checkNamesService.fetchIndustryTypes(industryId).subscribe({
     next: (response: any) => {
       if (response.error === '0') {
@@ -327,23 +340,46 @@ private fetchIndustryTypes(industryId: number = 0): void {
             IndustryName: item.industryName
           }));
           this.filteredIndustryTypes = [...this.industryTypes];
+          // this.showAddIndustryButton = industryId === -10;
+          this.showAddIndustryButton = true;
+
         } else {
           console.warn(
             `No industry types found for IndustryId: ${industryId}.`
           );
           this.industryTypes = []; 
+          this.showAddIndustryButton = false;
         }
       } else {
         console.error('Unexpected error response:', response.error);
         this.industryTypes = []; 
+        this.showAddIndustryButton = false;
       }
     },
     error: (error: any) => {
       console.error('Error fetching industry types:', error);
       this.industryTypes = []; 
+      this.showAddIndustryButton = false;
     }
   });
 }
+addNewIndustry(): void {
+  this.showAddIndustryModal = true;
+}
+
+// Close the modal
+closeAddIndustryModal(): void {
+  this.showAddIndustryModal = false;
+}
+
+// Handle the newly added industry
+handleNewIndustry(industry: IndustryType): void {
+  const updatedIndustries = [...this.industries.value, industry];
+  this.industries.next(updatedIndustries);
+  this.closeAddIndustryModal(); // Close the modal after adding
+}
+
+
 
   // Trigger filtering of industries based on dropdown selection
   onIndustryTypeChange(selectedIndustryId: string | number): void {
@@ -387,7 +423,6 @@ private fetchIndustryTypes(industryId: number = 0): void {
   // Fetch countries (Outside Bangladesh included)
   private fetchCountries(): void {
     const requestPayload = { OutsideBd: '1', DistrictId: '' };
-
     this.checkNamesService.getLocations(requestPayload).subscribe({
       next: (response: any) => {
         console.log("Full response:", response);
@@ -489,7 +524,7 @@ private fetchIndustryTypes(industryId: number = 0): void {
         this.filterIndustryTypes(query);
       });
   }
-
+ 
   getTypes(): IndustryTypeResponseDTO[] {
     return this.filteredIndustryTypes;
   }
@@ -504,11 +539,14 @@ private fetchIndustryTypes(industryId: number = 0): void {
       );
     }
   }
-
-  onCategoryChange(event: any): void {
-    this.onIndustryTypeChange(event.target.value); 
+  onCategoryChange(event: Event): void {
+    const selectedIndustryId = parseInt((event.target as HTMLSelectElement).value);
+    this.fetchIndustryTypes(selectedIndustryId);
+    this.onIndustryTypeChange(selectedIndustryId);
+    this.showAddIndustryButton = false;
   }
-
+  
+ 
   chooseCountry(country: any) {
     this.currentCountry = country;
     this.currentFlagPath = this.filePath[country.name];
