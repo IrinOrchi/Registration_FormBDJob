@@ -329,13 +329,13 @@
     </button>
   </div>
 
-  <app-add-industry-modal
-  *ngIf="showAddIndustryModal"
-  [closeModal]="closeAddIndustryModal.bind(this)"
-  [industries]="industries"
-  [selectedIndustryId]="selectedIndustryId" 
-  (newIndustry)="handleNewIndustry($event)">
-</app-add-industry-modal>
+      <app-add-industry-modal
+      *ngIf="showAddIndustryModal"
+      [closeModal]="closeAddIndustryModal.bind(this)"
+      [industries]="industries"
+      [selectedIndustryId]="selectedIndustryId" 
+      (newIndustry)="handleNewIndustry($event)">
+    </app-add-industry-modal>
 
   <div class="flex flex-col items-start gap-6 self-stretch h-[282px] w-[1242px] overflow-y-scroll rounded-lg border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)] p-6 mt-6 mb-2.5">
     <div>
@@ -359,7 +359,6 @@
                       class="h-4 w-4 text-blue-600 cursor-pointer border border-black/30 shadow-inner 
                             checked:bg-blue-600 checked:border-blue-600" 
                       (change)="onIndustryCheckboxChange($event, item)"
-
                     />
                     <label 
                       for="industry_type_{{item.IndustryValue}}" 
@@ -371,7 +370,6 @@
                 }
               }
               </div>
-
               @if (!showAll) {
                 <button 
                   class="text-[#0E73A9] text-sm font-semibold mt-2 focus:outline-none underline" 
@@ -423,8 +421,6 @@
               >
             </app-input-field>
             </div>
-            
-            
             <div class="flex-1">
               <label for="rlNo" class="block text-sm font-semibold text-gray-700 mb-1">
                 RL No.
@@ -621,14 +617,14 @@
     
     <!-- Checkbox -->
     <div class="flex items-center mt-4 gap-3">
-      <input
+      <app-checkbox-group
         name="DisabilitiesFacility"
         id="chkDisabilitiesFacility"
         value="1"
         type="checkbox"
-        class="w-4 h-4 text-[#0F6DDB] border-[#0F6DDB] rounded-sm focus:ring-0 focus:ring-offset-0"
+        customClasses="text-[#0F6DDB] border-[#0F6DDB] rounded-sm"
         [formControl]="facilitiesForDisabilitiesControl"
-      >
+      ></app-checkbox-group>
       <label for="chkDisabilitiesFacility" class="text-[#212121] font-inter text-[16px] font-normal leading-[24px]">
         Facilities for Person with Disabilities
       </label>
@@ -636,7 +632,7 @@
   
   @if (employeeForm.get('facilitiesForDisabilities')?.value === true) {
       <div  id="DisabilityPanel" class="block -mr-2">
-<div class="container flex flex-wrap p-4 mt-2 mx-auto -ml-2 rounded-lg" style="background-image: url('/assets/images/disability.svg'); background-size: 60%; background-repeat: no-repeat; background-position: right;">
+<div class="container flex flex-wrap  p-4 mt-2 mx-auto -ml-2 mb-4 rounded-lg" style="background-image: url('/assets/images/disability.svg'); background-size: 60%; background-repeat: no-repeat; background-position: right;">
   
     <div class="w-full mb-6 lg:w-1/2">
             <fieldset class="mb-4">
@@ -666,8 +662,7 @@
                         <span class="ml-1 question">No</span>
                     </label>
                 </fieldset>  
-              }
-                
+              }   
                 <fieldset class="mb-4">
                   <legend class="text-[#212121] font-inter text-[16px] font-semibold leading-[24px]">Do you provide Disability Inclusion Training for your Employees?</legend>
                   <label class="radio-inline mr-4" for="disabilityInclusRadPol5">

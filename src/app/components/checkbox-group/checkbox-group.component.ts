@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
@@ -9,24 +9,17 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
   styleUrls: ['./checkbox-group.component.scss']
 })
 export class CheckboxGroupComponent {
-  @Input() items: { label: string, value: string }[] = [];
-  @Input() selectedCategory: string = '';
-  @Input() searchQuery: string = '';
-  @Input() control: FormControl<string> = new FormControl()
-  
-  // @Input() control!: FormControl;
+  @Input() id!: string; // Unique identifier for the checkbox
+  @Input() name!: string; // Name attribute
+  @Input() value!: any; // Value of the checkbox
+  @Input() label!: string; // Label text
+  @Input() formControl!: FormControl; // FormControl for Reactive Forms
+  @Input() customClasses: string = ''; // Custom styling classes
 
-  getFilteredItems() {
-    let filteredItems = this.selectedCategory === 'Others' || this.selectedCategory === ''
-      ? this.items
-      : this.items.filter(item => item.value === this.selectedCategory);
+  @Output() changed = new EventEmitter<boolean>(); // Output for change events
 
-    if (this.searchQuery) {
-      filteredItems = filteredItems.filter(item =>
-        item.label.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-    }
-
-    return filteredItems;
+  onCheckboxChange(event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.changed.emit(checked);
   }
 }

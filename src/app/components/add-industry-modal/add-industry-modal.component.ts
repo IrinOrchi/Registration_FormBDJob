@@ -16,6 +16,7 @@ export class AddIndustryModalComponent implements OnChanges {
   @Input() industries: BehaviorSubject<IndustryType[]> = new BehaviorSubject<IndustryType[]>([]);
   @Output() newIndustry = new EventEmitter<IndustryType>();
   @Input() selectedIndustryId: number = 0;
+  
   employeeForm: FormGroup;
   constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef) {
     this.employeeForm = this.fb.group({

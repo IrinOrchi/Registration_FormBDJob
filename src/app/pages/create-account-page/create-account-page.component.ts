@@ -324,7 +324,6 @@ filteredCountriesList = this.countrie;
    // Fetch industry types based on selected IndustryId
 private fetchIndustryTypes(industryId: number = -1 ): void {
   this.showAddIndustryButton = false;
-
   if (industryId === -1) {
     console.log('Default "All" selected; hiding the button.');
     return; 
@@ -363,12 +362,9 @@ private fetchIndustryTypes(industryId: number = -1 ): void {
     }
   });
 }
-
-
 addNewIndustry(): void {
   this.showAddIndustryModal = true;
 }
-
 // Close the modal
 closeAddIndustryModal(): void {
   this.showAddIndustryModal = false;
@@ -380,7 +376,6 @@ handleNewIndustry(industry: IndustryType): void {
   this.industries.next(updatedIndustries);
   this.closeAddIndustryModal(); 
 }
-
   // Trigger filtering of industries based on dropdown selection
   onIndustryTypeChange(selectedIndustryId: string | number): void {
     const parsedIndustryId = parseInt(selectedIndustryId as string, 10); 
@@ -390,7 +385,6 @@ handleNewIndustry(industry: IndustryType): void {
       this.filteredIndustryTypes = [...this.industryTypes];
     }
   }
- 
   onIndustryCheckboxChange(
     event: Event,
     item: { IndustryValue: number; IndustryName: string }
@@ -418,8 +412,6 @@ handleNewIndustry(industry: IndustryType): void {
       checkbox.checked = false;
     }
   }
-
-
   // Fetch countries (Outside Bangladesh included)
   private fetchCountries(): void {
     const requestPayload = { OutsideBd: '1', DistrictId: '' };
@@ -577,8 +569,6 @@ onContinue() {
   this.checkCaptchaValidity();
   this.isContinueClicked = true; 
   console.log(this.employeeForm.value);
-
-
   const fieldsOrder = [
     'username', 
     'password',
