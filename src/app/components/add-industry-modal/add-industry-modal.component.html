@@ -3,56 +3,48 @@
   (click)="closeModal()">
   <div 
     class="bg-white rounded-lg w-[400px] p-6 shadow-lg"
-    (click)="$event.stopPropagation()"> <!-- Prevent propagation for modal clicks -->
+    (click)="$event.stopPropagation()"> 
+
     <!-- Modal Header -->
     <div class="flex justify-between items-center mb-4">
-      <div class="flex items-center gap-2">
-        <div class="text-blue-600 text-xl font-bold">+</div>
-        <h2 class="text-lg font-semibold">Add New Industry</h2>
-      </div>
+      <h2 class="text-lg font-semibold">Add New Industry</h2>
       <button class="text-gray-500" (click)="closeModal()">✕</button>
     </div>
-    <p class="text-sm text-gray-500 mb-4">Please specify your industry</p>
 
     <!-- Industry Type Dropdown -->
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700 mb-1">Industry Type</label>
-      <select formControlName="industryType" 
-              class="w-full p-2 rounded border border-gray-300">
-        <option value="" disabled selected>Select Industry Type</option>
-        <option *ngFor="let industry of industries | async; trackByIndustryId" 
-                [value]="industry?.IndustryId">
-          {{ industry?.IndustryName }}
-        </option>
+    <div class="col-span-1 ">
+      <select formControlName="industryType" id="SelCat" 
+              class="flex w-[350px] p-[14px_16px] justify-between items-center rounded-lg border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)]"> 
+           @for (industry of industries | async; track industry.IndustryId) {
+          <option [value]="industry?.IndustryId"
+            [selected]="industry?.IndustryId === selectedIndustryId">
+            {{ industry?.IndustryName }}</option>
+        }
       </select>
-      <small *ngIf="addIndustryForm.controls['industryType'].touched && addIndustryForm.controls['industryType'].invalid" 
-             class="text-red-500">
-        Industry type is required.
-      </small>
     </div>
+      <!-- Industry Name Input -->
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Your Industry Name</label>
+        <input 
+          formControlName="industryName"
+          type="text"
+          placeholder="Type industry name"
+          class="w-full p-2 rounded border border-gray-300">
+       
+      </div>
 
-    <!-- Industry Name Input -->
-    <div class="mb-4">
-      <label class="block text-sm font-medium text-gray-700 mb-1">Your Industry Name</label>
-      <input 
-        formControlName="industryName"
-        type="text"
-        placeholder="Type industry name"
-        class="w-full p-2 rounded border border-gray-300">
-      <small *ngIf="addIndustryForm.controls['industryName'].touched && addIndustryForm.controls['industryName'].invalid" 
-             class="text-red-500">
-        Industry name is required and must be at least 3 characters.
-      </small>
-    </div>
-
-    <!-- Action Buttons -->
-    <div class="flex justify-end gap-2">
-      <button 
-        class="bg-green-600 text-white px-4 py-2 rounded"
-        (click)="addIndustry()">Add</button>
-      <button 
-        class="bg-gray-300 text-black px-4 py-2 rounded"
-        (click)="closeModal()">Cancel</button>
-    </div>
+      <!-- Action Buttons -->
+      <div class="flex justify-end gap-2">
+        <button 
+          class="bg-green-600 text-white px-4 py-2 rounded"
+          (click)="addIndustry()"
+          [disabled]="employeeForm.invalid">
+          Add
+        </button>
+        <button 
+          class="bg-gray-300 text-black px-4 py-2 rounded"
+          (click)="closeModal()">Cancel</button>
+      </div>
+ 
   </div>
 </div>

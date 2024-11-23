@@ -112,8 +112,6 @@ filteredCountriesList = this.countrie;
   districtControl = computed(() => this.employeeForm.get('district') as FormControl<string>);
   thanaControl = computed(() => this.employeeForm.get('thana') as FormControl<string>);
   rlNoControl = computed(() => this.employeeForm.get('rlno') as FormControl<string>);
-
-  
   formControlSignals = computed(() => {
     const signals: { [key: string]: FormControl<any> } = {};
     Object.keys(this.employeeForm.controls).forEach(key => {
@@ -121,8 +119,6 @@ filteredCountriesList = this.countrie;
     });
     return signals;
   });
-
-
   usernameExistsMessage: string = '';
   companyNameExistsMessage: string = '';
   isUniqueCompanyName: boolean = false;
@@ -131,7 +127,7 @@ filteredCountriesList = this.countrie;
   showErrorModal: boolean = false; 
   showAll: boolean = false;  
   showAddIndustryModal = false;
-
+  selectedIndustryId: number = 0;
 
   searchControl: FormControl = new FormControl(''); 
 
@@ -164,6 +160,10 @@ filteredCountriesList = this.countrie;
     this.currentFlagPath = this.filePath['Bangladesh'];
     this.employeeForm.get('industryType')?.valueChanges.subscribe(selectedIndustryId => {
       this.onIndustryTypeChange(selectedIndustryId);
+      this.selectedIndustryId = selectedIndustryId;
+      console.log('Parent Component - Selected Industry ID:', selectedIndustryId);
+
+
     });
     this.employeeForm.get('country')?.valueChanges.subscribe((value: string) => {
             if (value === '118') {
@@ -363,6 +363,8 @@ private fetchIndustryTypes(industryId: number = -1 ): void {
     }
   });
 }
+
+
 addNewIndustry(): void {
   this.showAddIndustryModal = true;
 }
@@ -376,10 +378,8 @@ closeAddIndustryModal(): void {
 handleNewIndustry(industry: IndustryType): void {
   const updatedIndustries = [...this.industries.value, industry];
   this.industries.next(updatedIndustries);
-  this.closeAddIndustryModal(); // Close the modal after adding
+  this.closeAddIndustryModal(); 
 }
-
-
 
   // Trigger filtering of industries based on dropdown selection
   onIndustryTypeChange(selectedIndustryId: string | number): void {
