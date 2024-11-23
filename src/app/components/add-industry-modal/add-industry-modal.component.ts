@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { IndustryType } from '../../Models/company';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
@@ -7,7 +7,7 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 @Component({
   selector: 'app-add-industry-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './add-industry-modal.component.html',
   styleUrls: ['./add-industry-modal.component.scss']
 })
@@ -16,7 +16,7 @@ export class AddIndustryModalComponent implements OnChanges {
   @Input() industries: BehaviorSubject<IndustryType[]> = new BehaviorSubject<IndustryType[]>([]);
   @Output() newIndustry = new EventEmitter<IndustryType>();
   @Input() selectedIndustryId: number = 0;
-  
+
   employeeForm: FormGroup;
   constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef) {
     this.employeeForm = this.fb.group({

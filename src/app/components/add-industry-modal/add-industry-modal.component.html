@@ -13,15 +13,14 @@
 
     <!-- Industry Type Dropdown -->
     <div class="col-span-1 ">
+      <form [formGroup]="employeeForm">
       <select formControlName="industryType" id="SelCat" 
               class="flex w-[350px] p-[14px_16px] justify-between items-center rounded-lg border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)]"> 
+           <option value="" disabled>All</option>
            @for (industry of industries | async; track industry.IndustryId) {
-          <option [value]="industry?.IndustryId"
-            [selected]="industry?.IndustryId === selectedIndustryId">
-            {{ industry?.IndustryName }}</option>
+          <option [value]="industry?.IndustryId">{{ industry?.IndustryName }}</option>
         }
       </select>
-    </div>
       <!-- Industry Name Input -->
       <div class="mb-4">
         <label class="block text-sm font-medium text-gray-700 mb-1">Your Industry Name</label>
@@ -45,6 +44,6 @@
           class="bg-gray-300 text-black px-4 py-2 rounded"
           (click)="closeModal()">Cancel</button>
       </div>
- 
+      </form>
   </div>
 </div>
