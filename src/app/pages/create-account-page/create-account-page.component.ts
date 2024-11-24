@@ -269,7 +269,6 @@ filteredCountriesList = this.countrie;
         CheckFor: 'c',
         CompanyName: companyName
       };
-
       console.log(companyRequest.CompanyName)
 
       this.checkNamesService.verifyRLNo(rlRequest).subscribe({

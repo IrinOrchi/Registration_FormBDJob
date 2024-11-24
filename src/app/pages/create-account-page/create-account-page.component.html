@@ -321,22 +321,25 @@
     </select>
   </div>
 
-  <div *ngIf="showAddIndustryButton" class="mt-4">
-    <button 
-      class="p-2 text-blue-500 rounded-lg  hover:text-blue-800"
-      (click)="addNewIndustry()">
-      Add a New Industry
-    </button>
-  </div>
-
-      <app-add-industry-modal
-      *ngIf="showAddIndustryModal"
-      [closeModal]="closeAddIndustryModal.bind(this)"
-      [industries]="industries"
-      [selectedIndustryId]="selectedIndustryId" 
-      (newIndustry)="onNewIndustryAdded($event)">
-    </app-add-industry-modal>
-
+  @if (showAddIndustryButton)
+  {
+      <div class="mt-4">
+          <button 
+            class="p-2 text-blue-500 rounded-lg  hover:text-blue-800"
+            (click)="addNewIndustry()">
+            Add a New Industry
+          </button>
+      </div>
+  }
+  @if (showAddIndustryModal)
+  {
+        <app-add-industry-modal 
+        [closeModal]="closeAddIndustryModal.bind(this)"
+        [industries]="industries"
+        [selectedIndustryId]="selectedIndustryId" 
+        (newIndustry)="onNewIndustryAdded($event)">
+        </app-add-industry-modal>
+  }
   <div class="flex flex-col items-start gap-6 self-stretch h-[282px] w-[1242px] overflow-y-scroll rounded-lg border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)] p-6 mt-6 mb-2.5">
     <div>
         <input [formControl]="searchControl"
