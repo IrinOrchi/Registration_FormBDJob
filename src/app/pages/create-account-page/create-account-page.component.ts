@@ -320,7 +320,6 @@ filteredCountriesList = this.countrie;
       error: (err) => console.error('Error fetching industry data', err)
     });
   }
-
    // Fetch industry types based on selected IndustryId
 private fetchIndustryTypes(industryId: number = -1 ): void {
   this.showAddIndustryButton = false;
@@ -371,12 +370,17 @@ closeAddIndustryModal(): void {
 }
 onNewIndustryAdded(newIndustry: IndustryType): void {
   const newIndustryEntry: IndustryTypeResponseDTO = {
-    IndustryValue: newIndustry.IndustryId, 
+    IndustryValue: newIndustry.IndustryId,
     IndustryName: newIndustry.IndustryName,
   };
   this.industryTypes.push(newIndustryEntry);
-  this.filteredIndustryTypes = [...this.industryTypes]; 
+  this.filteredIndustryTypes = [...this.industryTypes];
+  if (!this.selectedIndustries.some((industry) => industry.IndustryValue === newIndustryEntry.IndustryValue)) 
+  {
+    this.selectedIndustries.push(newIndustryEntry);
+  }
 }
+
   // Trigger filtering of industries based on dropdown selection
   onIndustryTypeChange(selectedIndustryId: string | number): void {
     const parsedIndustryId = parseInt(selectedIndustryId as string, 10); 
@@ -392,19 +396,28 @@ onNewIndustryAdded(newIndustry: IndustryType): void {
   ): void {
     const checkbox = event.target as HTMLInputElement;
     if (checkbox.checked) {
-      this.selectedIndustries.push(item);
+      if (
+        !this.selectedIndustries.some(
+          (industry) => industry.IndustryValue === item.IndustryValue
+        )
+      ) {
+        this.selectedIndustries.push(item);
+      }
     } else {
       this.selectedIndustries = this.selectedIndustries.filter(
         (industry) => industry.IndustryValue !== item.IndustryValue
       );
     }
   }
+  isIndustryChecked(industryValue: number): boolean {
+    return this.selectedIndustries.some(
+      (industry) => industry.IndustryValue === industryValue
+    );
+  }
   removeIndustry(industry: { IndustryValue: number; IndustryName: string }): void {
     this.selectedIndustries = this.selectedIndustries.filter(
       (selected) => selected.IndustryValue !== industry.IndustryValue
     );
-
-    // Uncheck the corresponding checkbox
     const checkbox = document.getElementById(
       `industry_type_${industry.IndustryValue}`
     ) as HTMLInputElement;
@@ -418,7 +431,6 @@ onNewIndustryAdded(newIndustry: IndustryType): void {
     this.checkNamesService.getLocations(requestPayload).subscribe({
       next: (response: any) => {
         console.log("Full response:", response);
-
         if (response?.error === '0') {  
           const countryData = response.bdDistrict || [];
 
@@ -449,7 +461,6 @@ onNewIndustryAdded(newIndustry: IndustryType): void {
 // Fetch districts within Bangladesh
   private fetchDistricts(): void {
     const requestPayload = { OutsideBd: '0', DistrictId: '' };
-
     this.checkNamesService.getLocations(requestPayload).subscribe({
       next: (response: any) => {
         if (response?.error === "0") {

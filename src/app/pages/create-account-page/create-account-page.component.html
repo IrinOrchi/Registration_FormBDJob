@@ -356,7 +356,8 @@
                       id="industry_type_{{item.IndustryValue}}" 
                       type="checkbox" 
                       [value]="item.IndustryValue" 
-                      class="h-4 w-4 text-blue-600 cursor-pointer border border-black/30 shadow-inner 
+                      [checked]="isIndustryChecked(item.IndustryValue)"
+                      class=" checkbox-input h-4 w-4 text-blue-600 cursor-pointer border border-black/30 shadow-inner 
                             checked:bg-blue-600 checked:border-blue-600" 
                       (change)="onIndustryCheckboxChange($event, item)"
                     />
