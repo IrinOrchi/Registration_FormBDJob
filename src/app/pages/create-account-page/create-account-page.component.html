@@ -334,7 +334,7 @@
       [closeModal]="closeAddIndustryModal.bind(this)"
       [industries]="industries"
       [selectedIndustryId]="selectedIndustryId" 
-      (newIndustry)="handleNewIndustry($event)">
+      (newIndustry)="onNewIndustryAdded($event)">
     </app-add-industry-modal>
 
   <div class="flex flex-col items-start gap-6 self-stretch h-[282px] w-[1242px] overflow-y-scroll rounded-lg border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)] p-6 mt-6 mb-2.5">

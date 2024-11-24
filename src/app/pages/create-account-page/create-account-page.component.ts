@@ -338,6 +338,7 @@ private fetchIndustryTypes(industryId: number = -1 ): void {
             IndustryValue: item.industryValue,
             IndustryName: item.industryName
           }));
+          
           this.filteredIndustryTypes = [...this.industryTypes];
           // this.showAddIndustryButton = industryId === -10;
           this.showAddIndustryButton = true;
@@ -365,16 +366,16 @@ private fetchIndustryTypes(industryId: number = -1 ): void {
 addNewIndustry(): void {
   this.showAddIndustryModal = true;
 }
-// Close the modal
 closeAddIndustryModal(): void {
   this.showAddIndustryModal = false;
 }
-
-// Handle the newly added industry
-handleNewIndustry(industry: IndustryType): void {
-  const updatedIndustries = [...this.industries.value, industry];
-  this.industries.next(updatedIndustries);
-  this.closeAddIndustryModal(); 
+onNewIndustryAdded(newIndustry: IndustryType): void {
+  const newIndustryEntry: IndustryTypeResponseDTO = {
+    IndustryValue: newIndustry.IndustryId, 
+    IndustryName: newIndustry.IndustryName,
+  };
+  this.industryTypes.push(newIndustryEntry);
+  this.filteredIndustryTypes = [...this.industryTypes]; 
 }
   // Trigger filtering of industries based on dropdown selection
   onIndustryTypeChange(selectedIndustryId: string | number): void {
@@ -398,7 +399,6 @@ handleNewIndustry(industry: IndustryType): void {
       );
     }
   }
-
   removeIndustry(industry: { IndustryValue: number; IndustryName: string }): void {
     this.selectedIndustries = this.selectedIndustries.filter(
       (selected) => selected.IndustryValue !== industry.IndustryValue

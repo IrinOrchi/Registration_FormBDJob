@@ -40,14 +40,14 @@ export class AddIndustryModalComponent implements OnChanges {
     if (this.employeeForm.valid) {
       const formValue = this.employeeForm.value;
       const newIndustry: IndustryType = {
-        IndustryId: Date.now(),
+        IndustryId: Date.now(), // Generate a unique ID
         IndustryName: formValue.industryName,
       };
-
-      this.newIndustry.emit(newIndustry);
-      this.closeModal();
+  
+      this.newIndustry.emit(newIndustry); // Emit the new industry
+      this.closeModal(); // Close the modal
     } else {
       this.employeeForm.markAllAsTouched();
     }
   }
-}
+}  
