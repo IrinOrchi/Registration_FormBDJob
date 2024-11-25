@@ -215,37 +215,45 @@ filteredCountriesList = this.countrie;
   
   private checkUniqueUsername(username: string): void {
     this.checkNamesService.checkUniqueUserName(username).subscribe({
-      next: (response) => {
-        console.log('API Response:', response); 
-        this.usernameExistsMessage = response.message == 'Success!' ? '' : 'Username already exists';
+      next: (response: any) => {
+        console.log('API Response:', response);
+  
+        if (response.responseType === 'Success' && response.responseCode === 1 && !response.data) {
+          this.usernameExistsMessage = ''; 
+        } else if (response.responseType === 'Error' && response.responseCode === 0 && response.data) {
+          this.usernameExistsMessage = response.data; 
+        } else {
+          this.usernameExistsMessage = 'Unexpected response from the server.'; 
+        }
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error checking username:', error);
-        this.usernameExistsMessage = 'This Username already exists. Try another.';
-      }
+        this.usernameExistsMessage = 'An error occurred while checking the username.';
+      },
     });
   }
   
   // Check for unique company name 
   private checkUniqueCompanyName(companyName: string): void {
-    this.checkNamesService.checkUniqueCompanyName(companyName).subscribe({
-      next: (response) => {
-        console.log('API Response:', response);
-        if (response.message == 'Success!') {
-          this.isUniqueCompanyName = true;
-          this.companyNameExistsMessage = '';
-        }
-        else{
-          this.isUniqueCompanyName = false;
-          this.companyNameExistsMessage = 'Company name already exists';
-        }
-      },
-      error: (error) => {
-        console.error('Error checking company name:', error);
-        this.companyNameExistsMessage = 'Error checking company name';
+  this.checkNamesService.checkUniqueCompanyName(companyName).subscribe({
+    next: (response: any) => {
+      console.log('API Response:', response);
+
+      if (response.responseType === 'Success' && response.responseCode === 1 && !response.data) {
+        this.companyNameExistsMessage = ''; 
+      } else if (response.responseType === 'Error' && response.responseCode === 0 && response.data) {
+        this.companyNameExistsMessage = response.data; 
+      } else {
+        this.companyNameExistsMessage = 'Unexpected response from the server.';
       }
-    });
-  }
+    },
+    error: (error: any) => {
+      console.error('Error checking company name:', error);
+      this.companyNameExistsMessage = 'An error occurred while checking the company name.';
+    },
+  });
+}
+
   // rl
   onRLNoBlur(): void {
     this.employeeForm.controls['rlNo'].markAsTouched();
@@ -259,40 +267,50 @@ filteredCountriesList = this.countrie;
     }
   }
   verifyRLNo(): void {
-    const rlNo: string = this.employeeForm.get('rlNo')?.value.toString();
-    const companyName: string = this.employeeForm.get('companyName')?.value.toString(); 
-    if (rlNo) {
+    const rlNo: string = this.employeeForm.get('rlNo')?.value?.toString();
+    const companyName: string = this.employeeForm.get('companyName')?.value?.toString();
+  
+    if (rlNo && companyName) {
       const rlRequest: RLNoRequestModel = { RLNo: rlNo };
-
-      const companyRequest: CompanyNameCheckRequestDTO = {
-        UserName: '', 
-        CheckFor: 'c',
-        CompanyName: companyName
-      };
-      console.log(companyRequest.CompanyName)
-
+  
+      console.log('Company Name Input:', companyName);
+  
       this.checkNamesService.verifyRLNo(rlRequest).subscribe({
         next: (response: any) => {
-          console.log('RL No Response:', response); 
-          if (response.error === '0' && response.company_Name === companyRequest.CompanyName) {
+          console.log('RL No Response:', response);
+  
+          if (
+            response.responseType === 'Success' &&
+            response.responseCode === 1 &&
+            response.data?.error === '0' &&
+            response.data?.company_Name === companyName
+          ) {
             this.showError = false;
             this.rlErrorMessage = '';
-            this.showErrorModal = false; 
+            this.showErrorModal = false;
           } else {
             this.showError = true;
-            this.showErrorModal = true; 
+            this.rlErrorMessage =
+              response.data?.error !== '0'
+                ? 'Invalid RL No.'
+                : 'Company name does not match.';
+            this.showErrorModal = true;
           }
         },
-        error: () => {
+        error: (error: any) => {
+          console.error('Error verifying RL No:', error);
           this.showError = true;
-          this.showErrorModal = true; 
-        }
+          this.rlErrorMessage = 'An error occurred while verifying RL No.';
+          this.showErrorModal = true;
+        },
       });
-          } else {
-            this.showError = true;
-            this.showErrorModal = true; 
-          }
+    } else {
+      this.showError = true;
+      this.rlErrorMessage = 'RL No and Company Name are required.';
+      this.showErrorModal = true;
+    }
   }
+  
   closeModal(): void {
     this.showErrorModal = false; 
   }
@@ -376,7 +394,8 @@ onNewIndustryAdded(newIndustry: IndustryType): void {
   };
   this.industryTypes.push(newIndustryEntry);
   this.filteredIndustryTypes = [...this.industryTypes];
-  if (!this.selectedIndustries.some((industry) => industry.IndustryValue === newIndustryEntry.IndustryValue)) 
+  if (!this.selectedIndustries.some((industry) => 
+    industry.IndustryValue === newIndustryEntry.IndustryValue)) 
   {
     this.selectedIndustries.push(newIndustryEntry);
   }
@@ -444,7 +463,6 @@ onNewIndustryAdded(newIndustry: IndustryType): void {
               flagPath: this.filePath[item.optionText] || '', // Assuming `filePath` is properly initialized.
             }));
   
-            // Default value for the country dropdown
             this.employeeForm.get('country')?.setValue('118'); 
           } else {
             console.error('No countries found in the response.');
@@ -461,8 +479,6 @@ onNewIndustryAdded(newIndustry: IndustryType): void {
       },
     });
   }
-  
-
 // Fetch districts within Bangladesh
 private fetchDistricts(): void {
   const requestPayload = { OutsideBd: '0', DistrictId: '' };
@@ -477,7 +493,6 @@ private fetchDistricts(): void {
           OptionText: item.optionText,
         }));
 
-        // Clear the thanas when districts are fetched
         this.thanas = [];
       } else {
         console.error('Unexpected responseCode or response format:', response);

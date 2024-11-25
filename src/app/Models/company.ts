@@ -1,7 +1,6 @@
 export interface CompanyNameCheckRequestDTO {
-    UserName: string; 
+    Name: string; 
     CheckFor: string; 
-    CompanyName: string; 
 }
 
 export interface CheckNamesResponseDTO {

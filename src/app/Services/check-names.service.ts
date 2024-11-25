@@ -23,9 +23,8 @@ export class CheckNamesService {
     }
 
     const request: CompanyNameCheckRequestDTO = {
-      UserName: userName, 
+      Name: userName, 
       CheckFor: 'u', 
-      CompanyName: ''
     };
 
     return this.http.post<CheckNamesResponseDTO>(this.apiUrl, request).pipe(
@@ -43,9 +42,8 @@ export class CheckNamesService {
     }
 
     const request: CompanyNameCheckRequestDTO = {
-      UserName: '',  
+      Name: companyName,  
       CheckFor: 'c', 
-      CompanyName: companyName
     };
 
     return this.http.post<CheckNamesResponseDTO>(this.apiUrl, request).pipe(
