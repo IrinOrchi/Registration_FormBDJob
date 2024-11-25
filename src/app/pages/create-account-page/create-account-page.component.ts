@@ -300,67 +300,69 @@ filteredCountriesList = this.countrie;
   fetchIndustries(): void {
     this.checkNamesService.getAllIndustryIds().pipe(
       map((response: any) => {
-        if (response.error === '0') {
-          const industries = response.industryIds.map((industry: any) => ({
+        if (response.responseCode === 1 && Array.isArray(response.data)) {
+          const industries = response.data.map((industry: any) => ({
             IndustryId: industry.industryId,
-            IndustryName: industry.industryName
+            IndustryName: industry.industryName,
           }));
-          
+  
           industries.push({ IndustryId: -10, IndustryName: 'Others' }); 
           return industries;
         } else {
-          throw new Error('Failed to fetch industries due to error in response');
+          throw new Error('Failed to fetch industries due to an unexpected response');
         }
       })
     ).subscribe({
-      next: (industries: IndustryType[]) => {
+      next: (industries: { IndustryId: number; IndustryName: string }[]) => {
         this.industries.next(industries); 
       },
-      error: (err) => console.error('Error fetching industry data', err)
+      error: (err: any) => {
+        console.error('Error fetching industry data:', err);
+      },
     });
   }
-   // Fetch industry types based on selected IndustryId
-private fetchIndustryTypes(industryId: number = -1 ): void {
-  this.showAddIndustryButton = false;
-  if (industryId === -1) {
-    console.log('Default "All" selected; hiding the button.');
-    return; 
-  }
-  this.checkNamesService.fetchIndustryTypes(industryId).subscribe({
-    next: (response: any) => {
-      if (response.error === '0') {
-        const industryData = response.industryType || []; 
   
-        if (Array.isArray(industryData) && industryData.length > 0) {
-          this.industryTypes = industryData.map((item: any) => ({
-            IndustryValue: item.industryValue,
-            IndustryName: item.industryName
-          }));
-          
-          this.filteredIndustryTypes = [...this.industryTypes];
-          // this.showAddIndustryButton = industryId === -10;
-          this.showAddIndustryButton = true;
-
+   // Fetch industry types based on selected IndustryId
+   private fetchIndustryTypes(industryId: number = -1): void {
+    this.showAddIndustryButton = industryId !== -1;
+  
+    const requestPayload = {
+      industryId: industryId,
+      organizationText: '',
+      corporateID: 0,
+    };
+  
+    this.checkNamesService.fetchIndustryTypes(industryId).subscribe({
+      next: (response: any) => {
+        if (response.responseCode === 1 && Array.isArray(response.data)) {
+          const industryData = response.data;
+  
+          if (industryData.length > 0) {
+            this.industryTypes = industryData.map((item: any) => ({
+              IndustryValue: item.industryValue,
+              IndustryName: item.industryName,
+            }));
+  
+            this.filteredIndustryTypes = [...this.industryTypes];
+          } else {
+            console.warn(`No industry types found for IndustryId: ${industryId}.`);
+            this.industryTypes = [];
+            this.filteredIndustryTypes = [];
+          }
         } else {
-          console.warn(
-            `No industry types found for IndustryId: ${industryId}.`
-          );
-          this.industryTypes = []; 
-          this.showAddIndustryButton = false;
+          console.error('Unexpected response or responseCode:', response);
+          this.industryTypes = [];
+          this.filteredIndustryTypes = [];
         }
-      } else {
-        console.error('Unexpected error response:', response.error);
-        this.industryTypes = []; 
-        this.showAddIndustryButton = false;
-      }
-    },
-    error: (error: any) => {
-      console.error('Error fetching industry types:', error);
-      this.industryTypes = []; 
-      this.showAddIndustryButton = false;
-    }
-  });
-}
+      },
+      error: (error: any) => {
+        console.error('Error fetching industry types:', error);
+        this.industryTypes = [];
+        this.filteredIndustryTypes = [];
+      },
+    });
+  }
+  
 addNewIndustry(): void {
   this.showAddIndustryModal = true;
 }
@@ -427,57 +429,68 @@ onNewIndustryAdded(newIndustry: IndustryType): void {
   // Fetch countries (Outside Bangladesh included)
   private fetchCountries(): void {
     const requestPayload = { OutsideBd: '1', DistrictId: '' };
+  
     this.checkNamesService.getLocations(requestPayload).subscribe({
       next: (response: any) => {
         console.log("Full response:", response);
-        if (response?.error === '0') {  
-          const countryData = response.bdDistrict || [];
-
-          if (Array.isArray(countryData) && countryData.length > 0) {
+  
+        if (response.responseCode === 1 && Array.isArray(response.data)) {  
+          const countryData = response.data;
+  
+          if (countryData.length > 0) {
             this.countries = countryData.map((item: any) => ({
-              OptionValue: item.optionValue,  
+              OptionValue: item.optionValue,
               OptionText: item.optionText,
-              flagPath: this.filePath[item.optionText] || '' 
-
+              flagPath: this.filePath[item.optionText] || '', // Assuming `filePath` is properly initialized.
             }));
-            this.employeeForm.get('country')?.setValue('118');
+  
+            // Default value for the country dropdown
+            this.employeeForm.get('country')?.setValue('118'); 
           } else {
             console.error('No countries found in the response.');
-            this.countries = [];  
+            this.countries = [];
           }
         } else {
-          console.error('Unexpected error response:', response?.error);
-          this.countries = []; 
+          console.error('Unexpected responseCode or response format:', response);
+          this.countries = [];
         }
       },
       error: (error: any) => {
         console.error('Error fetching countries:', error);
-        this.countries = []; 
-      }
+        this.countries = [];
+      },
     });
   }
+  
 
 // Fetch districts within Bangladesh
-  private fetchDistricts(): void {
-    const requestPayload = { OutsideBd: '0', DistrictId: '' };
-    this.checkNamesService.getLocations(requestPayload).subscribe({
-      next: (response: any) => {
-        if (response?.error === "0") {
-          const districtData = response.bdDistrict || [];
-          this.districts = districtData.map((item: any) => ({
-            OptionValue: item.optionValue,
-            OptionText: item.optionText,
-          }));
-          this.thanas = []; 
-        } else {
-          this.districts = [];
-        }
-      },
-      error: () => {
+private fetchDistricts(): void {
+  const requestPayload = { OutsideBd: '0', DistrictId: '' };
+
+  this.checkNamesService.getLocations(requestPayload).subscribe({
+    next: (response: any) => {
+      if (response.responseCode === 1 && Array.isArray(response.data)) {
+        const districtData = response.data;
+
+        this.districts = districtData.map((item: any) => ({
+          OptionValue: item.optionValue,
+          OptionText: item.optionText,
+        }));
+
+        // Clear the thanas when districts are fetched
+        this.thanas = [];
+      } else {
+        console.error('Unexpected responseCode or response format:', response);
         this.districts = [];
       }
-    });
-  }
+    },
+    error: (error: any) => {
+      console.error('Error fetching districts:', error);
+      this.districts = [];
+    },
+  });
+}
+
   toggleDropdown() {
     this.isOpen = !this.isOpen;
   }
@@ -499,27 +512,30 @@ onNewIndustryAdded(newIndustry: IndustryType): void {
   
   }
 // Fetch thanas for the selected district
-  private fetchThanas(districtId: string): void {
-    const requestPayload = { OutsideBd: '0', DistrictId: districtId };
+private fetchThanas(districtId: string): void {
+  const requestPayload = { OutsideBd: '0', DistrictId: districtId };
 
-    this.checkNamesService.getLocations(requestPayload).subscribe({
-      next: (response: any) => {
-        if (response?.error === "0") {
-          const thanaData = response.bdDistrict || [];
-          this.thanas = thanaData.map((item: any) => ({
-            OptionValue: item.optionValue,
-            OptionText: item.optionText,
-          }));
-        } else {
-          this.thanas = [];
-        }
-      },
-      error: () => {
+  this.checkNamesService.getLocations(requestPayload).subscribe({
+    next: (response: any) => {
+      if (response.responseCode === 1 && Array.isArray(response.data)) {
+        const thanaData = response.data;
+
+        this.thanas = thanaData.map((item: any) => ({
+          OptionValue: item.optionValue,
+          OptionText: item.optionText,
+        }));
+      } else {
+        console.error('Unexpected responseCode or response format:', response);
         this.thanas = [];
       }
-    });
-  }
- 
+    },
+    error: (error: any) => {
+      console.error('Error fetching thanas:', error);
+      this.thanas = [];
+    },
+  });
+}
+
   setupSearch(): void {
     this.searchControl.valueChanges.pipe(debounceTime(300), distinctUntilChanged())
       .subscribe((query: string) => {

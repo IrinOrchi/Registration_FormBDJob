@@ -8,11 +8,11 @@ import { CheckNamesResponseDTO, CompanyNameCheckRequestDTO, IndustryTypeResponse
 })
 export class CheckNamesService {
  
-  private apiUrl = 'https://localhost:7240/api/Account/CheckNames'; 
-  private industryApiUrl = 'https://localhost:7240/api/IndustryType/GetIndustryType'; 
-  private industryIdApiUrl = 'https://localhost:7240/api/IndustryType/GetAllIndustrieIds';
-  private locationApiUrl = 'https://localhost:7119/api/Location/GetLocations'; 
-  private rlnoapiUrl = 'https://localhost:7240/api/RLNo/CheckRLNo';
+  private apiUrl = 'https://localhost:7152/api/CorporateCommon/CheckNames'; 
+  private industryApiUrl = 'https://localhost:7152/api/CorporateCommon/IndustryType'; 
+  private industryIdApiUrl = 'https://localhost:7152/api/CorporateCommon/Industries';
+  private locationApiUrl = 'https://localhost:7152/api/CorporateCommon/GetLocations'; 
+  private rlnoapiUrl = 'https://localhost:7152/api/CorporateCommon/RlNoCheck';
 
   constructor(private http: HttpClient) {}
 
@@ -66,7 +66,7 @@ export class CheckNamesService {
 
     return this.http.post<IndustryTypeResponseDTO[]>(this.industryApiUrl, request).pipe(
       catchError((error) => {
-        console.error('Error fetching industry types:', error);  // Log the error for debugging
+        console.error('Error fetching industry types:', error);
         return throwError(() => new Error('Error fetching industry types'));
       })
     );
@@ -101,7 +101,6 @@ export class CheckNamesService {
   // Method to get locations (districts, countries, or thanas)
   getLocations(requestPayload: LocationRequestDTO): Observable<LocationResponseDTO[]> {
     return this.http.post<LocationResponseDTO[]>(this.locationApiUrl, requestPayload).pipe(
-      // Handle errors here
       catchError((error) => {
         console.error('Error fetching locations', error);
         return throwError(() => new Error('Error fetching locations'));
@@ -109,7 +108,7 @@ export class CheckNamesService {
     );
   }
 
-  // Helper method to create payload for locations
+  //  payload for locations
   private createRequestPayload(outsideBd: boolean, districtId: string = ''): LocationRequestDTO {
     return {
       OutsideBd: outsideBd ? '1' : '0',
