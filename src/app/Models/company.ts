@@ -25,12 +25,13 @@ export interface IndustryTypeResponseDTO {
   }
   
   export interface LocationRequestDTO {
-    DistrictId: string;   // The district ID
-    OutsideBd: string;    // Whether it's for Bangladesh or outside
+    DistrictId: string;  
+    OutsideBd: string;    
   }
   export interface IndustryType{
     IndustryId: number;
     IndustryName: string;
+    OrganizationName: string
 }
 export interface RLNoRequestModel {
   RLNo: string;
@@ -41,4 +42,14 @@ export interface RLNoResponseModel {
   error: string;
   rlNo: string;
   company_Name: string;
+}
+
+export interface OrganizationRequestDTO {
+  OrganizationName: string; }
+export interface OrganizationCheckResponseDTO {
+  responseType: string;  
+  dataContext: string;   
+  responseCode: number;  
+  requestedData: string; 
+  data: any;            
 }

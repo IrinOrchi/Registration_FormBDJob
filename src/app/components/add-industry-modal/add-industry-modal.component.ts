@@ -18,13 +18,14 @@ export class AddIndustryModalComponent implements OnChanges {
   @Input() selectedIndustryId: number = 0;
 
   employeeForm: FormGroup;
+
   constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef) {
     this.employeeForm = this.fb.group({
       industryType: ['', Validators.required],
       industryName: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
-  
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['selectedIndustryId']) {
       console.log('Child Component - Selected Industry ID:', changes['selectedIndustryId'].currentValue);
@@ -32,22 +33,25 @@ export class AddIndustryModalComponent implements OnChanges {
       if (this.employeeForm.get('industryType')) {
         this.employeeForm.get('industryType')?.setValue(selectedId, { emitEvent: false });
         console.log('Modal Form Updated with Industry ID:', selectedId);
-        this.cdr.detectChanges(); 
+        this.cdr.detectChanges();
       }
     }
   }
+
   addIndustry(): void {
     if (this.employeeForm.valid) {
       const formValue = this.employeeForm.value;
-      const newIndustry: IndustryType = {
-        IndustryId: Date.now(), // Generate a unique ID
+
+      const organizationRequest: IndustryType = {
+        IndustryId: this.selectedIndustryId,  
         IndustryName: formValue.industryName,
+        OrganizationName: formValue.industryName,
       };
-  
-      this.newIndustry.emit(newIndustry); // Emit the new industry
-      this.closeModal(); // Close the modal
+
+      this.newIndustry.emit(organizationRequest);  
+      this.closeModal();
     } else {
       this.employeeForm.markAllAsTouched();
     }
   }
-}  
+}

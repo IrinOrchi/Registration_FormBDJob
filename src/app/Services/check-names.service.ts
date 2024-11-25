@@ -13,8 +13,26 @@ export class CheckNamesService {
   private industryIdApiUrl = 'https://localhost:7152/api/CorporateCommon/Industries';
   private locationApiUrl = 'https://localhost:7152/api/CorporateCommon/GetLocations'; 
   private rlnoapiUrl = 'https://localhost:7152/api/CorporateCommon/RlNoCheck';
+  private organizationCheckUrl = 'https://localhost:7152/api/CorporateCommon/OrganizationCheck';
+
 
   constructor(private http: HttpClient) {}
+
+
+  organizationCheck(organizationName: string): Observable<any> {
+    if (!organizationName || organizationName.trim() === '') {
+      return throwError(() => new Error('OrganizationName is required.'));
+    }
+
+    const url = `${this.organizationCheckUrl}?OrganizationName=${encodeURIComponent(organizationName)}`;
+    return this.http.get<any>(url).pipe(
+      catchError((error) => {
+        console.error('Error checking organization name:', error);
+        return throwError(() => new Error('Error checking organization name'));
+      })
+    );
+  }
+
 
   // Check for unique username
   checkUniqueUserName(userName: string): Observable<CheckNamesResponseDTO> {

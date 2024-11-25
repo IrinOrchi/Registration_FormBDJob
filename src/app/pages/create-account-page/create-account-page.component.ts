@@ -322,6 +322,7 @@ filteredCountriesList = this.countrie;
           const industries = response.data.map((industry: any) => ({
             IndustryId: industry.industryId,
             IndustryName: industry.industryName,
+            OrganizationName: '',
           }));
   
           industries.push({ IndustryId: -10, IndustryName: 'Others' }); 
@@ -331,7 +332,7 @@ filteredCountriesList = this.countrie;
         }
       })
     ).subscribe({
-      next: (industries: { IndustryId: number; IndustryName: string }[]) => {
+      next: (industries: { IndustryId: number; IndustryName: string; OrganizationName: string }[]) => {
         this.industries.next(industries); 
       },
       error: (err: any) => {
@@ -343,13 +344,7 @@ filteredCountriesList = this.countrie;
    // Fetch industry types based on selected IndustryId
    private fetchIndustryTypes(industryId: number = -1): void {
     this.showAddIndustryButton = industryId !== -1;
-  
-    const requestPayload = {
-      industryId: industryId,
-      organizationText: '',
-      corporateID: 0,
-    };
-  
+
     this.checkNamesService.fetchIndustryTypes(industryId).subscribe({
       next: (response: any) => {
         if (response.responseCode === 1 && Array.isArray(response.data)) {
@@ -387,18 +382,55 @@ addNewIndustry(): void {
 closeAddIndustryModal(): void {
   this.showAddIndustryModal = false;
 }
-onNewIndustryAdded(newIndustry: IndustryType): void {
-  const newIndustryEntry: IndustryTypeResponseDTO = {
-    IndustryValue: newIndustry.IndustryId,
-    IndustryName: newIndustry.IndustryName,
-  };
-  this.industryTypes.push(newIndustryEntry);
-  this.filteredIndustryTypes = [...this.industryTypes];
-  if (!this.selectedIndustries.some((industry) => 
-    industry.IndustryValue === newIndustryEntry.IndustryValue)) 
-  {
-    this.selectedIndustries.push(newIndustryEntry);
-  }
+onNewIndustryAdded(organizationRequest: { OrganizationName: string }): void {
+  this.checkNamesService
+    .organizationCheck(organizationRequest.OrganizationName)
+    .subscribe({
+      next: (response: any) => {
+        if (response.responseCode === 200 && response.dataContext === 'Organization found') {
+          const existingIndustry = this.industryTypes.find(
+            (industry) => industry.IndustryName === organizationRequest.OrganizationName
+          );
+
+          if (existingIndustry) {
+            if (
+              !this.selectedIndustries.some(
+                (industry) => industry.IndustryValue === existingIndustry.IndustryValue
+              )
+            ) {
+              this.selectedIndustries.push(existingIndustry);
+            }
+          }
+        } else if (response.responseCode === 200 && response.dataContext === 'Organization not found') {
+          const newIndustry: IndustryType = {
+            IndustryId: Date.now(),  
+            IndustryName: organizationRequest.OrganizationName,
+            OrganizationName: organizationRequest.OrganizationName,
+          };
+
+          const newIndustryEntry: IndustryTypeResponseDTO = {
+            IndustryValue: newIndustry.IndustryId,
+            IndustryName: newIndustry.IndustryName,
+          };
+
+          this.industryTypes.push(newIndustryEntry); 
+          this.filteredIndustryTypes = [...this.industryTypes];  
+
+          if (
+            !this.selectedIndustries.some(
+              (industry) => industry.IndustryValue === newIndustryEntry.IndustryValue
+            )
+          ) {
+            this.selectedIndustries.push(newIndustryEntry);
+          }
+        } else {
+          console.error('Unexpected API response:', response);
+        }
+      },
+      error: (error: any) => {
+        console.error('Error validating industry name:', error);
+      },
+    });
 }
 
   // Trigger filtering of industries based on dropdown selection
@@ -460,7 +492,7 @@ onNewIndustryAdded(newIndustry: IndustryType): void {
             this.countries = countryData.map((item: any) => ({
               OptionValue: item.optionValue,
               OptionText: item.optionText,
-              flagPath: this.filePath[item.optionText] || '', // Assuming `filePath` is properly initialized.
+              flagPath: this.filePath[item.optionText] || '', 
             }));
   
             this.employeeForm.get('country')?.setValue('118'); 
