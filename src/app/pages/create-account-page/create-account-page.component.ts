@@ -15,7 +15,7 @@ import { PricingPolicyComponent } from '../../components/pricing-policy/pricing-
 import { MathCaptchaComponent } from '../../components/math-captcha/math-captcha.component';
 import { filePath,countrie ,disabilities} from '../../constants/file-path.constants';
 import { AddIndustryModalComponent } from "../../components/add-industry-modal/add-industry-modal.component";
-
+import { UserDataService } from '../../Services/shared/user-data.service';
 @Component({
   selector: 'app-create-account-page',
   standalone: true,
@@ -76,8 +76,9 @@ filteredCountriesList = this.countrie;
     //new
     facilitiesForDisabilities: this.facilitiesForDisabilitiesControl,
     isPolicyAccepted: this.isPolicyAcceptedControl,
+    username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
     password: new FormControl('', [Validators.required, Validators.minLength(6)]),
-    confirmPassword: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    confirmPassword: new FormControl('', [Validators.required, Validators.minLength(6),Validators.maxLength(10)]),
     companyNameBangla: new FormControl(''),
     yearsOfEstablishMent: new FormControl('', Validators.required),
     companySize: new FormControl('-1', Validators.required),
@@ -93,7 +94,6 @@ filteredCountriesList = this.countrie;
     support: new FormControl(''),
     disabilityWrap: new FormControl(''),
     training: new FormControl(''),
-    username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
     companyName: new FormControl('', [Validators.required]),
     industryType: new FormControl(''),
     country: new FormControl('118'),  
@@ -134,7 +134,7 @@ filteredCountriesList = this.countrie;
   private usernameSubject: Subject<string> = new Subject();
   private companyNameSubject: Subject<string> = new Subject();
 
-  constructor(private checkNamesService: CheckNamesService) {}
+  constructor(private checkNamesService: CheckNamesService, private userDataService: UserDataService) {}
 
   ngOnInit(): void {
     this.searchControl.valueChanges
@@ -639,9 +639,32 @@ checkCaptchaValidity() {
   this.isCaptchaValid = this.captchaComponent.isCaptchaValid();
 }
 onContinue() {
-  this.checkCaptchaValidity();
-  this.isContinueClicked = true; 
-  console.log(this.employeeForm.value);
+  this.checkCaptchaValidity(); 
+
+  this.isContinueClicked = true;
+  console.log('Current form values:', this.employeeForm.value);
+
+  if (this.employeeForm.valid) {
+    const username = this.employeeForm.get('username')?.value;
+    const password = this.employeeForm.get('password')?.value;
+
+    if (username && password) {
+      this.userDataService.setUsername(username);
+      this.userDataService.setPassword(password);
+      console.log('Username and Password stored successfully in UserDataService:', {
+        username,
+        password,
+      });
+    } else {
+      console.error('Username or Password is invalid.');
+    }
+
+    this.formValue = this.employeeForm.value;
+    console.log('Form submitted successfully!', this.formValue);
+    return; 
+  }
+
+ 
   const fieldsOrder = [
     'username', 
     'password',
@@ -653,35 +676,26 @@ onContinue() {
     'companyAddressBangla',
     'contactName',
     'contactDesignation',
-    'contactEmail'
+    'contactEmail',
   ];
 
   const currentField = fieldsOrder[this.currentValidationFieldIndex];
   const control = this.employeeForm.get(currentField);
 
-  if (this.employeeForm.valid) {
-    this.isPolicyAcceptedControl.setValue(true);
-    this.formValue = this.employeeForm.value;
-    console.log("Form submitted successfully!", this.formValue);
-  } else if (control && control.invalid) {
+  if (control && control.invalid) {
     control.markAsTouched();
-
-    const errors = control.errors;
-    console.log(`Field ${currentField} is invalid:`, errors);
-
+    console.error(`Field ${currentField} is invalid:`, control.errors);
     return;
+  }
 
+  this.currentValidationFieldIndex++;
+
+  if (this.currentValidationFieldIndex < fieldsOrder.length) {
+    const nextField = fieldsOrder[this.currentValidationFieldIndex];
+    this.employeeForm.get(nextField)?.markAsTouched();
   } else {
-    this.currentValidationFieldIndex++;
-
-    if (this.currentValidationFieldIndex < fieldsOrder.length) {
-      const nextField = fieldsOrder[this.currentValidationFieldIndex];
-      this.employeeForm.get(nextField)?.markAsTouched();
-    } else {
-      this.isPolicyAcceptedControl.setValue(true);
-      this.formValue = this.employeeForm.value;
-      console.log("Form submitted successfully after validating all fields!", this.formValue);
-    }
+    this.formValue = this.employeeForm.value;
+    console.log('Form submitted successfully after validating all fields!', this.formValue);
   }
 }
 }

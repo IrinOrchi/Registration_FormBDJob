@@ -44,12 +44,12 @@ export interface RLNoResponseModel {
   company_Name: string;
 }
 
-export interface OrganizationRequestDTO {
-  OrganizationName: string; }
-export interface OrganizationCheckResponseDTO {
-  responseType: string;  
-  dataContext: string;   
-  responseCode: number;  
-  requestedData: string; 
-  data: any;            
-}
+// export interface OrganizationRequestDTO {
+//   OrganizationName: string; }
+// export interface OrganizationCheckResponseDTO {
+//   responseType: string;  
+//   dataContext: string;   
+//   responseCode: number;  
+//   requestedData: string; 
+//   data: any;            
+// }

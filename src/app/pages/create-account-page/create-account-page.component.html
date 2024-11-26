@@ -19,7 +19,7 @@
               label="Username"
               name="txtUserName"
               id="txtUserName"
-              [control]="usernameControl()"
+              [control]="formControlSignals()['username']"
               placeholder="Type Username"
               [maxLength]="20"
               [isRequired]="true"
@@ -312,7 +312,7 @@
       <!-- Industry Type Select Dropdown -->
 <div class="col-span-1 ">
     <select formControlName="industryType" id="SelCat" 
-            class="flex w-[611px] p-[14px_16px] justify-between items-center rounded-lg border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)]"> 
+            class="flex w-[611px] p-[14px_16px] justify-between items-center rounded-lg border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)]">
             (change)="onCategoryChange($event)">
          <option value="" disabled>All</option>
          @for (industry of industries | async; track industry.IndustryId) {
