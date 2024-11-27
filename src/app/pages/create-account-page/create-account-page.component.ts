@@ -15,7 +15,7 @@ import { PricingPolicyComponent } from '../../components/pricing-policy/pricing-
 import { MathCaptchaComponent } from '../../components/math-captcha/math-captcha.component';
 import { filePath,countrie ,disabilities} from '../../constants/file-path.constants';
 import { AddIndustryModalComponent } from "../../components/add-industry-modal/add-industry-modal.component";
-import { UserDataService } from '../../Services/shared/user-data.service';
+import { AuthService } from '../../Services/shared/auth.service';
 @Component({
   selector: 'app-create-account-page',
   standalone: true,
@@ -134,7 +134,7 @@ filteredCountriesList = this.countrie;
   private usernameSubject: Subject<string> = new Subject();
   private companyNameSubject: Subject<string> = new Subject();
 
-  constructor(private checkNamesService: CheckNamesService, private userDataService: UserDataService) {}
+  constructor(private checkNamesService: CheckNamesService , private authService: AuthService) {}
 
   ngOnInit(): void {
     this.searchControl.valueChanges
@@ -640,30 +640,16 @@ checkCaptchaValidity() {
 }
 onContinue() {
   this.checkCaptchaValidity(); 
-
   this.isContinueClicked = true;
   console.log('Current form values:', this.employeeForm.value);
 
-  if (this.employeeForm.valid) {
-    const username = this.employeeForm.get('username')?.value;
-    const password = this.employeeForm.get('password')?.value;
+  const credentials = {
+    username: this.employeeForm.value.username || '',
+    password: this.employeeForm.value.password || '',
+  };
+  this.authService.updateCredentials(credentials);
 
-    if (username && password) {
-      this.userDataService.setUsername(username);
-      this.userDataService.setPassword(password);
-      console.log('Username and Password stored successfully in UserDataService:', {
-        username,
-        password,
-      });
-    } else {
-      console.error('Username or Password is invalid.');
-    }
-
-    this.formValue = this.employeeForm.value;
-    console.log('Form submitted successfully!', this.formValue);
-    return; 
-  }
-
+  console.log('Credentials stored in AuthService:', credentials);
  
   const fieldsOrder = [
     'username', 

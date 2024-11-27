@@ -44,6 +44,12 @@ export interface RLNoResponseModel {
   company_Name: string;
 }
 
+export interface UserCredentials {
+  username: string;
+  password: string;
+}
+
+
 // export interface OrganizationRequestDTO {
 //   OrganizationName: string; }
 // export interface OrganizationCheckResponseDTO {
