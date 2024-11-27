@@ -16,6 +16,7 @@ import { MathCaptchaComponent } from '../../components/math-captcha/math-captcha
 import { filePath,countrie ,disabilities} from '../../constants/file-path.constants';
 import { AddIndustryModalComponent } from "../../components/add-industry-modal/add-industry-modal.component";
 import { AuthService } from '../../Services/shared/auth.service';
+import { passwordMatchValidator } from '../../utils/validators';
 @Component({
   selector: 'app-create-account-page',
   standalone: true,
@@ -72,13 +73,14 @@ filteredCountriesList = this.countrie;
   isPolicyAccepted: boolean = this.isPolicyAcceptedControl.value!;
 
 
-  employeeForm: FormGroup = new FormGroup({
-    //new
+  employeeForm: FormGroup = new FormGroup(
+    {
+    
     facilitiesForDisabilities: this.facilitiesForDisabilitiesControl,
     isPolicyAccepted: this.isPolicyAcceptedControl,
     username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
-    password: new FormControl('', [Validators.required, Validators.minLength(6)]),
-    confirmPassword: new FormControl('', [Validators.required, Validators.minLength(6),Validators.maxLength(10)]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8),Validators.maxLength(10)]),
+    confirmPassword: new FormControl('', [Validators.required]),
     companyNameBangla: new FormControl(''),
     yearsOfEstablishMent: new FormControl('', Validators.required),
     companySize: new FormControl('-1', Validators.required),
@@ -102,8 +104,9 @@ filteredCountriesList = this.countrie;
     cityName: new FormControl(''),
     companyAddress: new FormControl(''),
     companyAddressBangla: new FormControl(''),
-    rlNo: new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$')])
-  });
+    rlNo: new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$')]),
+  },  { validators: passwordMatchValidator() }
+);
   // Signals for form control values
   usernameControl = computed(() => this.employeeForm.get('username') as FormControl<string>);
   companyNameControl = computed(() => this.employeeForm.get('companyName') as FormControl<string>);

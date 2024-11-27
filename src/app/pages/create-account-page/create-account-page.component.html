@@ -81,6 +81,10 @@
               @else if(employeeForm.controls['confirmPassword'].errors?.['minlength']) {
                 <span class="error-message">Minimum length should be 8</span>
               }
+              @else if(employeeForm.errors?.['passwordsDontMatch']) {
+                <span class="error-message">Passwords do not match
+                </span>
+              }
             </div>
           </div>
         </div>
