@@ -254,10 +254,7 @@ export const filePath: { [key: string]: string } = {
         "British Indian Ocean Territory (IO)": "assets/images/Flags/British Indian Ocean Territory (IO).svg",
         "East African Community (EAC)": "assets/images/Flags/East African Community (EAC).svg",
         "England (GB-ENG)": "assets/images/Flags/England (GB-ENG).svg",
-        "Jersey (JE)": "assets/images/Flags/Jersey (JE).svg",
-    
-    
-  
+        "Jersey (JE)": "assets/images/Flags/Jersey (JE).svg" 
   
 };
 
