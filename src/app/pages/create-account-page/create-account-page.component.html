@@ -170,6 +170,7 @@
           <div class="relative">
             <button
               class=" flex justify-between items-center mb-2 w-[400px] h-[50px] p-[14px] px-[16px] gap-[10px] rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
+              [formControl]="countryControl()"
               (click)="toggleDropdown()"
             >
               @if (selectedCountry) {
@@ -222,6 +223,9 @@
               </div>
             }
           </div>   
+
+
+          
         @if (selectedCountry && selectedCountry.OptionText !== 'Bangladesh') {
           <div class="flex-1">
             <input
@@ -730,7 +734,7 @@
                     <input name="policy_accept" 
                            id="policy_accept" 
                            type="checkbox" 
-                           formControlName="isPolicyAccepted"
+                           [formControl]="isPolicyAcceptedControl"
                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-offset-0 focus:ring-2 cursor-pointer">
                   </div>
                   <div class="ml-3">

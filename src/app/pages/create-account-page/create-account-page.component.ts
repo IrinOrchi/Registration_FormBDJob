@@ -76,8 +76,8 @@ filteredCountriesList = this.countrie;
   employeeForm: FormGroup = new FormGroup(
     {
     
+    isPolicyAccepted: this.isPolicyAcceptedControl,
     facilitiesForDisabilities: new FormControl('', [Validators.required]),
-    isPolicyAccepted: new FormControl('', [Validators.required]),
     username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
     password: new FormControl('', [Validators.required, Validators.minLength(8),Validators.maxLength(10)]),
     confirmPassword: new FormControl('', [Validators.required]),
