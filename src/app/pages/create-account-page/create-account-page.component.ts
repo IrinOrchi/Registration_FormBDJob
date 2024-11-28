@@ -76,15 +76,15 @@ filteredCountriesList = this.countrie;
   employeeForm: FormGroup = new FormGroup(
     {
     
-    facilitiesForDisabilities: this.facilitiesForDisabilitiesControl,
-    isPolicyAccepted: this.isPolicyAcceptedControl,
+    facilitiesForDisabilities: new FormControl('', [Validators.required]),
+    isPolicyAccepted: new FormControl('', [Validators.required]),
     username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
     password: new FormControl('', [Validators.required, Validators.minLength(8),Validators.maxLength(10)]),
     confirmPassword: new FormControl('', [Validators.required]),
     companyNameBangla: new FormControl(''),
     yearsOfEstablishMent: new FormControl('', Validators.required),
     companySize: new FormControl('-1', Validators.required),
-    outSideCity: new FormControl(''),
+    outSideBd: new FormControl(''),
     businessDesc: new FormControl(''),
     tradeNo: new FormControl(''),
     webUrl: new FormControl(''),
@@ -98,11 +98,15 @@ filteredCountriesList = this.countrie;
     training: new FormControl(''),
     companyName: new FormControl('', [Validators.required]),
     industryType: new FormControl(''),
+    industryTypeArray: new FormControl(''),
     country: new FormControl('118'),  
     district: new FormControl(''),
     thana: new FormControl(''),
     cityName: new FormControl(''),
+    outsideBdcompanyAddress: new FormControl(''),
+    outsideBdcompanyAddressBangla: new FormControl(''),
     companyAddress: new FormControl(''),
+
     companyAddressBangla: new FormControl(''),
     rlNo: new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$')]),
   },  { validators: passwordMatchValidator() }
@@ -114,7 +118,6 @@ filteredCountriesList = this.countrie;
   countryControl = computed(() => this.employeeForm.get('country') as FormControl<string>);
   districtControl = computed(() => this.employeeForm.get('district') as FormControl<string>);
   thanaControl = computed(() => this.employeeForm.get('thana') as FormControl<string>);
-  rlNoControl = computed(() => this.employeeForm.get('rlno') as FormControl<string>);
   formControlSignals = computed(() => {
     const signals: { [key: string]: FormControl<any> } = {};
     Object.keys(this.employeeForm.controls).forEach(key => {

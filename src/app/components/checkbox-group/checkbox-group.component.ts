@@ -13,7 +13,7 @@ export class CheckboxGroupComponent {
   @Input() name!: string; // Name attribute
   @Input() value!: any; // Value of the checkbox
   @Input() label!: string; // Label text
-  @Input() formControl!: FormControl; // FormControl for Reactive Forms
+  @Input() control: FormControl<string> = new FormControl()
   @Input() customClasses: string = ''; // Custom styling classes
 
   @Output() changed = new EventEmitter<boolean>(); // Output for change events
