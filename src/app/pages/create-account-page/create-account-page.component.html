@@ -143,6 +143,7 @@
               [control]="formControlSignals()['yearsOfEstablishMent']"
               placeholder="Type Establishment Year"
               [maxLength]="4"
+              (input)="onInputChange($event)"
               [isRequired]="true">
             </app-input-field>
             <div class="text-red-600">
@@ -591,10 +592,11 @@
                     type="text" 
                     id="txtContactMobile" 
                     name="txtContactMobile" 
-                    class="flex-1 px-2 py-1 text-gray-500 placeholder-gray-400 focus:outline-none border-none"
+                    class="flex-1 px-2 py-1 text-black font-inter placeholder-gray-400 focus:outline-none border-none"
                     placeholder="Mobile Number" 
+                    (input)="onInputChange($event)"
                     [formControl]="formControlSignals()['contactMobile']"
-                    maxlength="13" 
+                    maxlength="10" 
                     required 
                   />
                 </div>
