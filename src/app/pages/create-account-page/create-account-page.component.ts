@@ -17,15 +17,16 @@ import { filePath,countrie ,disabilities} from '../../constants/file-path.consta
 import { AddIndustryModalComponent } from "../../components/add-industry-modal/add-industry-modal.component";
 import { AuthService } from '../../Services/shared/auth.service';
 import { passwordMatchValidator } from '../../utils/validators';
+import { CountryDropdownComponent } from '../../components/country-dropdown/country-dropdown.component';
 @Component({
   selector: 'app-create-account-page',
   standalone: true,
   imports: [
     MathCaptchaComponent,
+    CountryDropdownComponent,
     PricingPolicyComponent,
     RadioGroupComponent,
     InputFieldComponent,
-    SelectFieldComponent,
     TextAreaComponent,
     CheckboxGroupComponent,
     ReactiveFormsModule,
@@ -99,14 +100,12 @@ filteredCountriesList = this.countrie;
     companyName: new FormControl('', [Validators.required]),
     industryType: new FormControl(''),
     industryTypeArray: new FormControl(''),
-    country: new FormControl('118'),  
+    country: new FormControl(''),  
     district: new FormControl(''),
     thana: new FormControl(''),
-    cityName: new FormControl(''),
     outsideBdcompanyAddress: new FormControl(''),
     outsideBdcompanyAddressBangla: new FormControl(''),
     companyAddress: new FormControl(''),
-
     companyAddressBangla: new FormControl(''),
     rlNo: new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$')]),
   },  { validators: passwordMatchValidator() }
@@ -115,7 +114,7 @@ filteredCountriesList = this.countrie;
   usernameControl = computed(() => this.employeeForm.get('username') as FormControl<string>);
   companyNameControl = computed(() => this.employeeForm.get('companyName') as FormControl<string>);
   industryTypeControl = computed(() => this.employeeForm.get('industryType') as FormControl<string>);
-  countryControl = computed(() => this.employeeForm.get('country') as FormControl<string>);
+  // countryControl = computed(() => this.employeeForm.get('country') as FormControl<string>);
   districtControl = computed(() => this.employeeForm.get('district') as FormControl<string>);
   thanaControl = computed(() => this.employeeForm.get('thana') as FormControl<string>);
   formControlSignals = computed(() => {
