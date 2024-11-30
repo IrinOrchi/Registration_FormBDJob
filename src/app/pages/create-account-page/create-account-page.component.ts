@@ -16,7 +16,7 @@ import { MathCaptchaComponent } from '../../components/math-captcha/math-captcha
 import { filePath,countrie ,disabilities} from '../../constants/file-path.constants';
 import { AddIndustryModalComponent } from "../../components/add-industry-modal/add-industry-modal.component";
 import { AuthService } from '../../Services/shared/auth.service';
-import { passwordMatchValidator } from '../../utils/validators';
+import { passwordMatchValidator, yearValidator, banglaTextValidator } from '../../utils/validators';
 import { CountryDropdownComponent } from '../../components/country-dropdown/country-dropdown.component';
 @Component({
   selector: 'app-create-account-page',
@@ -82,8 +82,8 @@ filteredCountriesList = this.countrie;
     username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
     password: new FormControl('', [Validators.required, Validators.minLength(8),Validators.maxLength(10)]),
     confirmPassword: new FormControl('', [Validators.required]),
-    companyNameBangla: new FormControl(''),
-    yearsOfEstablishMent: new FormControl('', Validators.required),
+    companyNameBangla: new FormControl('',[Validators.required,banglaTextValidator()]),
+    yearsOfEstablishMent: new FormControl('', [Validators.required, yearValidator()]),
     companySize: new FormControl('-1', Validators.required),
     outSideBd: new FormControl(''),
     businessDesc: new FormControl(''),
@@ -106,7 +106,7 @@ filteredCountriesList = this.countrie;
     outsideBdcompanyAddress: new FormControl(''),
     outsideBdcompanyAddressBangla: new FormControl(''),
     companyAddress: new FormControl(''),
-    companyAddressBangla: new FormControl(''),
+    companyAddressBangla: new FormControl('',[Validators.required,banglaTextValidator()]),
     rlNo: new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$')]),
   },  { validators: passwordMatchValidator() }
 );

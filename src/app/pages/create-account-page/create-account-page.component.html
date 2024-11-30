@@ -132,6 +132,12 @@
               [maxLength]="120"
               [isRequired]="false">
             </app-input-field>
+            <div class="text-red-600">
+              @if(employeeForm.controls['companyNameBangla'].touched && employeeForm.controls['companyNameBangla'].errors?.['invalidBanglaText']) {
+                <span class="error-message">অনুগ্রহ করে শুধুমাত্র বাংলা অক্ষর লিখুন।
+                </span>
+              }
+          </div>
           </div>
   
           <!-- Year of Establishment -->
@@ -149,6 +155,10 @@
             <div class="text-red-600">
               @if(employeeForm.controls['yearsOfEstablishMent'].touched && employeeForm.controls['yearsOfEstablishMent'].errors?.['required']) {
                 <span class="error-message">This is required</span>
+              }
+              @else if(employeeForm.controls['yearsOfEstablishMent'].touched && employeeForm.controls['yearsOfEstablishMent'].errors?.['invalidYear']) {
+                <span class="error-message">Please enter a valid year between 1900 and Current Year!
+                </span>
               }
             </div>
           </div>
@@ -289,6 +299,12 @@
               [maxLength]="300"
               [rows]="4">
             </app-text-area>
+            <div class="text-red-600">
+              @if(employeeForm.controls['companyAddressBangla'].touched && employeeForm.controls['companyAddressBangla'].errors?.['invalidBanglaText']) {
+                <span class="error-message">অনুগ্রহ করে শুধুমাত্র বাংলা অক্ষর লিখুন।
+                </span>
+              }
+          </div>
           </div>
         </div>
 
@@ -411,6 +427,7 @@
               [control]="formControlSignals()['tradeNo']"
               id="business_license_no"
               placeholder="Business/ Trade License No"
+              (input)="onInputChange($event)"
               [value]="''"
               [maxLength]="30"
               [isRequired]="false"
@@ -431,7 +448,12 @@
                 placeholder="Enter Number Only"
                 maxlength="6"
               />
+              <div class="text-red-600">
+                @if(employeeForm.controls['rlNo'].touched && employeeForm.controls['rlNo'].errors?.['required']) {
+                  <span class="error-message">This is required</span>
+                }
             </div>  
+          </div>
             @if (showErrorModal){
 
             <app-error-modal></app-error-modal>
