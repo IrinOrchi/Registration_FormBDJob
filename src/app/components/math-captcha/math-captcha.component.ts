@@ -1,5 +1,5 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
-import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
+import { Component, OnInit, signal, computed, Input } from '@angular/core';
+import { FormControl, Validators, ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { InputFieldComponent } from '../input-field/input-field.component';
@@ -12,6 +12,8 @@ import { InputFieldComponent } from '../input-field/input-field.component';
   styleUrls: ['./math-captcha.component.scss']
 })
 export class MathCaptchaComponent implements OnInit {
+  @Input() employeeForm!: FormGroup;
+
   operand1 = signal(this.randomNumber());
   operand2 = signal(this.randomNumber());
   operator = signal(this.randomOperator());
@@ -21,7 +23,10 @@ export class MathCaptchaComponent implements OnInit {
     return `${this.operand1()} ${operatorSymbol} ${this.operand2()}`;
   });
   captchaAnswer = computed(() => this.evaluateCaptcha());
-  captchaInput = new FormControl('', [Validators.required]);
+  
+  get captchaInput(): FormControl {
+    return this.employeeForm.get('captchaInput') as FormControl; 
+  }
 
   ngOnInit() {
     this.captchaInput.valueChanges

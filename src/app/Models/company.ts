@@ -40,13 +40,17 @@ export interface RLNoRequestModel {
 
 export interface RLNoResponseModel {
   error: string;
-  rlNo: string;
+  rlNo: number;
   company_Name: string;
 }
 
 export interface UserCredentials {
   username: string;
   password: string;
+}
+export interface CreateAccountResponseDTO {
+  Message: string;
+  CorporateAccountID: number;
 }
 
 

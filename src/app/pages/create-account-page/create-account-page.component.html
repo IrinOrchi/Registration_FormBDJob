@@ -321,7 +321,7 @@
             id="SelCat" 
             class="flex w-[611px] p-[14px_16px] justify-between items-center rounded-lg border border-[#DAE5EC] bg-white shadow-[0px_1px_2px_rgba(0,0,0,0.05)]">
             (change)="onCategoryChange($event)">
-         <option value="" disabled>All</option>
+         <option value="0" disabled>All</option>
          @for (industry of industries | async; track industry.IndustryId) {
         <option [value]="industry?.IndustryId">{{ industry?.IndustryName }}</option>
       }
@@ -344,6 +344,7 @@
         [closeModal]="closeAddIndustryModal.bind(this)"
         [industries]="industries"
         [selectedIndustryId]="selectedIndustryId" 
+        [employeeForm]="employeeForm"
         (newIndustry)="onNewIndustryAdded({OrganizationName:$event.IndustryName})">
         </app-add-industry-modal>
   }
@@ -428,7 +429,6 @@
               [control]="formControlSignals()['tradeNo']"
               id="business_license_no"
               placeholder="Business/ Trade License No"
-              (input)="onInputChange($event)"
               [value]="''"
               [maxLength]="30"
               [isRequired]="false"
@@ -726,8 +726,10 @@
       <div class="max-w-7xl p-2 mx-auto flex-col mt-6 items-start gap-5 ">
                <!-- Verification -->
               <h2 class="font-inter text-[20px] mb-2 font-semibold leading-[38px] text-left text-[#0E73A9]">Congratulations! You’re Almost Done</h2>
-              <app-math-captcha></app-math-captcha>
-              </div>
+              <app-math-captcha  
+              [employeeForm]="employeeForm">
+              </app-math-captcha>
+            </div>
               <div class="max-w-7xl p-6 mx-auto flex-col mt-4 items-start gap-5 rounded-2xl bg-white border border-[#DAE5EC]">
                 <app-pricing-policy></app-pricing-policy>
                 
@@ -736,7 +738,7 @@
                     <input name="policy_accept" 
                            id="policy_accept" 
                            type="checkbox" 
-                           [formControl]="isPolicyAcceptedControl"
+                           [formControl]="formControlSignals()['isPolicyAcceptedControl']"
                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-offset-0 focus:ring-2 cursor-pointer">
                   </div>
                   <div class="ml-3">
@@ -750,10 +752,10 @@
               
               <section class="max-w-7xl mx-auto mt-8 flex justify-end">
                 <button 
-                        [disabled]="!isPolicyAcceptedControl.value && !isCaptchaValid" 
+                        [disabled]="!employeeForm.get('isPolicyAcceptedControl')?.valid && !isCaptchaValid" 
                         class="box-border m-0 font-inherit overflow-visible text-center font-normal leading-normal align-middle whitespace-nowrap touch-manipulation select-none border border-transparent rounded inline-flex items-center bg-[#05A44B] text-white text-[16px] font-inter px-5 py-3 shadow-md transition duration-300 ease-linear"
-                        [class.cursor-not-allowed]="!isPolicyAcceptedControl.value"
-                        [class.opacity-65]="!isPolicyAcceptedControl.value"
+                        [class.cursor-not-allowed]="!employeeForm.get('isPolicyAcceptedControl')?.value"
+                        [class.opacity-65]="!employeeForm.get('isPolicyAcceptedControl')?.value"
                         (click)="onContinue()">
                   Continue 
                 </button>

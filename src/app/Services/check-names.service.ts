@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, throwError } from 'rxjs'; 
-import { CheckNamesResponseDTO, CompanyNameCheckRequestDTO, IndustryTypeResponseDTO, IndustryType, LocationRequestDTO, LocationResponseDTO, IndustryTypeRequestDTO, RLNoRequestModel } from '../Models/company';
+import { CheckNamesResponseDTO, CompanyNameCheckRequestDTO, IndustryTypeResponseDTO, IndustryType, LocationRequestDTO, LocationResponseDTO, IndustryTypeRequestDTO, RLNoRequestModel, CreateAccountResponseDTO } from '../Models/company';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +14,7 @@ export class CheckNamesService {
   private locationApiUrl = 'https://localhost:7152/api/CorporateCommon/GetLocations'; 
   private rlnoapiUrl = 'https://localhost:7152/api/CorporateCommon/RlNoCheck';
   private organizationCheckUrl = 'https://localhost:7152/api/CorporateCommon/OrganizationCheck';
+  private insertAccountApiUrl = 'https://localhost:7152/api/CreateAccount/insert';
 
 
   constructor(private http: HttpClient) {}
@@ -149,5 +150,15 @@ export class CheckNamesService {
     return this.http.post(this.rlnoapiUrl, request);
   }
  
-}
 
+ 
+  // Method to insert account data
+  insertAccount(data: any): Observable<CreateAccountResponseDTO> {
+    return this.http.post<CreateAccountResponseDTO>(this.insertAccountApiUrl, data).pipe(
+      catchError((error) => {
+        console.error('Error inserting account data:', error);
+        return throwError(() => new Error('Failed to insert account data'));
+      })
+    );
+  }
+}

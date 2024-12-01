@@ -69,18 +69,15 @@ currentCountry = { name: 'Bangladesh', code: 'BD', phoneCode: '+880' };
 currentFlagPath = this.filePath['Bangladesh'];
 filteredCountriesList = this.countrie;
 
-  facilitiesForDisabilitiesControl = new FormControl(false);
-  isPolicyAcceptedControl = new FormControl(false);
-  isPolicyAccepted: boolean = this.isPolicyAcceptedControl.value!;
 
 
   employeeForm: FormGroup = new FormGroup(
     {
     
-    isPolicyAccepted: this.isPolicyAcceptedControl,
+    isPolicyAcceptedControl: new FormControl(''),
     facilitiesForDisabilities: new FormControl('', [Validators.required]),
-    username: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
-    password: new FormControl('', [Validators.required, Validators.minLength(8),Validators.maxLength(10)]),
+    username: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required, Validators.minLength(4),Validators.maxLength(10)]),
     confirmPassword: new FormControl('', [Validators.required]),
     companyNameBangla: new FormControl('',[Validators.required,banglaTextValidator()]),
     yearsOfEstablishMent: new FormControl('', [Validators.required, yearValidator()]),
@@ -95,17 +92,21 @@ filteredCountriesList = this.countrie;
     contactMobile: new FormControl(''),
     inclusionPolicy: new FormControl(''),
     support: new FormControl(''),
-    disabilityWrap: new FormControl(''),
+    disabilityWrap: new FormControl([]),
     training: new FormControl(''),
     companyName: new FormControl('', [Validators.required]),
-    industryType: new FormControl(''),
-    industryTypeArray: new FormControl(''),
+    industryType: new FormControl(0, Validators.required),
+    industryName: new FormControl('', [Validators.required]),
+    industryTypeArray: new FormControl(),
+    hidEntrepreneur: new FormControl(''),
+    rlNoStatus: new FormControl(''),
     country: new FormControl(''),  
     district: new FormControl(''),
     thana: new FormControl(''),
-    outsideBdcompanyAddress: new FormControl(''),
-    outsideBdcompanyAddressBangla: new FormControl(''),
+    outsideBDCompanyAddress: new FormControl(''),
+    outsideBDCompanyAddressBng: new FormControl(''),
     companyAddress: new FormControl(''),
+    captchaInput: new FormControl('', [Validators.required]),
     companyAddressBangla: new FormControl('',[Validators.required,banglaTextValidator()]),
     rlNo: new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$')]),
   },  { validators: passwordMatchValidator() }
@@ -648,14 +649,15 @@ onContinue() {
   this.isContinueClicked = true;
   console.log('Current form values:', this.employeeForm.value);
 
+  // Prepare credentials for AuthService
   const credentials = {
     username: this.employeeForm.value.username || '',
     password: this.employeeForm.value.password || '',
   };
   this.authService.updateCredentials(credentials);
-
   console.log('Credentials stored in AuthService:', credentials);
- 
+
+
   const fieldsOrder = [
     'username', 
     'password',
@@ -668,8 +670,11 @@ onContinue() {
     'contactName',
     'contactDesignation',
     'contactEmail',
+    'captchaInput', 
+
   ];
 
+  // Get the current field to validate
   const currentField = fieldsOrder[this.currentValidationFieldIndex];
   const control = this.employeeForm.get(currentField);
 
@@ -678,15 +683,18 @@ onContinue() {
     console.error(`Field ${currentField} is invalid:`, control.errors);
     return;
   }
+  const formData = this.employeeForm.value;
 
-  this.currentValidationFieldIndex++;
-
-  if (this.currentValidationFieldIndex < fieldsOrder.length) {
-    const nextField = fieldsOrder[this.currentValidationFieldIndex];
-    this.employeeForm.get(nextField)?.markAsTouched();
-  } else {
-    this.formValue = this.employeeForm.value;
-    console.log('Form submitted successfully after validating all fields!', this.formValue);
-  }
+  // Call the service to insert account data
+  this.checkNamesService.insertAccount(formData).subscribe({
+    next: (response) => {
+      console.log('Account created successfully:', response);
+      alert(`Account created successfully! CorporateAccountID: ${response.CorporateAccountID}`);
+    },
+    error: (error) => {
+      console.error('Error during account creation:', error);
+      alert('Failed to create account. Please try again later.');
+    },
+  });
 }
 }

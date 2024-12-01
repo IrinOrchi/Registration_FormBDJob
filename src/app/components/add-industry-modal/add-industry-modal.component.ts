@@ -16,15 +16,10 @@ export class AddIndustryModalComponent implements OnChanges {
   @Input() industries: BehaviorSubject<IndustryType[]> = new BehaviorSubject<IndustryType[]>([]);
   @Output() newIndustry = new EventEmitter<IndustryType>();
   @Input() selectedIndustryId: number = 0;
+  @Input() employeeForm!: FormGroup;
 
-  employeeForm: FormGroup;
-
-  constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef) {
-    this.employeeForm = this.fb.group({
-      industryType: ['', Validators.required],
-      industryName: ['', [Validators.required, Validators.minLength(3)]],
-    });
-  }
+  
+  constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['selectedIndustryId']) {
