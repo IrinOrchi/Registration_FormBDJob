@@ -1,13 +1,14 @@
 
 <div class="bg-[#F9FAFB] w-[1750px] h-[7022px]">
-    <!-- Header Section -->
-    <div class="flex justify-between items-center p-8 shadow-lg"
-         style="background: url('/assets/images/mid-header.svg') no-repeat; width: 1750px; height: 287px; flex-shrink: 0;"></div>
+   <!-- Header Section -->
+   <div class="flex flex-col md:flex-row justify-between items-center p-4 sm:p-6 lg:p-8 shadow-lg w-full min-h-[257px] md:min-h-[287px] flex-shrink-0"
+   style="background: url('/assets/images/mid-header.svg') no-repeat center; background-size: cover;">
+</div>
     <!-- Form -->
     <form action="" [formGroup]="employeeForm" (ngSubmit)="onContinue()">
   
       <!-- User Information Section -->
-      <div class="max-w-7xl p-6 mx-auto flex-col -mt-24 items-start gap-5 rounded-2xl bg-white shadow-lg">
+      <div class="w-[1290px] h-[183px] p-6 mx-auto flex-col -mt-24 items-start gap-5 rounded-2xl bg-white shadow-lg">
         <h2 class="flex items-center mb-4 text-[#0E73A9] font-inter text-[18px] font-semibold leading-[27px]">
           <span class="icon icon-employer mr-2"></span> Let’s fill in the user information first
         </h2>

@@ -1,14 +1,15 @@
 .error-message {
     color: #e3342f;
     font-size: 0.875rem; 
-    margin-top: -2px; 
+    margin-top: -16px; 
     display: block; 
-    margin-bottom: 6px;
+    margin-bottom: 24px;
   }
   
   .your-container {
     @apply bg-[#F9FAFB] w-[1750px] h-[3022px];
   }
+
 
   .row {
     background-image: url('/public/assets/images/disability.svg'); 
