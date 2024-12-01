@@ -381,7 +381,19 @@ filteredCountriesList = this.countrie;
       },
     });
   }
+  onCheckboxChange(event: Event) {
+    const checkbox = event.target as HTMLInputElement;
+    const value = parseInt(checkbox.value, 10);
+    const currentValues = this.formControlSignals()['disabilityWrap'].value || [];
   
+    if (checkbox.checked) {
+      this.formControlSignals()['disabilityWrap'].setValue([...currentValues, value]);
+    } else {
+      this.formControlSignals()['disabilityWrap'].setValue(currentValues.filter((v: number) => v !== value));
+    }
+  }
+  
+ 
 addNewIndustry(): void {
   this.showAddIndustryModal = true;
 }
