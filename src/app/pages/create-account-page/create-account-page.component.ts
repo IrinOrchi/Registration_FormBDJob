@@ -79,7 +79,7 @@ filteredCountriesList = this.countrie;
     confirmPassword: new FormControl('', [Validators.required]),
     companyNameBangla: new FormControl('',[Validators.required,banglaTextValidator()]),
     yearsOfEstablishMent: new FormControl('', [Validators.required, yearValidator()]),
-    companySize: new FormControl('-1', Validators.required),
+    companySize: new FormControl('', Validators.required),
     outSideBd: new FormControl(''),
     businessDesc: new FormControl(''),
     tradeNo: new FormControl(''),
@@ -93,7 +93,7 @@ filteredCountriesList = this.countrie;
     disabilityWrap: new FormControl(''),
     training: new FormControl(''),
     companyName: new FormControl('', [Validators.required]),
-    industryType: new FormControl(0, Validators.required),
+    industryType: new FormControl('', Validators.required),
     industryName: new FormControl('', [Validators.required]),
     industryTypeArray: new FormControl(''),
     hidEntrepreneur: new FormControl(''),
@@ -106,7 +106,7 @@ filteredCountriesList = this.countrie;
     companyAddress: new FormControl(''),
     captchaInput: new FormControl('', [Validators.required]),
     companyAddressBangla: new FormControl('',[Validators.required,banglaTextValidator()]),
-    rlNo: new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$')]),
+    rlNo: new FormControl('', [Validators.pattern('^[0-9]*$')]),
   },{ validators: passwordMatchValidator() }
 );
   // Signals for form control values
