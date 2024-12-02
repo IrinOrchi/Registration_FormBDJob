@@ -17,13 +17,11 @@ import { filePath,countrie ,disabilities} from '../../constants/file-path.consta
 import { AddIndustryModalComponent } from "../../components/add-industry-modal/add-industry-modal.component";
 import { AuthService } from '../../Services/shared/auth.service';
 import { passwordMatchValidator, yearValidator, banglaTextValidator } from '../../utils/validators';
-import { CountryDropdownComponent } from '../../components/country-dropdown/country-dropdown.component';
 @Component({
   selector: 'app-create-account-page',
   standalone: true,
   imports: [
     MathCaptchaComponent,
-    CountryDropdownComponent,
     PricingPolicyComponent,
     RadioGroupComponent,
     InputFieldComponent,

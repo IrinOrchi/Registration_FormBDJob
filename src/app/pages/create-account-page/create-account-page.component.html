@@ -180,12 +180,33 @@
         <div class="flex flex-col sm:flex-row sm:gap-6">     
           <!-- Country Dropdown -->
           <div class="relative">
-          <app-country-dropdown
-          [formcontrol]="formControlSignals()['country']"
-          [selectedCountry]="selectedCountry"
-          (click)="toggleDropdown()">
-          </app-country-dropdown>
-
+            <button
+            class=" flex justify-between items-center mb-2 w-[388px] h-[50px] p-[14px] px-[16px] gap-[10px] rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
+            (click)="toggleDropdown()"
+          >
+            @if (selectedCountry) {
+              <span class="flex items-center">
+                @if (selectedCountry.flagPath) {
+                  <img [src]="selectedCountry.flagPath" alt="Flag" class="w-6 h-6 mr-2" />
+                }
+                {{ selectedCountry.OptionText }}
+              </span>
+            } @else {
+              <span class="text-black-400">Select Country</span>
+            }
+            <svg
+              class="w-4 h-4 text-gray-600"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </button>      
             <!-- Dropdown List -->
             @if (isOpen) {
               <div class="flex flex-col items-start h-52 w-[400px] rounded-lg border border-[#DAE5EC] bg-white shadow-lg">
@@ -212,10 +233,7 @@
                 </ul>
               </div>
             }
-          </div>   
-
-
-          
+          </div>            
         @if (selectedCountry && selectedCountry.OptionText !== 'Bangladesh') {
           <div class="flex-1">
             <input
