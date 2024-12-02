@@ -158,8 +158,10 @@ filteredCountriesList = this.countrie;
     this.selectedCountry = {
       OptionText: 'Bangladesh',
       OptionValue: '118',
-      flagPath: this.filePath['Bangladesh']
+      flagPath: this.filePath['Bangladesh'],
+      
     };
+  
     this.currentCountry = { name: 'Bangladesh', code: 'BD', phoneCode: '+880' };
     this.currentFlagPath = this.filePath['Bangladesh'];
     this.employeeForm.get('industryType')?.valueChanges.subscribe(selectedIndustryId => {
@@ -175,7 +177,7 @@ filteredCountriesList = this.countrie;
       }, { emitEvent: false });
     });
     this.employeeForm.get('country')?.valueChanges.subscribe((value: string) => {
-            if (value === '118') {
+            if (value === 'Bangladesh') {
               this.outsideBd = false;  
               this.fetchDistricts();    
             } else {
@@ -513,7 +515,8 @@ onNewIndustryAdded(organizationRequest: { OrganizationName: string }): void {
   }
   // Fetch countries (Outside Bangladesh included)
   private fetchCountries(): void {
-    const requestPayload = { OutsideBd: '1', DistrictId: '', CountryId: this.selectedCountry?.OptionText  };
+    const selectedCountryText = this.selectedCountry?.OptionText || this.employeeForm.get('country')?.value;
+    const requestPayload = { OutsideBd: '1', DistrictId: '',   CountryId: selectedCountryText,  };
   
     this.checkNamesService.getLocations(requestPayload).subscribe({
       next: (response: any) => {
@@ -529,7 +532,7 @@ onNewIndustryAdded(organizationRequest: { OrganizationName: string }): void {
               flagPath: this.filePath[item.optionText] || '', 
             }));
   
-            this.employeeForm.get('country')?.setValue('118'); 
+            this.employeeForm.get('country')?.setValue('Bangladesh'); 
           } else {
             console.error('No countries found in the response.');
             this.countries = [];
