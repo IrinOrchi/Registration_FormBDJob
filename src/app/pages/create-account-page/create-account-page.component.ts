@@ -554,8 +554,9 @@ private fetchDistricts(): void {
       if (response.responseCode === 1 && Array.isArray(response.data)) {
         const districtData = response.data;
 
+        // Store both raw and formatted values
         this.districts = districtData.map((item: any) => ({
-          OptionValue: item.optionValue,
+          OptionValue: `${item.optionValue}##${item.optionText}`, 
           OptionText: item.optionText,
         }));
 
@@ -571,6 +572,7 @@ private fetchDistricts(): void {
     },
   });
 }
+
 
   toggleDropdown() {
     this.isOpen = !this.isOpen;
@@ -594,7 +596,9 @@ private fetchDistricts(): void {
   
   }
 // Fetch thanas for the selected district
-private fetchThanas(districtId: string): void {
+private fetchThanas(districtFormattedValue: string): void {
+  const districtId = districtFormattedValue.split('##')[0]; 
+
   const requestPayload = { OutsideBd: '0', DistrictId: districtId };
 
   this.checkNamesService.getLocations(requestPayload).subscribe({
@@ -603,7 +607,7 @@ private fetchThanas(districtId: string): void {
         const thanaData = response.data;
 
         this.thanas = thanaData.map((item: any) => ({
-          OptionValue: item.optionValue,
+          OptionValue: `${item.optionValue}##${item.optionText}`,
           OptionText: item.optionText,
         }));
       } else {
@@ -617,6 +621,7 @@ private fetchThanas(districtId: string): void {
     },
   });
 }
+
 
   setupSearch(): void {
     this.searchControl.valueChanges.pipe(debounceTime(300), distinctUntilChanged())
@@ -714,13 +719,9 @@ onContinue() {
   }
   const formData = this.employeeForm.value;
 
-   const payload = {
-    ...formData,
-    disabilityWrap: this.formControlSignals()['disabilityWrap'].value.join(',') // Convert array to comma-separated string
-  };
-
+  
   // Call the service to insert account data
-  this.checkNamesService.insertAccount(payload).subscribe({
+  this.checkNamesService.insertAccount(formData).subscribe({
     next: (response) => {
       console.log('Account created successfully:', response);
       alert(`Account created successfully! CorporateAccountID: ${response.CorporateAccountID}`);
