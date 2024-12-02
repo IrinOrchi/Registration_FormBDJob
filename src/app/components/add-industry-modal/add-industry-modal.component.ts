@@ -39,15 +39,15 @@ export class AddIndustryModalComponent implements OnChanges {
     if (this.employeeForm.valid) {
       const formValue = this.employeeForm.value;
       const organizationRequest: IndustryType = {
-        IndustryId: this.selectedIndustryId,
+        IndustryId: this.selectedIndustryId || Date.now(), // Default unique ID if none provided
         IndustryName: formValue.industryName,
         OrganizationName: formValue.industryName,
       };
-
+  
       this.newIndustry.emit(organizationRequest);
       this.closeModal();
     } else {
       this.employeeForm.markAllAsTouched();
     }
   }
-}
+}  

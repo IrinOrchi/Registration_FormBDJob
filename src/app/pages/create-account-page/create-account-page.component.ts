@@ -420,7 +420,7 @@ onNewIndustryAdded(organizationRequest: { OrganizationName: string }): void {
         const existingIndustry = this.industryTypes.find(
           (industry) => industry.IndustryName === organizationRequest.OrganizationName
         );
-        
+
         if (existingIndustry) {
           if (
             !this.selectedIndustries.some(
@@ -431,26 +431,21 @@ onNewIndustryAdded(organizationRequest: { OrganizationName: string }): void {
           }
         }
       } else if (response.responseCode === 200 && response.dataContext === 'Organization not found') {
-        const newIndustry: IndustryType = {
-          IndustryId: Date.now(),
+        const newIndustry: IndustryTypeResponseDTO = {
+          IndustryValue: Date.now(), // Temporary unique ID
           IndustryName: organizationRequest.OrganizationName,
-          OrganizationName: organizationRequest.OrganizationName,
         };
 
-        const newIndustryEntry: IndustryTypeResponseDTO = {
-          IndustryValue: newIndustry.IndustryId,
-          IndustryName: newIndustry.IndustryName,
-        };
-
-        this.industryTypes.push(newIndustryEntry);
+        // Add new industry to the arrays
+        this.industryTypes.push(newIndustry);
         this.filteredIndustryTypes = [...this.industryTypes];
 
         if (
           !this.selectedIndustries.some(
-            (industry) => industry.IndustryValue === newIndustryEntry.IndustryValue
+            (industry) => industry.IndustryValue === newIndustry.IndustryValue
           )
         ) {
-          this.selectedIndustries.push(newIndustryEntry);
+          this.selectedIndustries.push(newIndustry);
         }
       }
     },
@@ -470,6 +465,7 @@ onNewIndustryAdded(organizationRequest: { OrganizationName: string }): void {
       this.filteredIndustryTypes = [...this.industryTypes];
     }
   }
+
   onIndustryCheckboxChange(
     event: Event,
     item: { IndustryValue: number; IndustryName: string }
@@ -486,19 +482,20 @@ onNewIndustryAdded(organizationRequest: { OrganizationName: string }): void {
     } else {
       this.selectedIndustries = this.selectedIndustries.filter(
         (industry) => industry.IndustryValue !== item.IndustryValue
-      ); 
+      );
     }
-    const selectedValues = this.selectedIndustries
-      .map((industry) => industry.IndustryValue)
-      .join(',');
-    this.employeeForm.controls['industryTypeArray'].setValue(selectedValues); 
+  
+    // Update form control
+    const selectedValues = this.selectedIndustries.map((industry) => industry.IndustryValue).join(',');
+    this.employeeForm.controls['industryTypeArray'].setValue(selectedValues);
   }
-
+  
   isIndustryChecked(industryValue: number): boolean {
     return this.selectedIndustries.some(
       (industry) => industry.IndustryValue === industryValue
     );
   }
+  
   removeIndustry(industry: { IndustryValue: number; IndustryName: string }): void {
     this.selectedIndustries = this.selectedIndustries.filter(
       (selected) => selected.IndustryValue !== industry.IndustryValue
