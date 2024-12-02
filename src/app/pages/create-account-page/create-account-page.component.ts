@@ -92,12 +92,12 @@ filteredCountriesList = this.countrie;
     contactMobile: new FormControl(''),
     inclusionPolicy: new FormControl(''),
     support: new FormControl(''),
-    disabilityWrap: new FormControl([]),
+    disabilityWrap: new FormControl(''),
     training: new FormControl(''),
     companyName: new FormControl('', [Validators.required]),
     industryType: new FormControl(0, Validators.required),
     industryName: new FormControl('', [Validators.required]),
-    industryTypeArray: new FormControl(),
+    industryTypeArray: new FormControl(''),
     hidEntrepreneur: new FormControl(''),
     rlNoStatus: new FormControl(''),
     country: new FormControl(''),  
@@ -170,6 +170,11 @@ filteredCountriesList = this.countrie;
       console.log('Parent Component - Selected Industry ID:', selectedIndustryId);
 
 
+    });
+    this.employeeForm.get('facilitiesForDisabilities')?.valueChanges.subscribe((value: boolean) => {
+      this.employeeForm.patchValue({
+        facilitiesForDisabilities: value ? 1 : 0,
+      }, { emitEvent: false });
     });
     this.employeeForm.get('country')?.valueChanges.subscribe((value: string) => {
             if (value === '118') {
@@ -381,16 +386,24 @@ filteredCountriesList = this.countrie;
       },
     });
   }
-  onCheckboxChange(event: Event) {
+  onCheckboxChange(event: Event): void {
     const checkbox = event.target as HTMLInputElement;
     const value = parseInt(checkbox.value, 10);
-    const currentValues = this.formControlSignals()['disabilityWrap'].value || [];
+    const currentValues = this.formControlSignals()['disabilityWrap'].value
+      ? this.formControlSignals()['disabilityWrap'].value.split(',').map(Number) 
+      : [];
   
     if (checkbox.checked) {
-      this.formControlSignals()['disabilityWrap'].setValue([...currentValues, value]);
+      if (!currentValues.includes(value)) {
+        currentValues.push(value);
+      }
     } else {
-      this.formControlSignals()['disabilityWrap'].setValue(currentValues.filter((v: number) => v !== value));
+      const index = currentValues.indexOf(value);
+      if (index !== -1) {
+        currentValues.splice(index, 1);
+      }
     }
+    this.formControlSignals()['disabilityWrap'].setValue(currentValues.join(','));
   }
   
  
@@ -476,9 +489,14 @@ onNewIndustryAdded(organizationRequest: { OrganizationName: string }): void {
     } else {
       this.selectedIndustries = this.selectedIndustries.filter(
         (industry) => industry.IndustryValue !== item.IndustryValue
-      );
+      ); 
     }
+    const selectedValues = this.selectedIndustries
+      .map((industry) => industry.IndustryValue)
+      .join(',');
+    this.employeeForm.controls['industryTypeArray'].setValue(selectedValues); 
   }
+
   isIndustryChecked(industryValue: number): boolean {
     return this.selectedIndustries.some(
       (industry) => industry.IndustryValue === industryValue
@@ -697,8 +715,13 @@ onContinue() {
   }
   const formData = this.employeeForm.value;
 
+   const payload = {
+    ...formData,
+    disabilityWrap: this.formControlSignals()['disabilityWrap'].value.join(',') // Convert array to comma-separated string
+  };
+
   // Call the service to insert account data
-  this.checkNamesService.insertAccount(formData).subscribe({
+  this.checkNamesService.insertAccount(payload).subscribe({
     next: (response) => {
       console.log('Account created successfully:', response);
       alert(`Account created successfully! CorporateAccountID: ${response.CorporateAccountID}`);
