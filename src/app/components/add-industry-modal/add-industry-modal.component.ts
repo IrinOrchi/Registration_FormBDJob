@@ -16,18 +16,20 @@ export class AddIndustryModalComponent implements OnChanges {
   @Input() industries: BehaviorSubject<IndustryType[]> = new BehaviorSubject<IndustryType[]>([]);
   @Output() newIndustry = new EventEmitter<IndustryType>();
   @Input() selectedIndustryId: number = 0;
-  @Input() employeeForm!: FormGroup;
 
-  
-  constructor(private cdr: ChangeDetectorRef) {}
+  employeeForm: FormGroup;
+  constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef) {
+    this.employeeForm = this.fb.group({
+      industryType: ['', Validators.required],
+      industryName: ['', [Validators.required, Validators.minLength(3)]],
+    });
+  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['selectedIndustryId']) {
-      console.log('Child Component - Selected Industry ID:', changes['selectedIndustryId'].currentValue);
       const selectedId = changes['selectedIndustryId'].currentValue;
       if (this.employeeForm.get('industryType')) {
         this.employeeForm.get('industryType')?.setValue(selectedId, { emitEvent: false });
-        console.log('Modal Form Updated with Industry ID:', selectedId);
         this.cdr.detectChanges();
       }
     }
@@ -36,14 +38,13 @@ export class AddIndustryModalComponent implements OnChanges {
   addIndustry(): void {
     if (this.employeeForm.valid) {
       const formValue = this.employeeForm.value;
-
       const organizationRequest: IndustryType = {
-        IndustryId: this.selectedIndustryId,  
+        IndustryId: this.selectedIndustryId,
         IndustryName: formValue.industryName,
         OrganizationName: formValue.industryName,
       };
 
-      this.newIndustry.emit(organizationRequest);  
+      this.newIndustry.emit(organizationRequest);
       this.closeModal();
     } else {
       this.employeeForm.markAllAsTouched();
