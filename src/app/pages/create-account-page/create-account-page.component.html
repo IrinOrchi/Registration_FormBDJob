@@ -251,8 +251,8 @@
             <select
               id="district"
               class="gap-3 px-4 py-[14px] w-[388px] rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
-              [formControl]="districtControl()"
-              [disabled]="districts.length === 0"
+              [formControl]="formControlSignals()['district']"
+              [disabled]="districts.length === 0" 
             >
               <option value="" disabled>Select District</option> 
               @for (district of districts; track district) {
@@ -262,7 +262,7 @@
               }
             </select>
             <div class="mt-1 text-red-600">
-              @if (districtControl().touched && districtControl().hasError('required')) {
+              @if (employeeForm.controls['district'].touched && employeeForm.controls['district'].hasError('required')) {
                 <span class="error-message">This is required</span>
               }
             </div>
@@ -273,7 +273,7 @@
             <select
               id="thana"
               class="gap-3 px-4 py-[14px] w-[388px] rounded-lg border border-[#DAE5EC] bg-white shadow-[0_1px_2px_rgba(0,0,0,0.05)] focus:outline-none focus:border-[#0F6DDB]"
-              [formControl]="thanaControl()"
+              [formControl]="formControlSignals()['thana']"
               [disabled]="thanas.length === 0"
             >
               <option value="" disabled>Select Thana</option>
@@ -284,7 +284,7 @@
               }
             </select>
             <div class="mt-1 text-red-600">
-              @if (thanaControl().touched && thanaControl().hasError('required')) {
+              @if (employeeForm.controls['thana'].touched && employeeForm.controls['thana'].hasError('required')) {
                 <span class="error-message">This is required</span>
               }
             </div>

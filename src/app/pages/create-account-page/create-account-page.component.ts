@@ -107,15 +107,15 @@ filteredCountriesList = this.countrie;
     captchaInput: new FormControl('', [Validators.required]),
     companyAddressBangla: new FormControl('',[Validators.required,banglaTextValidator()]),
     rlNo: new FormControl('', [Validators.required, Validators.pattern('^[0-9]*$')]),
-  },  { validators: passwordMatchValidator() }
+  },{ validators: passwordMatchValidator() }
 );
   // Signals for form control values
   usernameControl = computed(() => this.employeeForm.get('username') as FormControl<string>);
   companyNameControl = computed(() => this.employeeForm.get('companyName') as FormControl<string>);
   industryTypeControl = computed(() => this.employeeForm.get('industryType') as FormControl<string>);
   // countryControl = computed(() => this.employeeForm.get('country') as FormControl<string>);
-  districtControl = computed(() => this.employeeForm.get('district') as FormControl<string>);
-  thanaControl = computed(() => this.employeeForm.get('thana') as FormControl<string>);
+  // districtControl = computed(() => this.employeeForm.get('district') as FormControl<string>);
+  // thanaControl = computed(() => this.employeeForm.get('thana') as FormControl<string>);
   formControlSignals = computed(() => {
     const signals: { [key: string]: FormControl<any> } = {};
     Object.keys(this.employeeForm.controls).forEach(key => {
@@ -513,7 +513,7 @@ onNewIndustryAdded(organizationRequest: { OrganizationName: string }): void {
   }
   // Fetch countries (Outside Bangladesh included)
   private fetchCountries(): void {
-    const requestPayload = { OutsideBd: '1', DistrictId: '' };
+    const requestPayload = { OutsideBd: '1', DistrictId: '', CountryId: this.selectedCountry?.OptionText  };
   
     this.checkNamesService.getLocations(requestPayload).subscribe({
       next: (response: any) => {
@@ -580,6 +580,7 @@ private fetchDistricts(): void {
     this.selectedCountry = country;
     this.isOpen = false;
     this.searchTerm.setValue('');
+    this.employeeForm.get('country')?.setValue(country.OptionText); 
   }
 
   get filteredCountries() {
