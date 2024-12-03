@@ -1,7 +1,7 @@
 import { Component, computed, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CheckNamesService } from '../../Services/check-names.service';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { InputFieldComponent } from '../../components/input-field/input-field.component';
 import { SelectFieldComponent } from '../../components/select-field/select-field.component';
 import { TextAreaComponent } from '../../components/text-area/text-area.component';
@@ -74,7 +74,10 @@ filteredCountriesList = this.countrie;
     
     isPolicyAcceptedControl: new FormControl(''),
     facilitiesForDisabilities: new FormControl('', [Validators.required]),
-    username: new FormControl('', [Validators.required]),
+    username: new FormControl('', [Validators.minLength(4),Validators.maxLength(8),
+      Validators.required,
+      Validators.pattern(/^[a-zA-Z]+[a-zA-Z\d]*$/) 
+    ]),  
     password: new FormControl('', [Validators.required, Validators.minLength(4),Validators.maxLength(10)]),
     confirmPassword: new FormControl('', [Validators.required]),
     companyNameBangla: new FormControl('',[Validators.required,banglaTextValidator()]),
@@ -142,7 +145,7 @@ filteredCountriesList = this.countrie;
 
   ngOnInit(): void {
     this.searchControl.valueChanges
-    .pipe(debounceTime(300)) // Add debounce to reduce calls
+    .pipe(debounceTime(300)) 
     .subscribe(() => {
       this.filteredCountriesList = this.filteredCountrie();
     });
@@ -196,14 +199,23 @@ filteredCountriesList = this.countrie;
     );
   }
 
-   setupUsernameCheck(): void {
+  setupUsernameCheck(): void {
     const usernameControl = this.employeeForm.get('username') as FormControl;
+  
     usernameControl.valueChanges
-      .pipe(debounceTime(300), distinctUntilChanged())
+      .pipe(
+        debounceTime(300), 
+        distinctUntilChanged(), 
+        filter((value: string) => this.isValidUsername(value)) 
+      )
       .subscribe((value) => {
         this.usernameSubject.next(value);
-        this.checkUniqueUsername(value);
+        this.checkUniqueUsername(value); 
       });
+  }
+  private isValidUsername(value: string): boolean {
+    const usernameRegex = /^[a-zA-Z]+[a-zA-Z\d]*$/;
+    return usernameRegex.test(value);
   }
 
   filteredCountrie() {
@@ -237,10 +249,7 @@ filteredCountriesList = this.countrie;
           this.usernameExistsMessage = 'Unexpected response from the server.'; 
         }
       },
-      error: (error: any) => {
-        console.error('Error checking username:', error);
-        this.usernameExistsMessage = 'An error occurred while checking the username.';
-      },
+     
     });
   }
   
