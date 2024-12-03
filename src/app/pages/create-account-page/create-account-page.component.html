@@ -293,38 +293,72 @@
       </div>       
         <!-- Company Address Fields -->
         <div class="grid grid-cols-1 gap-4 mt-6 sm:grid-cols-2">
-          <div class="col-span-1">
+            @if (selectedCountry && selectedCountry.OptionText !== 'Bangladesh') {
+            <div class="col-span-1">
             <app-text-area
               name="txtCompanyAddress"
               id="txtCompanyAddress"
               placeholder="Write Company Detail Address In English"
-              [control]="formControlSignals()['companyAddress']"
+              [control]="formControlSignals()['outsideBDCompanyAddress']"
               [maxLength]="300"
               [rows]="4">
             </app-text-area>
             <div class="text-red-600">
-              @if(employeeForm.controls['companyAddress'].touched && employeeForm.controls['companyAddress'].errors?.['required']) {
+              @if(employeeForm.controls['outsideBDCompanyAddress'].touched && employeeForm.controls['outsideBDCompanyAddress'].errors?.['required']) {
                 <span class="error-message">This is required</span>
               }
             </div>
-          </div>
-        
+            </div>  
           <div class="col-span-1">
             <app-text-area
               name="txtCompanyAddressBng"
               id="txtCompanyAddressBng"
               placeholder="Write Company Detail Address In Bangla"
-              [control]="formControlSignals()['companyAddressBangla']"
+              [control]="formControlSignals()['outsideBDCompanyAddressBng']"
               [maxLength]="300"
               [rows]="4">
             </app-text-area>
             <div class="text-red-600">
-              @if(employeeForm.controls['companyAddressBangla'].touched && employeeForm.controls['companyAddressBangla'].errors?.['invalidBanglaText']) {
+              @if(employeeForm.controls['outsideBDCompanyAddressBng'].touched && employeeForm.controls['outsideBDCompanyAddressBng'].errors?.['invalidBanglaText']) {
                 <span class="error-message">অনুগ্রহ করে শুধুমাত্র বাংলা অক্ষর লিখুন।
                 </span>
               }
+            </div>    
+          </div> 
+        }        
+        @else {
+          <div class="col-span-1">      
+          <app-text-area
+          name="txtCompanyAddress"
+          id="txtCompanyAddress"
+          placeholder="Write Company Detail Address In English"
+          [control]="formControlSignals()['companyAddress']"
+          [maxLength]="300"
+          [rows]="4">
+        </app-text-area>
+        <div class="text-red-600">
+          @if(employeeForm.controls['companyAddress'].touched && employeeForm.controls['companyAddress'].errors?.['required']) {
+            <span class="error-message">This is required</span>
+          }
+        </div> 
           </div>
-          </div>
+        <div class="col-span-1">
+          <app-text-area
+            name="txtCompanyAddressBng"
+            id="txtCompanyAddressBng"
+            placeholder="Write Company Detail Address In Bangla"
+            [control]="formControlSignals()['companyAddressBangla']"
+            [maxLength]="300"
+            [rows]="4">
+          </app-text-area>
+          <div class="text-red-600">
+            @if(employeeForm.controls['companyAddressBangla'].touched && employeeForm.controls['companyAddressBangla'].errors?.['invalidBanglaText']) {
+              <span class="error-message">অনুগ্রহ করে শুধুমাত্র বাংলা অক্ষর লিখুন।
+              </span>
+            }
+        </div>
+        </div>
+      }
         </div>
 
         <!-- Industry Type -->
