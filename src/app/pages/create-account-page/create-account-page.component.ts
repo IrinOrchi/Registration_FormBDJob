@@ -89,7 +89,7 @@ filteredCountriesList = this.countrie;
     contactEmail: new FormControl('', [Validators.required, Validators.email]),
     contactMobile: new FormControl(''),
     inclusionPolicy: new FormControl(''),
-    support: new FormControl(''),
+    support: new FormControl(0),
     disabilityWrap: new FormControl(''),
     training: new FormControl(''),
     companyName: new FormControl('', [Validators.required]),
@@ -432,11 +432,10 @@ onNewIndustryAdded(organizationRequest: { OrganizationName: string }): void {
         }
       } else if (response.responseCode === 200 && response.dataContext === 'Organization not found') {
         const newIndustry: IndustryTypeResponseDTO = {
-          IndustryValue: Date.now(), // Temporary unique ID
+          IndustryValue: Date.now() % 2147483647,
           IndustryName: organizationRequest.OrganizationName,
         };
 
-        // Add new industry to the arrays
         this.industryTypes.push(newIndustry);
         this.filteredIndustryTypes = [...this.industryTypes];
 
@@ -454,6 +453,7 @@ onNewIndustryAdded(organizationRequest: { OrganizationName: string }): void {
     },
   });
 }
+
 
 
   // Trigger filtering of industries based on dropdown selection
@@ -485,7 +485,6 @@ onNewIndustryAdded(organizationRequest: { OrganizationName: string }): void {
       );
     }
   
-    // Update form control
     const selectedValues = this.selectedIndustries.map((industry) => industry.IndustryValue).join(',');
     this.employeeForm.controls['industryTypeArray'].setValue(selectedValues);
   }
@@ -714,11 +713,11 @@ onContinue() {
     console.error(`Field ${currentField} is invalid:`, control.errors);
     return;
   }
-  const formData = this.employeeForm.value;
+  const formValue = this.employeeForm.value;
 
   
   // Call the service to insert account data
-  this.checkNamesService.insertAccount(formData).subscribe({
+  this.checkNamesService.insertAccount(formValue).subscribe({
     next: (response) => {
       console.log('Account created successfully:', response);
       alert(`Account created successfully! CorporateAccountID: ${response.CorporateAccountID}`);

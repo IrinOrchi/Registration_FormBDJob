@@ -36,18 +36,14 @@ export class AddIndustryModalComponent implements OnChanges {
   }
 
   addIndustry(): void {
-    if (this.employeeForm.valid) {
-      const formValue = this.employeeForm.value;
-      const organizationRequest: IndustryType = {
-        IndustryId: this.selectedIndustryId || Date.now(), // Default unique ID if none provided
-        IndustryName: formValue.industryName,
-        OrganizationName: formValue.industryName,
-      };
-  
-      this.newIndustry.emit(organizationRequest);
-      this.closeModal();
-    } else {
-      this.employeeForm.markAllAsTouched();
-    }
+    const formValue = this.employeeForm.value;
+    const uniqueId = Date.now() % 2147483647; 
+    const organizationRequest: IndustryType = {
+      IndustryId: this.selectedIndustryId || uniqueId, 
+      IndustryName: formValue.industryName,
+      OrganizationName: formValue.industryName,
+    };
+    this.newIndustry.emit(organizationRequest);
+    this.closeModal();
   }
 }  
