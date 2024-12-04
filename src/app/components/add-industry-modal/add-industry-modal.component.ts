@@ -14,8 +14,8 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 export class AddIndustryModalComponent implements OnChanges {
   @Input() closeModal!: () => void;
   @Input() industries: BehaviorSubject<IndustryType[]> = new BehaviorSubject<IndustryType[]>([]);
-  @Output() newIndustry = new EventEmitter<IndustryType>();
   @Input() selectedIndustryId: number = 0;
+  @Output() newIndustry = new EventEmitter<{ IndustryName: string }>();
 
   employeeForm: FormGroup;
   constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef) {
@@ -35,15 +35,13 @@ export class AddIndustryModalComponent implements OnChanges {
     }
   }
 
-  addIndustry(): void {
-    const formValue = this.employeeForm.value;
-    const uniqueId = Date.now() % 2147483647; 
-    const organizationRequest: IndustryType = {
-      IndustryId: this.selectedIndustryId || uniqueId, 
-      IndustryName: formValue.industryName,
-      OrganizationName: formValue.industryName,
-    };
-    this.newIndustry.emit(organizationRequest);
-    this.closeModal();
-  }
-}  
+ // Child component method when adding a new industry
+addIndustry(): void {
+  const formValue = this.employeeForm.value; // Get form value with IndustryName
+  const industryName = formValue.industryName; // This is the value you want to send
+
+  // Emit only the IndustryName to the parent
+  this.newIndustry.emit({ IndustryName: industryName });
+  this.closeModal();
+}
+}

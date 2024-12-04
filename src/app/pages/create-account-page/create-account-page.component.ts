@@ -74,7 +74,7 @@ filteredCountriesList = this.countrie;
     
     isPolicyAcceptedControl: new FormControl(''),
     facilitiesForDisabilities: new FormControl('', [Validators.required]),
-    username: new FormControl('', [Validators.minLength(4),Validators.maxLength(8),
+    username: new FormControl('', [Validators.minLength(4),
       Validators.required,
       Validators.pattern(/^[a-zA-Z]+[a-zA-Z\d]*$/) 
     ]),  
@@ -234,7 +234,6 @@ filteredCountriesList = this.countrie;
         this.checkUniqueCompanyName(value);
       });
   }
-  
   
   private checkUniqueUsername(username: string): void {
     this.checkNamesService.checkUniqueUserName(username).subscribe({
@@ -422,39 +421,29 @@ addNewIndustry(): void {
 closeAddIndustryModal(): void {
   this.showAddIndustryModal = false;
 }
-onNewIndustryAdded(organizationRequest: { OrganizationName: string }): void {
-  this.checkNamesService.organizationCheck(organizationRequest.OrganizationName).subscribe({
-    next: (response: any) => {
-      if (response.responseCode === 200 && response.dataContext === 'Organization found') {
-        const existingIndustry = this.industryTypes.find(
-          (industry) => industry.IndustryName === organizationRequest.OrganizationName
-        );
+onNewIndustryAdded(event: { IndustryName: string }): void {
+  const industryName = event.IndustryName; // Extract the IndustryName
 
-        if (existingIndustry) {
-          if (
-            !this.selectedIndustries.some(
-              (industry) => industry.IndustryValue === existingIndustry.IndustryValue
-            )
-          ) {
-            this.selectedIndustries.push(existingIndustry);
-          }
-        }
-      } else if (response.responseCode === 200 && response.dataContext === 'Organization not found') {
+  // Set the IndustryName to the form control
+  this.employeeForm.controls['industryName'].setValue(industryName);
+
+  // Now send the request to the backend with the IndustryName
+  this.checkNamesService.organizationCheck(industryName).subscribe({
+    next: (response: any) => {
+      if (response.responseCode === 200 && response.dataContext === 'Organization not found') {
+        // If organization not found, proceed with your logic here
+        // This can involve pushing the new industry to your list, etc.
         const newIndustry: IndustryTypeResponseDTO = {
-          IndustryValue: Date.now() % 2147483647,
-          IndustryName: organizationRequest.OrganizationName,
+          IndustryValue: Date.now() % 2147483647, // Generate a unique ID
+          IndustryName: industryName,
         };
 
         this.industryTypes.push(newIndustry);
         this.filteredIndustryTypes = [...this.industryTypes];
 
-        if (
-          !this.selectedIndustries.some(
-            (industry) => industry.IndustryValue === newIndustry.IndustryValue
-          )
-        ) {
-          this.selectedIndustries.push(newIndustry);
-        }
+        // Update the form control for the selected industries
+        const selectedValues = this.selectedIndustries.map((industry) => industry.IndustryValue).join(',');
+        this.employeeForm.controls['industryTypeArray'].setValue(selectedValues);
       }
     },
     error: (error: any) => {
@@ -462,7 +451,6 @@ onNewIndustryAdded(organizationRequest: { OrganizationName: string }): void {
     },
   });
 }
-
 
 
   // Trigger filtering of industries based on dropdown selection
