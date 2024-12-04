@@ -49,14 +49,10 @@ export class CreateAccountPageComponent implements OnInit {
   searchTerm = new FormControl('');
   isOpen: boolean = false;
   showAddIndustryButton: boolean = false; 
-  
-
-
   fieldsOrder: string[] = [];
   industries: BehaviorSubject<IndustryType[]> = new BehaviorSubject<IndustryType[]>([]);
   industryTypes: IndustryTypeResponseDTO[] = [];
   filteredIndustryTypes: IndustryTypeResponseDTO[] = [];
-
   countries: LocationResponseDTO[] = [];
   districts: LocationResponseDTO[] = [];
   thanas: LocationResponseDTO[] = [];
@@ -69,15 +65,11 @@ filteredCountriesList = this.countrie;
 
 
 
-  employeeForm: FormGroup = new FormGroup(
-    {
+  employeeForm: FormGroup = new FormGroup({
     
     isPolicyAcceptedControl: new FormControl(''),
     facilitiesForDisabilities: new FormControl('', [Validators.required]),
-    username: new FormControl('', [Validators.minLength(4),
-      Validators.required,
-      Validators.pattern(/^[a-zA-Z]+[a-zA-Z\d]*$/) 
-    ]),  
+    username: new FormControl('', [Validators.minLength(4),Validators.required,Validators.pattern(/^[a-zA-Z]+[a-zA-Z\d]*$/)  ]),  
     password: new FormControl('', [Validators.required, Validators.minLength(4),Validators.maxLength(10)]),
     confirmPassword: new FormControl('', [Validators.required]),
     companyNameBangla: new FormControl('',[Validators.required,banglaTextValidator()]),
@@ -135,7 +127,6 @@ filteredCountriesList = this.countrie;
   showAll: boolean = false;  
   showAddIndustryModal = false;
   selectedIndustryId: number = 0;
-
   searchControl: FormControl = new FormControl(''); 
 
   private usernameSubject: Subject<string> = new Subject();
@@ -172,7 +163,6 @@ filteredCountriesList = this.countrie;
       this.selectedIndustryId = selectedIndustryId;
       console.log('Parent Component - Selected Industry ID:', selectedIndustryId);
 
-
     });
     this.employeeForm.get('facilitiesForDisabilities')?.valueChanges.subscribe((value: boolean) => {
       this.employeeForm.patchValue({
@@ -198,10 +188,8 @@ filteredCountriesList = this.countrie;
       country.OptionText.toLowerCase().includes(this.searchTerm.value?.toLowerCase() || '')
     );
   }
-
   setupUsernameCheck(): void {
     const usernameControl = this.employeeForm.get('username') as FormControl;
-  
     usernameControl.valueChanges
       .pipe(
         debounceTime(300), 
@@ -225,8 +213,7 @@ filteredCountriesList = this.countrie;
     );
   }
   setupCompanyNameCheck(): void {
-    const companyNameControl = this.employeeForm.get('companyName') as FormControl;
-
+   const companyNameControl = this.employeeForm.get('companyName') as FormControl;
     companyNameControl.valueChanges
       .pipe(debounceTime(300), distinctUntilChanged())
       .subscribe((value) => {
@@ -359,7 +346,6 @@ filteredCountriesList = this.countrie;
       },
     });
   }
-  
    // Fetch industry types based on selected IndustryId
    private fetchIndustryTypes(industryId: number = -1): void {
     this.showAddIndustryButton = industryId !== -1;
@@ -400,7 +386,6 @@ filteredCountriesList = this.countrie;
     const currentValues = this.formControlSignals()['disabilityWrap'].value
       ? this.formControlSignals()['disabilityWrap'].value.split(',').map(Number) 
       : [];
-  
     if (checkbox.checked) {
       if (!currentValues.includes(value)) {
         currentValues.push(value);
@@ -413,8 +398,6 @@ filteredCountriesList = this.countrie;
     }
     this.formControlSignals()['disabilityWrap'].setValue(currentValues.join(','));
   }
-  
- 
 addNewIndustry(): void {
   this.showAddIndustryModal = true;
 }
@@ -428,24 +411,16 @@ onNewIndustryAdded(event: { IndustryName: string }): void {
   this.checkNamesService.organizationCheck(industryName).subscribe({
     next: (response: any) => {
       if (response.responseCode === 200 && response.dataContext === 'Organization not found') {
-        // Create new industry and add to the list
         const newIndustry: IndustryTypeResponseDTO = {
-          IndustryValue: Date.now() % 2147483647,  // Generate a unique ID
+          IndustryValue: Date.now() % 2147483647,  
           IndustryName: industryName,
         };
-
-        // Add new industry to the industry list and update the filtered list
         this.industryTypes.push(newIndustry);
         this.filteredIndustryTypes = [...this.industryTypes];
-
-        // Mark the newly added industry as checked
         this.selectedIndustries.push(newIndustry);
 
-        // Update the form control for the selected industries
         const selectedValues = this.selectedIndustries.map((industry) => industry.IndustryValue).join(',');
         this.employeeForm.controls['industryTypeArray'].setValue(selectedValues);
-
-      
       }
     },
     error: (error: any) => {
@@ -453,8 +428,6 @@ onNewIndustryAdded(event: { IndustryName: string }): void {
     },
   });
 }
-
-
   // Trigger filtering of industries based on dropdown selection
   onIndustryTypeChange(selectedIndustryId: string | number): void {
     const parsedIndustryId = parseInt(selectedIndustryId as string, 10); 
@@ -464,7 +437,6 @@ onNewIndustryAdded(event: { IndustryName: string }): void {
       this.filteredIndustryTypes = [...this.industryTypes];
     }
   }
-
   onIndustryCheckboxChange(
     event: Event,
     item: { IndustryValue: number; IndustryName: string }
@@ -472,7 +444,6 @@ onNewIndustryAdded(event: { IndustryName: string }): void {
     const checkbox = event.target as HTMLInputElement;
   
     if (checkbox.checked) {
-      // Add the industry to selected industries if not already selected
       if (
         !this.selectedIndustries.some(
           (industry) => industry.IndustryValue === item.IndustryValue
@@ -481,20 +452,15 @@ onNewIndustryAdded(event: { IndustryName: string }): void {
         this.selectedIndustries.push(item);
       }
     } else {
-      // Remove the industry from selected industries if unchecked
       this.selectedIndustries = this.selectedIndustries.filter(
         (industry) => industry.IndustryValue !== item.IndustryValue
       );
     }
-  
-    // Update the form control value to reflect the selected industries
     const selectedValues = this.selectedIndustries
       .map((industry) => industry.IndustryValue)
       .join(',');
     this.employeeForm.controls['industryTypeArray'].setValue(selectedValues);
-  
   }
-  
   
   isIndustryChecked(industryValue: number): boolean {
     return this.selectedIndustries.some(
@@ -551,7 +517,6 @@ onNewIndustryAdded(event: { IndustryName: string }): void {
 // Fetch districts within Bangladesh
 private fetchDistricts(): void {
   const requestPayload = { OutsideBd: '0', DistrictId: '' };
-
   this.checkNamesService.getLocations(requestPayload).subscribe({
     next: (response: any) => {
       if (response.responseCode === 1 && Array.isArray(response.data)) {
@@ -575,8 +540,6 @@ private fetchDistricts(): void {
     },
   });
 }
-
-
   toggleDropdown() {
     this.isOpen = !this.isOpen;
   }
@@ -601,9 +564,7 @@ private fetchDistricts(): void {
 // Fetch thanas for the selected district
 private fetchThanas(districtFormattedValue: string): void {
   const districtId = districtFormattedValue.split('##')[0]; 
-
   const requestPayload = { OutsideBd: '0', DistrictId: districtId };
-
   this.checkNamesService.getLocations(requestPayload).subscribe({
     next: (response: any) => {
       if (response.responseCode === 1 && Array.isArray(response.data)) {
@@ -624,8 +585,6 @@ private fetchThanas(districtFormattedValue: string): void {
     },
   });
 }
-
-
   setupSearch(): void {
     this.searchControl.valueChanges.pipe(debounceTime(300), distinctUntilChanged())
       .subscribe((query: string) => {
@@ -653,14 +612,11 @@ private fetchThanas(districtFormattedValue: string): void {
     this.onIndustryTypeChange(selectedIndustryId);
     this.showAddIndustryButton = false;
   }
-  
- 
   chooseCountry(country: any) {
     this.currentCountry = country;
     this.currentFlagPath = this.filePath[country.name];
     this.isOpen = false; 
   }
-
   private updateFlagPath() {
    const countryCode = this.employeeForm.controls['contactMobile'].value;
     const country = this.countrie.find(c => c.code === countryCode);
@@ -693,8 +649,6 @@ onContinue() {
   };
   this.authService.updateCredentials(credentials);
   console.log('Credentials stored in AuthService:', credentials);
-
-
   const fieldsOrder = [
     'username', 
     'password',
