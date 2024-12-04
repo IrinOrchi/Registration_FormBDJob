@@ -422,28 +422,30 @@ closeAddIndustryModal(): void {
   this.showAddIndustryModal = false;
 }
 onNewIndustryAdded(event: { IndustryName: string }): void {
-  const industryName = event.IndustryName; // Extract the IndustryName
-
-  // Set the IndustryName to the form control
+  const industryName = event.IndustryName; 
   this.employeeForm.controls['industryName'].setValue(industryName);
 
-  // Now send the request to the backend with the IndustryName
   this.checkNamesService.organizationCheck(industryName).subscribe({
     next: (response: any) => {
       if (response.responseCode === 200 && response.dataContext === 'Organization not found') {
-        // If organization not found, proceed with your logic here
-        // This can involve pushing the new industry to your list, etc.
+        // Create new industry and add to the list
         const newIndustry: IndustryTypeResponseDTO = {
-          IndustryValue: Date.now() % 2147483647, // Generate a unique ID
+          IndustryValue: Date.now() % 2147483647,  // Generate a unique ID
           IndustryName: industryName,
         };
 
+        // Add new industry to the industry list and update the filtered list
         this.industryTypes.push(newIndustry);
         this.filteredIndustryTypes = [...this.industryTypes];
+
+        // Mark the newly added industry as checked
+        this.selectedIndustries.push(newIndustry);
 
         // Update the form control for the selected industries
         const selectedValues = this.selectedIndustries.map((industry) => industry.IndustryValue).join(',');
         this.employeeForm.controls['industryTypeArray'].setValue(selectedValues);
+
+      
       }
     },
     error: (error: any) => {
@@ -468,7 +470,9 @@ onNewIndustryAdded(event: { IndustryName: string }): void {
     item: { IndustryValue: number; IndustryName: string }
   ): void {
     const checkbox = event.target as HTMLInputElement;
+  
     if (checkbox.checked) {
+      // Add the industry to selected industries if not already selected
       if (
         !this.selectedIndustries.some(
           (industry) => industry.IndustryValue === item.IndustryValue
@@ -477,14 +481,20 @@ onNewIndustryAdded(event: { IndustryName: string }): void {
         this.selectedIndustries.push(item);
       }
     } else {
+      // Remove the industry from selected industries if unchecked
       this.selectedIndustries = this.selectedIndustries.filter(
         (industry) => industry.IndustryValue !== item.IndustryValue
       );
     }
   
-    const selectedValues = this.selectedIndustries.map((industry) => industry.IndustryValue).join(',');
+    // Update the form control value to reflect the selected industries
+    const selectedValues = this.selectedIndustries
+      .map((industry) => industry.IndustryValue)
+      .join(',');
     this.employeeForm.controls['industryTypeArray'].setValue(selectedValues);
+  
   }
+  
   
   isIndustryChecked(industryValue: number): boolean {
     return this.selectedIndustries.some(
@@ -701,7 +711,6 @@ onContinue() {
 
   ];
 
-  // Get the current field to validate
   const currentField = fieldsOrder[this.currentValidationFieldIndex];
   const control = this.employeeForm.get(currentField);
 
@@ -710,18 +719,12 @@ onContinue() {
     console.error(`Field ${currentField} is invalid:`, control.errors);
     return;
   }
-  const formValue = this.employeeForm.value;
-
+  const payload = this.employeeForm.value;
   
-  // Call the service to insert account data
-  this.checkNamesService.insertAccount(formValue).subscribe({
+  this.checkNamesService.insertAccount(payload).subscribe({
     next: (response) => {
       console.log('Account created successfully:', response);
       alert(`Account created successfully! CorporateAccountID: ${response.CorporateAccountID}`);
-    },
-    error: (error) => {
-      console.error('Error during account creation:', error);
-      alert('Failed to create account. Please try again later.');
     },
   });
 }

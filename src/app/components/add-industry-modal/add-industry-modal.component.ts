@@ -16,8 +16,8 @@ export class AddIndustryModalComponent implements OnChanges {
   @Input() industries: BehaviorSubject<IndustryType[]> = new BehaviorSubject<IndustryType[]>([]);
   @Input() selectedIndustryId: number = 0;
   @Output() newIndustry = new EventEmitter<{ IndustryName: string }>();
+  @Input() employeeForm: FormGroup;
 
-  employeeForm: FormGroup;
   constructor(private fb: FormBuilder, private cdr: ChangeDetectorRef) {
     this.employeeForm = this.fb.group({
       industryType: ['', Validators.required],
@@ -35,12 +35,10 @@ export class AddIndustryModalComponent implements OnChanges {
     }
   }
 
- // Child component method when adding a new industry
 addIndustry(): void {
-  const formValue = this.employeeForm.value; // Get form value with IndustryName
-  const industryName = formValue.industryName; // This is the value you want to send
+  const formValue = this.employeeForm.value; 
+  const industryName = formValue.industryName; 
 
-  // Emit only the IndustryName to the parent
   this.newIndustry.emit({ IndustryName: industryName });
   this.closeModal();
 }

@@ -401,7 +401,6 @@
         [closeModal]="closeAddIndustryModal.bind(this)"
         [industries]="industries"
         [selectedIndustryId]="selectedIndustryId" 
-        [formControl]="formControlSignals()['industryName']"
         (newIndustry)="onNewIndustryAdded($event)">
         </app-add-industry-modal>
   }
