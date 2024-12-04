@@ -89,7 +89,7 @@ filteredCountriesList = this.countrie;
     training: new FormControl(''),
     companyName: new FormControl('', [Validators.required]),
     industryType: new FormControl('', Validators.required),
-    industryName: new FormControl([]),
+    industryName: new FormControl(''),
     industryTypeArray: new FormControl(''),
     hidEntrepreneur: new FormControl(''),
     rlNoStatus: new FormControl(''),
