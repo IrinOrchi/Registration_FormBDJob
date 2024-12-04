@@ -505,7 +505,7 @@ export const disabilities = [
         { label: 'Ramps or Lifts or Escalators for entry and move between floors', value: '7' },
         { label: 'Reasonable Accommodation in Recruitment/interview procedures like sign language, oral/typed/video interview', value: '8' },
         { label: 'Warning Indicators or Markers in place for hazards, staircase', value: '9' },
-        { label: 'Workstation or seating adaptations for easy use', value: '10' }
+        { label: 'Workstation or seating adaptations for easy use', value: '0' }
       ];
       
     
