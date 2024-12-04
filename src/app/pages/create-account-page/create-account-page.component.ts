@@ -89,7 +89,7 @@ filteredCountriesList = this.countrie;
     training: new FormControl(''),
     companyName: new FormControl('', [Validators.required]),
     industryType: new FormControl('', Validators.required),
-    industryName: new FormControl('', [Validators.required]),
+    industryName: new FormControl([]),
     industryTypeArray: new FormControl(''),
     hidEntrepreneur: new FormControl(''),
     rlNoStatus: new FormControl(''),
@@ -405,21 +405,34 @@ closeAddIndustryModal(): void {
   this.showAddIndustryModal = false;
 }
 onNewIndustryAdded(event: { IndustryName: string }): void {
-  const industryName = event.IndustryName; 
-  this.employeeForm.controls['industryName'].setValue(industryName);
-
+  const industryName = event.IndustryName.trim(); 
+  const currentIndustryNames = this.employeeForm.controls['industryName'].value;
+  const updatedIndustryNames = currentIndustryNames
+    ? `${currentIndustryNames}, ${industryName}`
+    : industryName;
+  this.employeeForm.controls['industryName'].setValue(updatedIndustryNames);
   this.checkNamesService.organizationCheck(industryName).subscribe({
     next: (response: any) => {
-      if (response.responseCode === 200 && response.dataContext === 'Organization not found') {
-        const newIndustry: IndustryTypeResponseDTO = {
-          IndustryValue: Date.now() % 2147483647,  
-          IndustryName: industryName,
-        };
-        this.industryTypes.push(newIndustry);
+      if (response.responseCode === 200) {
+        const existingIndustry = this.industryTypes.find(
+          (industry) => industry.IndustryName.toLowerCase() === industryName.toLowerCase()
+        );
+        if (response.dataContext === 'Organization not found') {
+          const newIndustry: IndustryTypeResponseDTO = {
+            IndustryValue: Date.now() % 2147483647,
+            IndustryName: industryName,
+          };
+          this.industryTypes.push(newIndustry);
+          this.selectedIndustries.push(newIndustry);
+        } else if (existingIndustry) {
+          if (!this.selectedIndustries.includes(existingIndustry)) {
+            this.selectedIndustries.push(existingIndustry);
+          }
+        }
         this.filteredIndustryTypes = [...this.industryTypes];
-        this.selectedIndustries.push(newIndustry);
-
-        const selectedValues = this.selectedIndustries.map((industry) => industry.IndustryValue).join(',');
+        const selectedValues = this.selectedIndustries
+          .map((industry) => industry.IndustryValue)
+          .join(',');
         this.employeeForm.controls['industryTypeArray'].setValue(selectedValues);
       }
     },
@@ -428,6 +441,8 @@ onNewIndustryAdded(event: { IndustryName: string }): void {
     },
   });
 }
+
+
   // Trigger filtering of industries based on dropdown selection
   onIndustryTypeChange(selectedIndustryId: string | number): void {
     const parsedIndustryId = parseInt(selectedIndustryId as string, 10); 
@@ -437,25 +452,18 @@ onNewIndustryAdded(event: { IndustryName: string }): void {
       this.filteredIndustryTypes = [...this.industryTypes];
     }
   }
-  onIndustryCheckboxChange(
-    event: Event,
-    item: { IndustryValue: number; IndustryName: string }
-  ): void {
-    const checkbox = event.target as HTMLInputElement;
+  onIndustryCheckboxChange(event: Event, industry: IndustryTypeResponseDTO): void {
+    const isChecked = (event.target as HTMLInputElement).checked;
   
-    if (checkbox.checked) {
-      if (
-        !this.selectedIndustries.some(
-          (industry) => industry.IndustryValue === item.IndustryValue
-        )
-      ) {
-        this.selectedIndustries.push(item);
-      }
+    if (isChecked) {
+      this.selectedIndustries.push(industry);
     } else {
       this.selectedIndustries = this.selectedIndustries.filter(
-        (industry) => industry.IndustryValue !== item.IndustryValue
+        (selected) => selected.IndustryValue !== industry.IndustryValue
       );
     }
+  
+    // Update the form control value
     const selectedValues = this.selectedIndustries
       .map((industry) => industry.IndustryValue)
       .join(',');
