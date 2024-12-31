@@ -17,6 +17,7 @@ import { filePath,countrie ,disabilities} from '../../constants/file-path.consta
 import { AddIndustryModalComponent } from "../../components/add-industry-modal/add-industry-modal.component";
 import { AuthService } from '../../Services/shared/auth.service';
 import { passwordMatchValidator, yearValidator, banglaTextValidator } from '../../utils/validators';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-create-account-page',
   standalone: true,
@@ -37,6 +38,7 @@ import { passwordMatchValidator, yearValidator, banglaTextValidator } from '../.
   styleUrls: ['./create-account-page.component.scss']
 })
 export class CreateAccountPageComponent implements OnInit {
+  
   filePath = filePath;
   countrie = countrie;
   disabilities = disabilities;
@@ -132,7 +134,8 @@ filteredCountriesList = this.countrie;
   private usernameSubject: Subject<string> = new Subject();
   private companyNameSubject: Subject<string> = new Subject();
 
-  constructor(private checkNamesService: CheckNamesService , private authService: AuthService) {}
+  constructor(private checkNamesService: CheckNamesService , private authService: AuthService ,
+    private router: Router) {}
 
   ngOnInit(): void {
     this.searchControl.valueChanges
@@ -687,6 +690,13 @@ onContinue() {
     next: (response) => {
       console.log('Account created successfully:', response);
       alert(`Account created successfully! CorporateAccountID: ${response.CorporateAccountID}`);
+
+      this.router.navigate(['/account-created-successfully']);
+
+    },
+    error: (error) => {
+      console.error('Error creating account:', error);
+      alert('There was an error creating the account. Please try again.');
     },
   });
 }

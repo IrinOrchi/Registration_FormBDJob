@@ -8,15 +8,13 @@ import { CheckNamesResponseDTO, CompanyNameCheckRequestDTO, IndustryTypeResponse
 })
 export class CheckNamesService {
  
-  private apiUrl = 'https://localhost:7152/api/CorporateCommon/CheckNames'; 
-  private industryApiUrl = 'https://localhost:7152/api/CorporateCommon/IndustryType' ; 
-  private industryIdApiUrl = 'https://localhost:7152/api/CorporateCommon/Industries';
-  private locationApiUrl = 'https://localhost:7152/api/CorporateCommon/GetLocations'; 
-  private rlnoapiUrl = 'https://localhost:7152/api/CorporateCommon/RlNoCheck';
-  private organizationCheckUrl = 'https://localhost:7152/api/CorporateCommon/OrganizationCheck';
-  private insertAccountApiUrl = 'https://localhost:7152/api/CreateAccount/insert';
-
-
+  private apiUrl = 'https://api.bdjobs.com/employeraccount/api/CorporateCommon/CheckNames'; 
+  private industryApiUrl = 'https://api.bdjobs.com/employeraccount/api/CorporateCommon/IndustryType' ; 
+  private industryIdApiUrl = 'https://api.bdjobs.com/employeraccount/api/CorporateCommon/Industries';
+  private locationApiUrl = 'https://api.bdjobs.com/employeraccount/api/CorporateCommon/GetLocations'; 
+  private rlnoapiUrl = 'https://api.bdjobs.com/employeraccount/api/CorporateCommon/RlNoCheck';
+  private organizationCheckUrl = 'https://api.bdjobs.com/employeraccount/api/CorporateCommon/OrganizationCheck';
+  private insertAccountApiUrl = 'https://api.bdjobs.com/employeraccount/api/CreateAccount/insert';
   constructor(private http: HttpClient) {}
 
 
