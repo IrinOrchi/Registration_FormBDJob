@@ -7,7 +7,7 @@ import { SuccessfulAccountComponent } from './pages/successful-account/successfu
 export const routes: Routes = [
     {
         path:"",
-        redirectTo: 'account-created-successfully',
+        redirectTo: 'register',
         pathMatch: 'full'
     },
     {

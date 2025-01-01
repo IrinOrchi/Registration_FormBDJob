@@ -3,7 +3,6 @@ import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angula
 import { CheckNamesService } from '../../Services/check-names.service';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { InputFieldComponent } from '../../components/input-field/input-field.component';
-import { SelectFieldComponent } from '../../components/select-field/select-field.component';
 import { TextAreaComponent } from '../../components/text-area/text-area.component';
 import { CheckboxGroupComponent } from '../../components/checkbox-group/checkbox-group.component';
 import {  CommonModule } from '@angular/common';
@@ -38,15 +37,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./create-account-page.component.scss']
 })
 export class CreateAccountPageComponent implements OnInit {
-  
   filePath = filePath;
   countrie = countrie;
   disabilities = disabilities;
 
-
   @ViewChild(MathCaptchaComponent) captchaComponent!: MathCaptchaComponent;
+  
   isCaptchaValid = false;
-
   selectedCountry: LocationResponseDTO | null = null;
   searchTerm = new FormControl('');
   isOpen: boolean = false;
@@ -60,12 +57,9 @@ export class CreateAccountPageComponent implements OnInit {
   thanas: LocationResponseDTO[] = [];
   outsideBd: boolean = false;  
   selectedIndustries: { IndustryValue: number; IndustryName: string }[] = [];
-
 currentCountry = { name: 'Bangladesh', code: 'BD', phoneCode: '+880' }; 
 currentFlagPath = this.filePath['Bangladesh'];
 filteredCountriesList = this.countrie;
-
-
 
   employeeForm: FormGroup = new FormGroup({
     
@@ -106,7 +100,6 @@ filteredCountriesList = this.countrie;
     rlNo: new FormControl('', [Validators.pattern('^[0-9]*$')]),
   },{ validators: passwordMatchValidator() }
 );
-  // Signals for form control values
   usernameControl = computed(() => this.employeeForm.get('username') as FormControl<string>);
   companyNameControl = computed(() => this.employeeForm.get('companyName') as FormControl<string>);
   industryTypeControl = computed(() => this.employeeForm.get('industryType') as FormControl<string>);
@@ -133,7 +126,6 @@ filteredCountriesList = this.countrie;
 
   private usernameSubject: Subject<string> = new Subject();
   private companyNameSubject: Subject<string> = new Subject();
-
   constructor(private checkNamesService: CheckNamesService , private authService: AuthService ,
     private router: Router) {}
 
