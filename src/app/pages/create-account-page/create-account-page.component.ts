@@ -653,13 +653,12 @@ onContinue() {
   this.isContinueClicked = true;
   console.log('Current form values:', this.employeeForm.value);
 
-  // Prepare credentials for AuthService
   const credentials = {
     username: this.employeeForm.value.username || '',
     password: this.employeeForm.value.password || '',
   };
   this.authService.updateCredentials(credentials);
-  console.log('Credentials stored in AuthService:', credentials);
+  // console.log('Credentials stored in AuthService:', credentials);
   const fieldsOrder = [
     'username', 
     'password',
