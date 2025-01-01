@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../../Services/login.service';
 import { AuthService } from '../../Services/shared/auth.service';
@@ -6,91 +6,49 @@ import { AuthService } from '../../Services/shared/auth.service';
 @Component({
   selector: 'app-successful-account',
   standalone: true,
-  imports: [],
   templateUrl: './successful-account.component.html',
-  styleUrl: './successful-account.component.scss'
+  styleUrls: ['./successful-account.component.scss'],
 })
-export class SuccessfulAccountComponent {
+export class SuccessfulAccountComponent implements OnInit {
   userName: string = '';
   password: string = '';
   loginFormErrorMessage: string = '';
   isLoginApiCallPending = false;
-  urlParams = new URLSearchParams(window.location.search);
-  
-  queryString: any = this.urlParams.get('selectedJobType')
-  ? this.urlParams.get('selectedJobType')
-  : '';
+  queryString: string;
 
-  constructor(private router: Router, private loginService: LoginService, private authService: AuthService
-  ) {}
-  ngOnInit(): void {
-    const storedCredentials = this.authService['credentialsSubject'].value;
-    this.userName = storedCredentials.username;
-    this.password = storedCredentials.password;
-
-    this.authService.credentials$.subscribe((credentials) => {
-      this.userName = credentials.username;
-      this.password = credentials.password;
-    });
+  constructor(
+    private router: Router,
+    private loginService: LoginService,
+    private authService: AuthService
+  ) {
+    const urlParams = new URLSearchParams(window.location.search);
+    this.queryString = urlParams.get('selectedJobType') || '';
   }
-  onClickLoginButton() {
+
+  ngOnInit(): void {
+    const storedCredentials = this.authService.getCredentials();
+    if (storedCredentials.username && storedCredentials.password) {
+      this.userName = storedCredentials.username;
+      this.password = storedCredentials.password;
+    }
+  }
+
+  onClickLoginButton(): void {
     this.loginFormErrorMessage = '';
 
-    if (this.userName === '' && this.password === '') {
-      this.loginFormErrorMessage = 'Enter a valid username and password.';
-      return;
-    } else if (this.userName === '') {
-      this.loginFormErrorMessage = 'Enter a valid username.';
-      return;
-    } else if (this.password === '') {
-      this.loginFormErrorMessage = 'Enter a valid password.';
+    if (!this.userName || !this.password) {
+      this.loginFormErrorMessage = 'Please enter both username and password.';
       return;
     }
 
     this.isLoginApiCallPending = true;
-
     this.loginService.loginUser(this.userName, this.password).subscribe({
       next: (data) => {
-        //debugger;
-        if (
-          data &&
-          data.status === 200 &&
-          data.message === 'User logged in successfully.' &&
-          data.redirectUrl
-        ) {
-          this.loginService.setCookies().subscribe({
-            next: (data) => {
-              
-              if (data) {
-                console.log(data)
-                if (this.queryString === '') {
-                  window.location.href = 'https://recruiter.bdjobs.com/dashboard';
-                } else {
-
-                  setTimeout(() => {
-                    console.log('This is the query string value on login -- ' + this.queryString);
-                    const externalUrl = `https://recruiter.bdjobs.com/dashboard?selectedJobType=${encodeURIComponent(this.queryString)}`;
-                    window.location.href = externalUrl;
-                  }, 2000);
-                  
-
-                  // setTimeout(() => {
-                  //   console.log('this is the query string valu on login -- '+this.queryString)
-                  //   this.router.navigate(['dashboard'], { queryParams: { selectedJobType: this.queryString} });
-                  // }, 2000);
-                   
-                }
-              }
-            },
-          });
+        if (data?.status === 200 && data?.message === 'User logged in successfully.') {
+          this.handleSuccessfulLogin();
         } else {
-          if (data) {
-            this.loginFormErrorMessage = data.message;
-            this.isLoginApiCallPending = false;
-          } else {
-            this.loginFormErrorMessage = 'An unknown error occurred.';
-            this.isLoginApiCallPending = false;
-          }
+          this.loginFormErrorMessage = data?.message || 'An unknown error occurred.';
+          this.isLoginApiCallPending = false;
         }
       },
       error: () => {
@@ -100,6 +58,29 @@ export class SuccessfulAccountComponent {
     });
   }
 
+  private handleSuccessfulLogin(): void {
+    this.loginService.setCookies().subscribe({
+      next: (cookieResponse) => {
+        if (cookieResponse) {
+          this.redirectToDashboard();
+        } else {
+          this.loginFormErrorMessage = 'Failed to set cookies.';
+          this.isLoginApiCallPending = false;
+        }
+      },
+      error: () => {
+        this.loginFormErrorMessage = "Couldn't set cookies.";
+        this.isLoginApiCallPending = false;
+      },
+    });
+  }
+
+  private redirectToDashboard(): void {
+    const baseUrl = 'https://recruiter.bdjobs.com/dashboard';
+    const redirectUrl = this.queryString
+      ? `${baseUrl}?selectedJobType=${encodeURIComponent(this.queryString)}`
+      : baseUrl;
+
+    window.location.href = redirectUrl; 
+  }
 }
-
-

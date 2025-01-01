@@ -680,14 +680,11 @@ onContinue() {
   this.checkNamesService.insertAccount(payload).subscribe({
     next: (response) => {
       console.log('Account created successfully:', response);
-      alert(`Account created successfully! CorporateAccountID: ${response.CorporateAccountID}`);
-
       this.router.navigate(['/account-created-successfully']);
 
     },
     error: (error) => {
       console.error('Error creating account:', error);
-      alert('There was an error creating the account. Please try again.');
     },
   });
 }

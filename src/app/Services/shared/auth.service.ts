@@ -19,4 +19,8 @@ export class AuthService {
   clearCredentials(): void {
     this.credentialsSubject.next({ username: '', password: '' });
   }
+  getCredentials(): UserCredentials {
+    return this.credentialsSubject.value;
+  }
+  
 }
