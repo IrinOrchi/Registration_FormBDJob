@@ -1,4 +1,4 @@
-import { Component, computed, OnInit, ViewChild } from '@angular/core';
+import { Component, computed, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CheckNamesService } from '../../Services/check-names.service';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
@@ -64,7 +64,7 @@ filteredCountriesList = this.countrie;
   employeeForm: FormGroup = new FormGroup({
     
     isPolicyAcceptedControl: new FormControl(''),
-    facilitiesForDisabilities: new FormControl(''),
+    facilitiesForDisabilities: new FormControl(0),
     username: new FormControl('', [Validators.minLength(4),Validators.required,Validators.pattern(/^[a-zA-Z]+[a-zA-Z\d]*$/)  ]),  
     password: new FormControl('', [Validators.required, Validators.minLength(4),Validators.maxLength(10)]),
     confirmPassword: new FormControl('', [Validators.required]),
@@ -72,14 +72,14 @@ filteredCountriesList = this.countrie;
     yearsOfEstablishMent: new FormControl('', [Validators.required, yearValidator()]),
     companySize: new FormControl('', Validators.required),
     outSideBd: new FormControl(''),
-    businessDesc: new FormControl(''),
+    businessDesc: new FormControl('', [Validators.required]),
     tradeNo: new FormControl(''),
     webUrl: new FormControl(''),
     contactName: new FormControl('', [Validators.required]),
     contactDesignation: new FormControl('', [Validators.required]),
     contactEmail: new FormControl('', [Validators.required, Validators.email]),
     contactMobile: new FormControl(''),
-    inclusionPolicy: new FormControl(''),
+    inclusionPolicy: new FormControl(0),
     support: new FormControl(0),
     disabilityWrap: new FormControl(''),
     training: new FormControl(''),
@@ -97,7 +97,7 @@ filteredCountriesList = this.countrie;
     companyAddress: new FormControl(''),
     captchaInput: new FormControl('', [Validators.required]),
     companyAddressBangla: new FormControl('',[Validators.required,banglaTextValidator()]),
-    rlNo: new FormControl('', [Validators.pattern('^[0-9]*$')]),
+    rlNo: new FormControl(null,[Validators.pattern('^[0-9]*$')]),
   },{ validators: passwordMatchValidator() }
 );
   usernameControl = computed(() => this.employeeForm.get('username') as FormControl<string>);
@@ -546,6 +546,14 @@ private fetchDistricts(): void {
   toggleDropdown() {
     this.isOpen = !this.isOpen;
   }
+  @HostListener('document:click', ['$event'])
+  closeDropdown(event: Event) {
+    const targetElement = event.target as HTMLElement;
+    const isInsideDropdown = targetElement.closest('.dropdown-container');
+    if (!isInsideDropdown) {
+      this.isOpen = false;
+    }
+  }
 
   selectCountry(country: LocationResponseDTO) {
     this.selectedCountry = country;
@@ -685,6 +693,8 @@ onContinue() {
     },
     error: (error) => {
       console.error('Error creating account:', error);
+      alert('There was an error creating the account. Please try again.');
+
     },
   });
 }
