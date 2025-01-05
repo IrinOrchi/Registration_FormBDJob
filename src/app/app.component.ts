@@ -12,5 +12,5 @@ import { ErrorModalComponent } from './components/error-modal/error-modal.compon
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'recruiter-registration';
+  title = 'employee-account';
 }

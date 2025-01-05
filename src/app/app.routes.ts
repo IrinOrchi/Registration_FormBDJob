@@ -3,6 +3,7 @@ import { CreateAccountPageComponent } from './pages/create-account-page/create-a
 import {NidVerificationComponent} from './pages/nid-verification/nid-verification.component';
 import { BeforeLoginNidComponent } from './pages/before-login-nid/before-login-nid.component';
 import { SuccessfulAccountComponent } from './pages/successful-account/successful-account.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     {

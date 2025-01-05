@@ -97,4 +97,5 @@ private readonly DOMAIN_PARAM_ONLY = window.location.href.includes('gateway')
       throw new Error('Error decoding JWT');
     }
   }
+  
 }
