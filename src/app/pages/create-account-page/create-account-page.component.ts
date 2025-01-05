@@ -1,4 +1,4 @@
-import { Component, computed, OnInit, ViewChild } from '@angular/core';
+import { Component, computed, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CheckNamesService } from '../../Services/check-names.service';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs/operators';
@@ -64,27 +64,27 @@ filteredCountriesList = this.countrie;
   employeeForm: FormGroup = new FormGroup({
     
     isPolicyAcceptedControl: new FormControl(''),
-    facilitiesForDisabilities: new FormControl(''),
+    facilitiesForDisabilities: new FormControl(0),
     username: new FormControl('', [Validators.minLength(4),Validators.required,Validators.pattern(/^[a-zA-Z]+[a-zA-Z\d]*$/)  ]),  
     password: new FormControl('', [Validators.required, Validators.minLength(4),Validators.maxLength(10)]),
     confirmPassword: new FormControl('', [Validators.required]),
-    companyNameBangla: new FormControl('',[Validators.required,banglaTextValidator()]),
+    companyNameBangla: new FormControl('',[banglaTextValidator()]),
     yearsOfEstablishMent: new FormControl('', [Validators.required, yearValidator()]),
-    companySize: new FormControl('', Validators.required),
+    companySize: new FormControl('', [Validators.required]),
     outSideBd: new FormControl(''),
-    businessDesc: new FormControl(''),
+    businessDesc: new FormControl('', [Validators.required]),
     tradeNo: new FormControl(''),
     webUrl: new FormControl(''),
     contactName: new FormControl('', [Validators.required]),
     contactDesignation: new FormControl('', [Validators.required]),
     contactEmail: new FormControl('', [Validators.required, Validators.email]),
-    contactMobile: new FormControl(''),
-    inclusionPolicy: new FormControl(''),
+    contactMobile: new FormControl('', [Validators.required]),
+    inclusionPolicy: new FormControl(0),
     support: new FormControl(0),
     disabilityWrap: new FormControl(''),
-    training: new FormControl(''),
+    training: new FormControl(0),
     companyName: new FormControl('', [Validators.required]),
-    industryType: new FormControl('', Validators.required),
+    industryType: new FormControl(0),
     industryName: new FormControl(''),
     industryTypeArray: new FormControl(''),
     hidEntrepreneur: new FormControl(''),
@@ -96,13 +96,14 @@ filteredCountriesList = this.countrie;
     outsideBDCompanyAddressBng: new FormControl(''),
     companyAddress: new FormControl(''),
     captchaInput: new FormControl('', [Validators.required]),
-    companyAddressBangla: new FormControl('',[Validators.required,banglaTextValidator()]),
-    rlNo: new FormControl('', [Validators.pattern('^[0-9]*$')]),
+    companyAddressBangla: new FormControl('',[banglaTextValidator()]),
+    rlNo: new FormControl(null,[Validators.pattern('^[0-9]*$')]),
   },{ validators: passwordMatchValidator() }
 );
   usernameControl = computed(() => this.employeeForm.get('username') as FormControl<string>);
   companyNameControl = computed(() => this.employeeForm.get('companyName') as FormControl<string>);
-  industryTypeControl = computed(() => this.employeeForm.get('industryType') as FormControl<string>);
+  // industryTypeControl = computed(() => this.employeeForm.get('industryType') as FormControl<string>);
+
   // countryControl = computed(() => this.employeeForm.get('country') as FormControl<string>);
   // districtControl = computed(() => this.employeeForm.get('district') as FormControl<string>);
   // thanaControl = computed(() => this.employeeForm.get('thana') as FormControl<string>);
@@ -122,6 +123,7 @@ filteredCountriesList = this.countrie;
   showAll: boolean = false;  
   showAddIndustryModal = false;
   selectedIndustryId: number = 0;
+  isPhoneDropdownOpen = false;
   searchControl: FormControl = new FormControl(''); 
 
   private usernameSubject: Subject<string> = new Subject();
@@ -259,14 +261,20 @@ filteredCountriesList = this.countrie;
   onRLNoBlur(): void {
     this.employeeForm.controls['rlNo'].markAsTouched();
   
-    if (this.employeeForm.controls['rlNo'].valid) {
-      this.verifyRLNo();  
-    } else {
+    if (this.rlNoHasValue && this.employeeForm.controls['rlNo'].invalid) {
       this.showError = true;
-      this.rlErrorMessage = 'RL Number is required';
+      this.rlErrorMessage = 'RL Number is required';  
       this.showErrorModal = true; 
+    } else {
+      this.showError = false; 
+      this.showErrorModal = false; 
+    }
+  
+    if (this.rlNoHasValue && this.employeeForm.controls['rlNo'].valid) {
+      this.verifyRLNo();
     }
   }
+  
   verifyRLNo(): void {
     const rlNo: string = this.employeeForm.get('rlNo')?.value?.toString();
     const companyName: string = this.employeeForm.get('companyName')?.value?.toString();
@@ -543,8 +551,21 @@ private fetchDistricts(): void {
     },
   });
 }
+
+Dropdown() {
+  this.isPhoneDropdownOpen = !this.isPhoneDropdownOpen;
+}
   toggleDropdown() {
     this.isOpen = !this.isOpen;
+  }
+  @HostListener('document:click', ['$event'])
+  closeDropdown(event: Event) {
+    const targetElement = event.target as HTMLElement;
+
+    const isInsideDropdown = targetElement.closest('.dropdown-container');
+    if (!isInsideDropdown) {
+      this.isOpen = false;
+    }
   }
 
   selectCountry(country: LocationResponseDTO) {
@@ -618,7 +639,7 @@ private fetchThanas(districtFormattedValue: string): void {
   chooseCountry(country: any) {
     this.currentCountry = country;
     this.currentFlagPath = this.filePath[country.name];
-    this.isOpen = false; 
+    this.isPhoneDropdownOpen = false;
   }
   private updateFlagPath() {
    const countryCode = this.employeeForm.controls['contactMobile'].value;
@@ -629,10 +650,14 @@ private fetchThanas(districtFormattedValue: string): void {
 formValue : any
 currentValidationFieldIndex: number = 0;
 isContinueClicked: boolean = false;
+rlNoHasValue: boolean = false;
+
 
 onInputChange(event: Event) {
   const input = event.target as HTMLInputElement;
   input.value = input.value.replace(/[^0-9]/g, '');
+  this.rlNoHasValue = input.value.trim().length > 0;
+
 }
 toggleShowAll() {
   this.showAll = !this.showAll;
@@ -640,52 +665,53 @@ toggleShowAll() {
 checkCaptchaValidity() {
   this.isCaptchaValid = this.captchaComponent.isCaptchaValid();
 }
+
 onContinue() {
-  this.checkCaptchaValidity(); 
+  this.checkCaptchaValidity();
   this.isContinueClicked = true;
+
   console.log('Current form values:', this.employeeForm.value);
 
+  // Update credentials in AuthService
   const credentials = {
     username: this.employeeForm.value.username || '',
     password: this.employeeForm.value.password || '',
   };
   this.authService.updateCredentials(credentials);
-  // console.log('Credentials stored in AuthService:', credentials);
-  const fieldsOrder = [
-    'username', 
-    'password',
-    'confirmPassword',
-    'companyName',
-    'yearsOfEstablishMent',
-    'companySize',
-    'companyAddress',
-    'companyAddressBangla',
-    'contactName',
-    'contactDesignation',
-    'contactEmail',
-    'captchaInput', 
 
-  ];
+  const requiredFields = Object.keys(this.employeeForm.controls).filter((key) => {
+    const control = this.employeeForm.get(key);
+    return control && control.hasValidator(Validators.required);
+  });
 
-  const currentField = fieldsOrder[this.currentValidationFieldIndex];
-  const control = this.employeeForm.get(currentField);
+  let hasErrors = false;
+  requiredFields.forEach((key) => {
+    const control = this.employeeForm.get(key);
+    if (control && control.invalid) {
+      control.markAsTouched();
+      console.error(`Field ${key} is invalid:`, control.errors);
+      hasErrors = true;
+    }
+  });
+  if (hasErrors) {
+    console.error('Form has errors in required fields. Please correct them before submitting.');
+    alert('Form has errors in required fields. Please correct them before submitting.');
 
-  if (control && control.invalid) {
-    control.markAsTouched();
-    console.error(`Field ${currentField} is invalid:`, control.errors);
     return;
   }
   const payload = this.employeeForm.value;
-  
   this.checkNamesService.insertAccount(payload).subscribe({
     next: (response) => {
       console.log('Account created successfully:', response);
       this.router.navigate(['/account-created-successfully']);
-
     },
     error: (error) => {
       console.error('Error creating account:', error);
+      alert('There was an error creating the account. Please try again.');
+
     },
   });
 }
+
+
 }
