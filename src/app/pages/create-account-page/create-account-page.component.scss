@@ -1,14 +1,15 @@
 .error-message {
-  color: #e3342f;
-  font-size: 0.875rem; 
-  margin-top: -12px; 
-  display: block; 
-  margin-bottom: 24px;
-}
 
-.your-container {
-  @apply bg-[#F9FAFB] w-[1750px] h-[3022px];
-}
+    color: #e3342f;
+    font-size: 0.875rem; 
+    margin-top: -12px; 
+    display: block; 
+    margin-bottom: 24px;
+  }
+  
+  .your-container {
+    @apply bg-[#F9FAFB] w-[1750px] h-[3022px];
+  }
 
 
 .row {

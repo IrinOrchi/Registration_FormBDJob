@@ -36,8 +36,9 @@ export class AddIndustryModalComponent implements OnChanges {
   }
 
 addIndustry(): void {
-  const formValue = this.employeeForm.value; 
-  const industryName = formValue.industryName; 
+  event?.stopPropagation();
+  const Value = this.employeeForm.value; 
+  const industryName = Value.industryName; 
 
   this.newIndustry.emit({ IndustryName: industryName });
   this.closeModal();
