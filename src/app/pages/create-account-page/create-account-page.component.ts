@@ -667,12 +667,16 @@ checkCaptchaValidity() {
 }
 
 onContinue() {
+  
+  if (!this.employeeForm.get('isPolicyAcceptedControl')?.value) {
+    return; 
+  }
+
   this.checkCaptchaValidity();
   this.isContinueClicked = true;
 
   console.log('Current form values:', this.employeeForm.value);
 
-  // Update credentials in AuthService
   const credentials = {
     username: this.employeeForm.value.username || '',
     password: this.employeeForm.value.password || '',
@@ -693,12 +697,13 @@ onContinue() {
       hasErrors = true;
     }
   });
+
   if (hasErrors) {
     console.error('Form has errors in required fields. Please correct them before submitting.');
     alert('Form has errors in required fields. Please correct them before submitting.');
-
     return;
   }
+
   const payload = this.employeeForm.value;
   this.checkNamesService.insertAccount(payload).subscribe({
     next: (response) => {
@@ -708,9 +713,6 @@ onContinue() {
     error: (error) => {
       console.error('Error creating account:', error);
       alert('There was an error creating the account. Please try again.');
-
-      alert('There was an error creating the account. Please try again.');
-
     },
   });
 }
