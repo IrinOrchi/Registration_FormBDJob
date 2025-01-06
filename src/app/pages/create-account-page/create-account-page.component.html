@@ -19,7 +19,7 @@
            <app-input-field
              label="Username"
              name="txtUserName"
-             id="txtUserName"
+             id="username"
              [control]="formControlSignals()['username']"
              placeholder="Type Username"
              [maxLength]="20"
@@ -48,7 +48,7 @@
            <app-input-field
              label="Password"
              name="txtPassword"
-             id="txtPassword"
+             id="password"
              [control]="formControlSignals()['password']"
              placeholder="Type Password"
              [maxLength]="8"
@@ -178,7 +178,7 @@
          [options]="['1-25', '26-50', '51-100', '101-500', '501-1000', '1000+']"
          [isRequired]="true">
        </app-radio-group>
-       <div class="text-red-600">
+       <div class="mt-2 text-red-600">
          @if(employeeForm.controls['companySize'].touched && employeeForm.controls['companySize'].errors?.['required']) {
            <span class="error-message">This is required</span>
          }
