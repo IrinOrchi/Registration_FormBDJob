@@ -1,8 +1,8 @@
 
 <div class="bg-[#F9FAFB] w-auto h-auto">
   <!-- Header Section -->
-  <div class="flex flex-col md:flex-row justify-between items-center p-4 sm:p-6 lg:p-8 shadow-lg w-full min-h-[257px] md:min-h-[287px] flex-shrink-0"
-  style="background: url('/assets/images/mid-header.svg') no-repeat center; background-size: cover;">
+  <div class="flex flex-col md:flex-row justify-between items-center p-4 sm:p-6 lg:p-8 shadow-lg w-auto min-h-[257px] md:min-h-[287px] flex-shrink-0"
+  style="background: url('assets/images/mid-header.svg') no-repeat center; background-size: cover;">
 </div>
    <!-- Form -->
    <form action="" [formGroup]="employeeForm">
@@ -24,7 +24,7 @@
              placeholder="Type Username"
              [maxLength]="20"
              [isRequired]="true"
-             icon="icon-user"
+             icon="icon-user-name-outline"
              errorMessage="Username is required">
            </app-input-field>
            <div class="text-red-600">
@@ -54,7 +54,7 @@
              [maxLength]="8"
              [isRequired]="true"
              type="password"
-             icon="icon-lock-open-plus"
+             icon="icon-key-outline"
              errorMessage="Password is required">
            </app-input-field>
            <div class="text-red-600">
@@ -78,7 +78,7 @@
              [maxLength]="8"
              [isRequired]="true"
              type="password" 
-             icon="icon-lock-open-plus"
+             icon="icon-key-outline"
              errorMessage="Confirm Password is required">
            </app-input-field>
            <div class="text-red-600">
@@ -476,7 +476,7 @@
    }
  </div>
          <h2 class="block mt-4 mb-2 text-sm font-semibold text-gray-700">
-           Business Description <span class="text-red-500">*</span>
+           Business Description
          </h2>      
          <app-text-area
          name="txtDescription"
@@ -485,11 +485,7 @@
          placeholder="Write Business Description"
          [rows]="4"
          ></app-text-area> 
-         <div class="text-red-600">
-           @if (employeeForm.controls['businessDesc'].touched &&  employeeForm.controls['businessDesc'].errors?.['required']) {
-           <span class="error-message">This is required</span>
-           }
-       </div>
+       
          <div class="flex flex-col sm:flex-row sm:gap-6">
            <div class="flex-1">
              <app-input-field
@@ -612,7 +608,7 @@
                }
            </div>
              </div>
-             <div class="flex-1">
+             <div class="flex-1 dropdown-container">
                <label for="contactMobile" class="block mb-1 text-sm font-semibold text-gray-700">
                  Contact Person's Mobile <span class="text-red-500">*</span>
                </label>
@@ -621,14 +617,14 @@
                    [src]="currentFlagPath" 
                    alt="Flag" 
                    class="w-5 h-5 mr-2 cursor-pointer" 
-                   (click)="Dropdown()" 
+                   (click)="toggleDropdown()" 
                  />
                  <div class="relative flex items-center">
                    <button 
                      id="dropdown-phone-button" 
                      class="flex items-center py-2 px-3 text-[16px] font-inter text-gray-900 bg-white border-r border-gray-300 hover:bg-gray-100 focus:ring-2 focus:ring-gray-200 focus:outline-none"
                      type="button"
-                     (click)="Dropdown()"
+                     (click)="toggleDropdown()"
                    >
                      <span class="mr-1">{{ currentCountry.phoneCode }}</span>
                      <svg class="w-3 h-3 ml-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
@@ -637,7 +633,7 @@
                    </button>
                    
                    <!-- Dropdown for selecting country -->
-                   @if (isPhoneDropdownOpen) {
+                   @if (isOpen) {
                      <div class="absolute top-10 left-0 bg-white border rounded-lg shadow-md w-[300px] z-10">
                        <div class="p-2">
                          <input 
@@ -661,8 +657,7 @@
                        </ul>
                      </div>
                    }
-                 </div>
-               
+                 </div>                
                  <!-- Mobile Number Input -->
                  <input 
                    type="text" 
@@ -678,7 +673,7 @@
                </div>
                
              <div class="text-red-600 ">
-               @if (employeeForm.controls['contactMobile'].touched &&  employeeForm.controls['contactMobile'].errors?.['required']) {
+               @if (employeeForm.controls['contactMobile'].touched && employeeForm.controls['contactMobile'].errors?.['required']) {
                <span class="mt-4 text-sm">This is required</span>
                }
                @else if (employeeForm.controls['contactMobile'].errors?.['mobile']) {

@@ -137,7 +137,7 @@ export class SuccessfulAccountComponent implements OnInit {
     this.loginService.setCookies().subscribe({
       next: () => {
         if (this.authService.hasValidToken()) {
-          window.location.href = redirectUrl || 'https://recruiter.bdjobs.com/dashboard';
+          window.location.href = 'https://recruiter.bdjobs.com/dashboard';
         } else {
           this.handleError('Login failed. Invalid token.');
         }
