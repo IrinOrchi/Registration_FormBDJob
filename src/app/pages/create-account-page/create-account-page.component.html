@@ -5,7 +5,7 @@
   style="background: url('assets/images/mid-header.svg') no-repeat center; background-size: cover;">
 </div>
    <!-- Form -->
-   <form action="" [formGroup]="employeeForm">
+   <form action="" [formGroup]="employeeForm" (ngSubmit)="onContinue()">
  
      <!-- User Information Section -->
      <div class="w-[1290px] h-[183px] p-6 mx-auto flex-col -mt-24 items-start gap-5 rounded-2xl bg-white shadow-lg">
@@ -19,7 +19,7 @@
            <app-input-field
              label="Username"
              name="txtUserName"
-             id="txtUserName"
+             id="username"
              [control]="formControlSignals()['username']"
              placeholder="Type Username"
              [maxLength]="20"
@@ -48,7 +48,7 @@
            <app-input-field
              label="Password"
              name="txtPassword"
-             id="txtPassword"
+             id="password"
              [control]="formControlSignals()['password']"
              placeholder="Type Password"
              [maxLength]="8"
@@ -178,7 +178,7 @@
          [options]="['1-25', '26-50', '51-100', '101-500', '501-1000', '1000+']"
          [isRequired]="true">
        </app-radio-group>
-       <div class="text-red-600">
+       <div class="mt-2 text-red-600">
          @if(employeeForm.controls['companySize'].touched && employeeForm.controls['companySize'].errors?.['required']) {
            <span class="error-message">This is required</span>
          }
@@ -826,14 +826,14 @@
              </div>
              
              <section class="flex justify-end mx-auto mt-8 max-w-7xl">
-               <button 
-                       [disabled]="!employeeForm.get('isPolicyAcceptedControl')?.valid && !isCaptchaValid" 
-                       class="box-border m-0 font-inherit overflow-visible text-center font-normal leading-normal align-middle whitespace-nowrap touch-manipulation select-none border border-transparent rounded inline-flex items-center bg-[#05A44B] text-white text-[16px] font-inter px-5 py-3 shadow-md transition duration-300 ease-linear"
-                       [class.cursor-not-allowed]="!employeeForm.get('isPolicyAcceptedControl')?.value"
-                       [class.opacity-65]="!employeeForm.get('isPolicyAcceptedControl')?.value"
-                       (click)="onContinue()">
-                 Continue 
-               </button>
+              <button 
+              [disabled]="!employeeForm.get('isPolicyAcceptedControl')?.value && !isCaptchaValid" 
+              class="box-border m-0 font-inherit overflow-visible text-center font-normal leading-normal align-middle whitespace-nowrap touch-manipulation select-none border border-transparent rounded inline-flex items-center bg-[#05A44B] text-white text-[16px] font-inter px-5 py-3 shadow-md transition duration-300 ease-linear"
+              [class.cursor-not-allowed]="!employeeForm.get('isPolicyAcceptedControl')?.value"
+              [class.opacity-65]="!employeeForm.get('isPolicyAcceptedControl')?.value">
+              Continue
+            </button>
+            
              </section>
              
              <div class="mt-6">

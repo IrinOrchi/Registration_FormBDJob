@@ -666,39 +666,156 @@ checkCaptchaValidity() {
   this.isCaptchaValid = this.captchaComponent.isCaptchaValid();
 }
 
+// onContinue() {
+  
+//   if (!this.employeeForm.get('isPolicyAcceptedControl')?.value) {
+//     return; 
+//   }
+
+//   this.checkCaptchaValidity();
+//   this.isContinueClicked = true;
+
+//   console.log('Current form values:', this.employeeForm.value);
+
+//   const credentials = {
+//     username: this.employeeForm.value.username || '',
+//     password: this.employeeForm.value.password || '',
+//   };
+//   this.authService.updateCredentials(credentials);
+
+//   const requiredFields = Object.keys(this.employeeForm.controls).filter((key) => {
+//     const control = this.employeeForm.get(key);
+//     return control && control.hasValidator(Validators.required);
+//   });
+
+//   let hasErrors = false;
+//   requiredFields.forEach((key) => {
+//     const control = this.employeeForm.get(key);
+//     if (control && control.invalid) {
+//       control.markAsTouched();
+//       console.error(`Field ${key} is invalid:`, control.errors);
+//       hasErrors = true;
+//     }
+//   });
+
+//   if (hasErrors) {
+//     console.error('Form has errors in required fields. Please correct them before submitting.');
+//     alert('Form has errors in required fields. Please correct them before submitting.');
+//     return;
+//   }
+
+//   const payload = this.employeeForm.value;
+//   this.checkNamesService.insertAccount(payload).subscribe({
+//     next: (response) => {
+//       console.log('Account created successfully:', response);
+//       this.router.navigate(['/account-created-successfully']);
+//     },
+//     error: (error) => {
+//       console.error('Error creating account:', error);
+//       alert('There was an error creating the account. Please try again.');
+//     },
+//   });
+// }
+
+
+// onContinue() {
+//   this.checkCaptchaValidity();
+//   this.isContinueClicked = true;
+//   if (!this.employeeForm.get('isPolicyAcceptedControl')?.value) {
+//        return; 
+//        }
+
+//   console.log('Current form values:', this.employeeForm.value);
+
+//   // Update credentials in AuthService
+//   const credentials = {
+//     username: this.employeeForm.value.username || '',
+//     password: this.employeeForm.value.password || '',
+//   };
+//   this.authService.updateCredentials(credentials);
+
+//   const requiredFields = Object.keys(this.employeeForm.controls).filter((key) => {
+//     const control = this.employeeForm.get(key);
+//     return control && control.hasValidator(Validators.required);
+//   });
+
+//   let hasErrors = false;
+//   let firstInvalidField: HTMLElement | null = null;
+
+//   requiredFields.forEach((key) => {
+//     const control = this.employeeForm.get(key);
+//     if (control && control.invalid) {
+//       control.markAsTouched();
+//       if (!hasErrors) {
+//         hasErrors = true;
+
+//         const element = document.getElementById(key);
+//         if (element) {
+//           firstInvalidField = element;
+//         }
+//         console.error(`Field ${key} is invalid:`, control.errors);
+//       }
+//     }
+//   });
+
+//   if (hasErrors) {
+//     console.error('Form has errors in required fields. Please correct them before submitting.');
+//     alert('Form has errors in required fields. Please correct them before submitting.');
+
+//     if (firstInvalidField) {
+//       (firstInvalidField as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'center' });
+//       (firstInvalidField as HTMLElement).focus();
+//     }
+//     return;
+//   }
+
+//   const payload = this.employeeForm.value;
+//   this.checkNamesService.insertAccount(payload).subscribe({
+//     next: (response) => {
+//       console.log('Account created successfully:', response);
+//       this.router.navigate(['/account-created-successfully']);
+//     },
+//     error: (error) => {
+//       console.error('Error creating account:', error);
+//       alert('There was an error creating the account. Please try again.');
+//     },
+//   });
+// }
 onContinue() {
   this.checkCaptchaValidity();
   this.isContinueClicked = true;
 
   console.log('Current form values:', this.employeeForm.value);
 
-  // Update credentials in AuthService
   const credentials = {
     username: this.employeeForm.value.username || '',
     password: this.employeeForm.value.password || '',
   };
   this.authService.updateCredentials(credentials);
 
-  const requiredFields = Object.keys(this.employeeForm.controls).filter((key) => {
-    const control = this.employeeForm.get(key);
-    return control && control.hasValidator(Validators.required);
-  });
+  const controls = this.employeeForm.controls;
+  let firstInvalidField: HTMLElement | null = null;
 
-  let hasErrors = false;
-  requiredFields.forEach((key) => {
-    const control = this.employeeForm.get(key);
-    if (control && control.invalid) {
-      control.markAsTouched();
-      console.error(`Field ${key} is invalid:`, control.errors);
-      hasErrors = true;
+  for (const key in controls) {
+    if (controls.hasOwnProperty(key)) {
+      const control = controls[key];
+      if (control.invalid) {
+        control.markAsTouched();
+
+        const element = document.getElementById(key);
+        if (element) {
+          firstInvalidField = element;
+          firstInvalidField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          firstInvalidField.focus();
+        }
+
+        console.error(`Field ${key} is invalid:`, control.errors);
+        alert(`The field "${key}" is required. Please fill it.`);
+        return; 
+      }
     }
-  });
-  if (hasErrors) {
-    console.error('Form has errors in required fields. Please correct them before submitting.');
-    alert('Form has errors in required fields. Please correct them before submitting.');
-
-    return;
   }
+
   const payload = this.employeeForm.value;
   this.checkNamesService.insertAccount(payload).subscribe({
     next: (response) => {
@@ -708,9 +825,6 @@ onContinue() {
     error: (error) => {
       console.error('Error creating account:', error);
       alert('There was an error creating the account. Please try again.');
-
-      alert('There was an error creating the account. Please try again.');
-
     },
   });
 }
