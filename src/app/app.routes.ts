@@ -4,20 +4,23 @@ import {NidVerificationComponent} from './pages/nid-verification/nid-verificatio
 import { BeforeLoginNidComponent } from './pages/before-login-nid/before-login-nid.component';
 import { SuccessfulAccountComponent } from './pages/successful-account/successful-account.component';
 import { AuthGuard } from './guards/auth.guard';
+import { CommunicationComponent } from './pages/communication/communication.component';
 
 export const routes: Routes = [
     {
         path:"",
-        redirectTo: 'register',
+        redirectTo: 'communication',
         pathMatch: 'full'
     },
     {
         path:'register',
-        component: CreateAccountPageComponent
+        component: CreateAccountPageComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: "account-created-successfully",
         component: SuccessfulAccountComponent,
+        canActivate: [AuthGuard]
     },
     {
         path:'register/nidVerify',
@@ -26,5 +29,10 @@ export const routes: Routes = [
     {
         path:'register/before-login-nid',
         component: BeforeLoginNidComponent
+    },
+    {
+        path:'communication',
+        component: CommunicationComponent
+
     }
 ];
