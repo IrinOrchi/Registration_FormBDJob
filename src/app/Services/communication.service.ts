@@ -7,12 +7,12 @@ import { Observable } from 'rxjs';
 })
 export class CommunicationService {
 
-  private apiUrl = 'https://api.example.com/jobs'; // Replace with actual API endpoint
+  private apiUrl = 'https://localhost:7004/api/EmailsOverview/GetSentEmails';
 
   constructor(private http: HttpClient) {}
 
-  getJobs(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+  getEmailsOverview(companyId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}?companyId=${companyId}`);
   }
 }
 

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { HeaderComponent } from "../../components/header/header.component";
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { CommunicationService } from '../../Services/communication.service';
 import { CommonModule, DatePipe } from '@angular/common';
 interface Job {
@@ -13,57 +13,36 @@ interface Job {
 @Component({
   selector: 'app-communication',
   standalone: true,
-  imports: [HeaderComponent,ReactiveFormsModule ,DatePipe, CommonModule],
+  imports: [HeaderComponent,ReactiveFormsModule , CommonModule],
   templateUrl: './communication.component.html',
   styleUrl: './communication.component.scss'
 })
 export class CommunicationComponent implements OnInit {
-  jobs: Job[] = [];
-  filteredJobs: Job[] = [];
-  searchControl = new FormControl('');
-  currentPage = 1;
-  itemsPerPage = 5;
-  totalPages: number[] = [];
-  sentEmails = {
-    cv: 125,
-    applicants: 5,
-    invitation: 0,
-  };
+  sentEmails = signal({ cv: 0, applicants: 0, invitation: 0 });
+  readEmails = signal({ cv: 0, applicants: 0, invitation: 0 });
 
-  readEmails = {
-    cv: 84,
-    applicants: 0,
-    invitation: 0,
-  };
   constructor(private communicationService: CommunicationService) {}
 
-  ngOnInit() {
-    this.fetchJobs();
+  ngOnInit(): void {
+    this.fetchEmails();
   }
 
-  fetchJobs() {
-    this.communicationService.getJobs().subscribe((data: Job[]) => {
-      this.jobs = data;
-      this.filteredJobs = [...this.jobs];
-      this.updatePagination();
+  fetchEmails(): void {
+    this.communicationService.getEmailsOverview('ZxU0PRC%3D').subscribe(response => {
+      if (response.responseType === 'success') {
+        this.sentEmails.set({
+          cv: response.data.emailCVbank,
+          applicants: response.data.emailByJobs,
+          invitation: response.data.invited
+        });
+
+        this.readEmails.set({
+          cv: response.data.readEmailCVbank,
+          applicants: response.data.readEmailbyJobs,
+          invitation: response.data.invitedRead
+        });
+      }
     });
   }
-
-  filterJobs() {
-    const searchTerm = this.searchControl.value?.toLowerCase() || '';
-    this.filteredJobs = this.jobs.filter((job) =>
-      job.title.toLowerCase().includes(searchTerm)
-    );
-    this.updatePagination();
-  }
-
-  updatePagination() {
-    this.totalPages = Array(Math.ceil(this.filteredJobs.length / this.itemsPerPage)).fill(0).map((_, i) => i + 1);
-  }
-
-  changePage(page: number) {
-    this.currentPage = page;
-  }
 }
-
 
