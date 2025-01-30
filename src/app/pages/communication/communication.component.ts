@@ -1,12 +1,11 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, Input, OnInit, signal } from '@angular/core';
 import { HeaderComponent } from "../../components/header/header.component";
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommunicationService } from '../../Services/communication.service';
 import { CommonModule, DatePipe } from '@angular/common';
 interface Job {
-  id: number;
   title: string;
-  publishedDate: string;
+  publishedDate: Date;
   sentEmails: number;
   readEmails: number;
 }
@@ -18,6 +17,7 @@ interface Job {
   styleUrl: './communication.component.scss'
 })
 export class CommunicationComponent implements OnInit {
+  jobs: Job[] = [];
   sentEmails = signal({ cv: 0, applicants: 0, invitation: 0 });
   readEmails = signal({ cv: 0, applicants: 0, invitation: 0 });
 
@@ -32,13 +32,20 @@ export class CommunicationComponent implements OnInit {
 
   fetchEmails(): void {
     this.communicationService.getEmailsOverview('ZxU0PRC%3D').subscribe(response => {
-      if (response.responseType === 'success') {
+      if (response.responseType === 'success' && response.data?.list) {
+        this.jobs = response.data.list.map((item: any) => ({
+          title: item.job,
+          publishedDate: new Date(item.publishDate),
+          sentEmails: item.sentEmail,
+          readEmails: item.readEmail
+        }));
+  
         this.sentEmails.set({
           cv: response.data.emailCVbank,
           applicants: response.data.emailByJobs,
           invitation: response.data.invited
         });
-
+  
         this.readEmails.set({
           cv: response.data.readEmailCVbank,
           applicants: response.data.readEmailbyJobs,
@@ -47,5 +54,6 @@ export class CommunicationComponent implements OnInit {
       }
     });
   }
+  
 }
 

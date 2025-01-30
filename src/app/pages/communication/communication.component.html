@@ -1,4 +1,4 @@
-<div class="bg-gray-100 min-h-screen p-6">
+<div class="bg-gray-100 h-[auto] w-[auto] p-8">
   <div class="max-w-6xl mx-auto">
     <!-- Header Section -->
     <div class="flex justify-between items-center mb-6">
@@ -96,4 +96,41 @@
       </div>
     </div>
   </div>
+  <!-- jobs-email-table.component.html -->
+<div class="max-w-6xl mx-auto mt-20 rounded-lg border border-gray-200">
+  <table class="min-w-full divide-y divide-gray-200 bg-white">
+    <thead class="bg-gray-500">
+      <tr>
+        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+          Job
+        </th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+          Published Date
+        </th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+          Sent Email(s)
+        </th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
+          Read Email(s)
+        </th>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+      <tr *ngFor="let job of jobs">
+        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+          {{ job.title }}
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          <span class="icon icon-calendar mr-2"></span>{{ job.publishedDate | date }}
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          {{ job.sentEmails }}
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+          {{ job.readEmails }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 </div>
