@@ -26,6 +26,9 @@ export class CommunicationComponent implements OnInit {
   ngOnInit(): void {
     this.fetchEmails();
   }
+  redirectTo(url: string) {
+    window.location.href = url;
+  }
 
   fetchEmails(): void {
     this.communicationService.getEmailsOverview('ZxU0PRC%3D').subscribe(response => {
