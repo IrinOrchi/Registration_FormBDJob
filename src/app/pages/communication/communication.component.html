@@ -1,136 +1,57 @@
-<div class="bg-gray-100 h-[auto] w-[auto] p-8">
-  <div class="max-w-6xl mx-auto">
-    <!-- Header Section -->
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-2xl font-bold flex items-center gap-2">
-        <i class="icon-com text-gray-700"></i> Communication
-      </h2>
-      <div class="flex gap-2">
-        <button 
-          class="bg-[#0c6899] hover:bg-[#08547a] text-white px-3 py-2 rounded flex items-center gap-2 transition duration-300"
-          (click)="redirectTo('https://corporate3.bdjobs.com/cvsearch.asp')">
-          <i class="icon icon-search"></i> Search CV Bank
-        </button>
-      
-        <!-- Post a New Job Button -->
-        <button 
-          class="bg-[#008A22] hover:bg-[#006617] text-white px-3 py-2 rounded flex items-center gap-2 transition duration-300"
-          (click)="redirectTo('https://recruiter.bdjobs.com/jobposting/')">
-          <i class="icon icon-plus"></i> Post a New Job
-        </button>
-      </div>
-    </div>
-
-    <!-- Grid Section -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div class="bg-white shadow-md rounded-md p-4 border transition duration-300 focus:ring-4 focus:ring-blue-500 focus:outline-none hover:shadow-lg hover:bg-gray-50">
-        <div class="flex items-center justify-between">
-          <span class="text-gray-700 font-semibold">Emails by using CV Bank</span>
-          <div class="flex items-center gap-4">
-            <div class="flex items-center gap-1 text-gray-700">
-              <i class="icon icon-check text-md text-gray-600"></i> 
-              <span>Sent</span>
-              <span class="px-3  text-orange-700 bg-[#fbe9e9] border border-orange-300 rounded-full text-sm font-semibold transition duration-300 hover:bg-orange-800 hover:text-white">
-                {{ sentEmails().cv }}
-              </span>
-            </div>
-    
-            <!-- Read Emails -->
-            <div class="flex items-center gap-1 text-gray-700">
-              <i class="icon icon-check-double text-gray-600"></i> 
-              <span>Read</span>
-              <span class="px-3  text-green-700 bg-[#e8f5e9] border border-[#81c784] rounded-full text-sm font-semibold transition duration-300 hover:bg-green-800 hover:text-white">
-                {{ readEmails().cv }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Emails to Applicants -->
-      <div class="bg-white shadow-md rounded-md p-4 border transition duration-300 focus:ring-4 focus:ring-blue-500 focus:outline-none hover:shadow-lg hover:bg-gray-50">
-        <div class="flex items-center justify-between">
-          <span class="text-gray-700 font-semibold">Emails to Applicants</span>
-      
-          <div class="flex items-center gap-4">
-            <div class="flex items-center gap-1 text-gray-700">
-              <i class="icon icon-check text-md text-gray-600"></i> 
-              <span>Sent</span>
-              <span class="px-3  text-orange-700 bg-[#fbe9e9]  border border-[#ffab91] rounded-full text-sm font-semibold transition duration-300 hover:bg-orange-800 hover:text-white">
-                {{ sentEmails().applicants }}
-              </span>
-            </div>
-            <div class="flex items-center gap-1 text-gray-700">
-              <i class="icon icon-check-double text-gray-600"></i> 
-              <span>Read</span>
-              <span class="px-3  text-green-700 bg-[#e8f5e9] border border-[#81c784] rounded-full text-sm font-semibold transition duration-300 hover:bg-green-800 hover:text-white">
-                {{ readEmails().applicants }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>     
-      <!-- Emails for Invitation -->
-      <div class="bg-white shadow-md rounded-md p-4 border transition duration-300 focus:ring-4 focus:ring-blue-500 focus:outline-none hover:shadow-lg hover:bg-gray-50">
-        <div class="flex items-center justify-between">
-          <span class="text-gray-700 font-semibold">Emails for Invitation</span>    
-          <div class="flex items-center gap-4">
-            <div class="flex items-center gap-1 text-gray-700">
-              <i class="icon icon-check text-md text-gray-600"></i> 
-              <span>Sent</span>
-              <span class="px-3  text-orange-700 bg-[#fbe9e9]  border border-orange-300 rounded-full text-sm font-semibold transition duration-300 hover:bg-orange-800 hover:text-white">
-                {{ sentEmails().invitation }}
-              </span>
-            </div>
-      
-            <!-- Read Emails -->
-            <div class="flex items-center gap-1 text-gray-700">
-              <i class="icon icon-check-double text-gray-600"></i> 
-              <span>Read</span>
-              <span class="px-3  text-green-700 bg-[#e8f5e9] border border-[#81c784] rounded-full text-sm font-semibold transition duration-300 hover:bg-green-800 hover:text-white">
-                {{ readEmails().invitation }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+<div class="max-w-6xl mx-auto mt-4">
+  <!-- Search Bar -->
+  <div class="flex justify-between items-center mb-4">
+    <input
+      type="text"
+      class="border p-2 rounded w-1/3"
+      placeholder="Search Jobs..."
+      [formControl]="searchControl"
+      (keyup)="onSearch()"
+    />
   </div>
-  <!-- jobs-email-table.component.html -->
-<div class="max-w-6xl mx-auto mt-20 rounded-lg border border-gray-200">
-  <table class="min-w-full divide-y divide-gray-200 bg-white">
-    <thead class="bg-gray-500">
-      <tr>
-        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-          Job
-        </th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-          Published Date
-        </th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-          Sent Email(s)
-        </th>
-        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">
-          Read Email(s)
-        </th>
-      </tr>
-    </thead>
-    <tbody class="bg-white divide-y divide-gray-200">
-      <tr *ngFor="let job of jobs">
-        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-          {{ job.title }}
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-          <span class="icon icon-calendar mr-2"></span>{{ job.publishedDate | date }}
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-          {{ job.sentEmails }}
-        </td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-          {{ job.readEmails }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+
+  <!-- Job Email Table -->
+  <div class="rounded-lg border border-gray-200">
+    <table class="min-w-full divide-y divide-gray-200 bg-white">
+      <thead class="bg-gray-500 text-white">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium uppercase">Job</th>
+          <th class="px-6 py-3 text-left text-xs font-medium uppercase">Published Date</th>
+          <th class="px-6 py-3 text-left text-xs font-medium uppercase">Sent Email(s)</th>
+          <th class="px-6 py-3 text-left text-xs font-medium uppercase">Read Email(s)</th>
+        </tr>
+      </thead>
+      <tbody *ngIf="jobs.length > 0; else noDataTemplate">
+        <tr *ngFor="let job of jobs">
+          <td class="px-6 py-4 text-sm font-medium text-gray-900">{{ job.title }}</td>
+          <td class="px-6 py-4 text-sm text-gray-500">{{ job.publishedDate | date }}</td>
+          <td class="px-6 py-4 text-sm text-gray-500">{{ job.sentEmails }}</td>
+          <td class="px-6 py-4 text-sm text-gray-500">{{ job.readEmails }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- No Data Found -->
+    <ng-template #noDataTemplate>
+      <div class="not-found text-center py-6">
+        <i class="icon-envelope text-gray-400 text-3xl"></i>
+        <h2 class="text-gray-600">No data found</h2>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Pagination -->
+  <div class="flex justify-end mt-4 space-x-2">
+    <button 
+      class="px-4 py-2 bg-gray-300 rounded"
+      [disabled]="currentPage === 1"
+      (click)="changePage(-1)">
+      Previous
+    </button>
+    <button 
+      class="px-4 py-2 bg-blue-500 text-white rounded"
+      (click)="changePage(1)">
+      Next
+    </button>
+  </div>
 </div>
