@@ -107,8 +107,8 @@
     <div class="relative max-w-6xl mx-auto mt-4">
       <input
         type="text"
-        class="border p-2 rounded w-full outline-none pr-12"
-        placeholder="Search Jobs..."
+        class="border p-2 rounded w-full outline-none focus:to-blue-300 pr-12"
+        placeholder="Search by job title"
         [formControl]="searchControl"
         (keyup.enter)="onSearch()" 
       />
