@@ -20,3 +20,18 @@
     min-width: 120px;
   }
 }
+.input-group {
+  @apply flex items-center border border-gray-300 rounded-lg overflow-hidden;
+  
+  input {
+    @apply flex-1 px-4 py-2 outline-none;
+  }
+
+  .input-group-btn {
+    @apply flex;
+    
+    button {
+      @apply bg-gray-200 px-4 py-2 text-gray-700 hover:bg-gray-300 transition;
+    }
+  }
+}
