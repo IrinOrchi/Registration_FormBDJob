@@ -37,7 +37,11 @@ export class CommunicationComponent implements OnInit {
   fetchJobs(searchQuery: string = ''): void {
     this.communicationService.getJobEmails(searchQuery, this.currentPage, this.pageSize)
       .subscribe(response => {
-        this.jobs = response.jobs || [];
+        if (response.jobs && response.jobs.length > 0) {
+          this.jobs = response.jobs;
+        } else {
+          this.jobs = []; 
+        }
       });
   }
 
