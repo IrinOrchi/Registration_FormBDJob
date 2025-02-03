@@ -23,12 +23,15 @@ export class CommunicationComponent implements OnInit {
   searchControl = new FormControl('');
   currentPage = 1;
   pageSize = 10;
+  totalPages = 1;
+  totalPagesArray: number[] = [];
 
   constructor(private communicationService: CommunicationService) {}
 
   ngOnInit(): void {
     this.fetchEmails();
     this.fetchJobs();
+    this.totalPagesArray = Array.from({ length: this.totalPages }, (_, i) => i + 1);
 
   }
   redirectTo(url: string) {
