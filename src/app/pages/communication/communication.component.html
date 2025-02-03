@@ -97,7 +97,10 @@
     </div>
   </div>
   
-      <div class="bg-white mt-4 rounded-lg border shadow-sm">
+      <div class="bg-white mt-4 rounded-lg border shadow-sm mb-2 ">
+        <h2 class="text-lg font-semibold flex items-center mt-4 gap-2">
+          <span class="icon-envelope ml-4 "></span> Jobwise emails sent to applicants
+        </h2>
         <div class="p-4 border-b">
           <div class="flex space-x-2">
             <input
@@ -112,8 +115,9 @@
               (click)="onSearch()">
               Search
             </button>
-          </div>
-        </div>
+            </div>
+        
+        
   <!-- jobs-email-table.component.html -->
 <div class="max-w-6xl mx-auto mt-2 rounded-lg border border-gray-200">
   <table class="min-w-full divide-y divide-gray-200 bg-white">
@@ -176,4 +180,7 @@
       Next
     </button>
   </div>
+  <a class="bg-[#0e73a9] text-white px-4 py-2 rounded shadow-md hover:bg-blue-700 transition" routerLink="/message-template">
+    Email Templates
+  </a>
 </div>
