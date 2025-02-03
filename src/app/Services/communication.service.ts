@@ -14,5 +14,8 @@ export class CommunicationService {
   getEmailsOverview(companyId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}?companyId=${companyId}`);
   }
+  getJobEmails(searchQuery: string, page: number, pageSize: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}?search=${searchQuery}&page=${page}&pageSize=${pageSize}`);
+  }
 }
 

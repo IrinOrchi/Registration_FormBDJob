@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, signal } from '@angular/core';
 import { HeaderComponent } from "../../components/header/header.component";
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommunicationService } from '../../Services/communication.service';
 import { CommonModule, DatePipe } from '@angular/common';
 interface Job {
@@ -20,16 +20,36 @@ export class CommunicationComponent implements OnInit {
   jobs: Job[] = [];
   sentEmails = signal({ cv: 0, applicants: 0, invitation: 0 });
   readEmails = signal({ cv: 0, applicants: 0, invitation: 0 });
+  searchControl = new FormControl('');
+  currentPage = 1;
+  pageSize = 10;
 
   constructor(private communicationService: CommunicationService) {}
 
   ngOnInit(): void {
     this.fetchEmails();
+    this.fetchJobs();
+
   }
   redirectTo(url: string) {
     window.location.href = url;
   }
+  fetchJobs(searchQuery: string = ''): void {
+    this.communicationService.getJobEmails(searchQuery, this.currentPage, this.pageSize)
+      .subscribe(response => {
+        this.jobs = response.jobs || [];
+      });
+  }
 
+  onSearch(): void {
+    const query = this.searchControl.value?.trim();
+    this.fetchJobs(query);
+  }
+
+  changePage(direction: number): void {
+    this.currentPage += direction;
+    this.fetchJobs();
+  }
   fetchEmails(): void {
     this.communicationService.getEmailsOverview('ZxU0PRC%3D').subscribe(response => {
       if (response.responseType === 'success' && response.data?.list) {
