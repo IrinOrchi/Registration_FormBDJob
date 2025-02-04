@@ -1,3 +1,4 @@
+
 <div class="bg-gray-100 h-[auto] w-[auto] p-8">
   <div class="max-w-6xl mx-auto">
     <!-- Header Section -->
@@ -109,7 +110,7 @@
         type="text"
         class="border p-2 rounded w-full outline-none focus:to-blue-300 pr-12"
         placeholder="Search by job title"
-        [formControl]="searchControl"
+        [formControl]="keyword"
         (keyup.enter)="onSearch()" 
       />
       <button 
@@ -131,30 +132,29 @@
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
+          <ng-container *ngIf="jobs.length > 0; else noData">
           <tr *ngFor="let job of jobs">
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ job.title }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ job.job }}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-              <span class="icon icon-calendar mr-2"></span>{{ job.publishedDate | date }}
+              <span class="icon icon-calendar mr-2"></span>{{ job.publishDate | date }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ job.sentEmails }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ job.readEmails }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ job.sentEmail }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ job.readEmail }}</td>
           </tr>
-        </tbody>
-      </table>
-    </div>
+      </ng-container>
+      </tbody>
+    </table>
+  </div>
 
-    <!-- No Data Found -->
-    <ng-template #noDataTemplate>
-      <div class="not-found text-center py-6">
-        <i class="icon-envelope text-gray-400 text-3xl"></i>
-        <h2 class="text-gray-600">No data found</h2>
-      </div>
-    </ng-template>
+  <ng-template #noData>
+    <tr>
+      <td colspan="4" class="px-6 py-4 text-center text-sm font-medium text-gray-500">
+        No data found
+      </td>
+    </tr>
+  </ng-template>
 
-    <!-- Pagination & Email Templates Button -->
     <div class="flex flex-col items-start mt-4">
-
-      <!-- Pagination -->
       <div class="flex space-x-2 mb-12 mt-2">
         <button
           *ngFor="let page of totalPagesArray"

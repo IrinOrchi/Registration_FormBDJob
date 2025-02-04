@@ -6,15 +6,15 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { SalesContactComponent } from '../../components/sales-contact/sales-contact.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 interface Job {
-  title: string;
-  publishedDate: Date;
-  sentEmails: number;
-  readEmails: number;
+  job: string;
+  publishDate: Date;
+  sentEmail: number;
+  readEmail: number;
 }
 @Component({
   selector: 'app-communication',
   standalone: true,
-  imports: [HeaderComponent,ReactiveFormsModule , CommonModule, SalesContactComponent,FooterComponent],
+  imports: [ReactiveFormsModule , CommonModule, SalesContactComponent],
   templateUrl: './communication.component.html',
   styleUrl: './communication.component.scss'
 })
@@ -22,7 +22,7 @@ export class CommunicationComponent implements OnInit {
   jobs: Job[] = [];
   sentEmails = signal({ cv: 0, applicants: 0, invitation: 0 });
   readEmails = signal({ cv: 0, applicants: 0, invitation: 0 });
-  searchControl = new FormControl('');
+  keyword = new FormControl('');
   currentPage = 1;
   pageSize = 10;
   totalPages = 1;
@@ -40,18 +40,21 @@ export class CommunicationComponent implements OnInit {
     window.location.href = url;
   }
   fetchJobs(searchQuery: string = ''): void {
-    this.communicationService.getJobEmails(searchQuery, this.currentPage, this.pageSize)
-      .subscribe(response => {
-        if (response.jobs && response.jobs.length > 0) {
-          this.jobs = response.jobs;
-        } else {
-          this.jobs = []; 
-        }
-      });
+    const companyId = 'ZxU0PRC=';  
+    const pageNo = this.currentPage; 
+    
+    this.communicationService.getJobEmails(companyId, pageNo, searchQuery).subscribe(response => {
+      if (response.data && response.data.list && response.data.list.length > 0) {
+        this.jobs = response.data.list;
+      } else {
+        this.jobs = []; 
+      }
+    });
   }
+  
 
   onSearch(): void {
-    const query = this.searchControl.value?.trim();
+    const query = this.keyword.value?.trim();
     this.fetchJobs(query);
   }
 
