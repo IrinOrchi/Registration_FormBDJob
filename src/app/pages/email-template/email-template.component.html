@@ -1,0 +1,70 @@
+<div class="bg-gray-100 h-[auto] w-[auto] p-8">
+    <div class="max-w-6xl mx-auto">
+      <!-- Header Section -->
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold flex items-center gap-2">
+          <i class="icon-com text-gray-700"></i> Communication
+        </h2>
+        <div class="flex gap-2">
+          <button 
+            class="bg-[#0c6899] hover:bg-[#08547a] text-white px-3 py-2 rounded flex items-center gap-2 transition duration-300"
+            (click)="redirectTo('https://corporate3.bdjobs.com/cvsearch.asp')">
+            <i class="icon icon-search"></i> Search CV Bank
+          </button>
+        
+          <!-- Post a New Job Button -->
+          <button 
+            class="bg-[#008A22] hover:bg-[#006617] text-white px-3 py-2 rounded flex items-center gap-2 transition duration-300"
+            (click)="redirectTo('https://recruiter.bdjobs.com/jobposting/')">
+            <i class="icon icon-plus"></i> Post a New Job
+          </button>
+        </div>
+      </div>
+  
+
+<!-- Header -->
+    <div class="flex items-center gap-2 border-b border-gray-300 pb-2 mb-4">
+      <span class="text-xl font-semibold text-gray-700">📩 Email Template(s)</span>
+    </div>
+  
+    <!-- Description -->
+    <p class="text-gray-600 mb-4">
+      Sending interview invitation or rejection letter or any other message to a job seeker through email is a very
+      common task for HR personnel. Bdjobs.com allows you to create templates of such texts so that you can reuse it
+      whenever necessary. To create/edit such an email template, choose the buttons below:
+    </p>
+  
+    <!-- Table -->
+    <div class="bg-white shadow-md rounded-lg overflow-hidden">
+      <table class="w-full border border-gray-300">
+        <thead class="bg-gray-700 text-white">
+          <tr>
+            <th class="p-3 text-left">#</th>
+            <th class="p-3 text-left">Template(s)</th>
+            <th class="p-3 text-left">Last Update</th>
+            <th class="p-3 text-left">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let template of emailTemplatesList; let i = index" class="border-b">
+            <td class="p-3 flex items-center">
+              <span class="bg-gray-300 text-gray-700 rounded-full w-6 h-6 flex items-center justify-center font-bold">{{ i + 1 }}</span>
+            </td>
+            <td class="p-3 text-gray-700">{{ template.name }}</td>
+            <td class="p-3 flex items-center gap-2 text-gray-600">
+              📅 {{ template.lastUpdated | date: 'd MMM yyyy' }}
+            </td>
+            <td class="p-3 flex gap-2">
+              <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 flex items-center gap-1">
+                👁 View
+              </button>
+              <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 flex items-center gap-1">
+                ✏ Edit
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  

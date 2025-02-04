@@ -164,7 +164,7 @@
         <button
           *ngFor="let page of totalPagesArray"
           class="px-4 py-2 rounded transition-colors"
-          [style.backgroundColor]="currentPage === page ? '#3B82F6' : '#E5E7EB'"
+          [style.backgroundColor]="currentPage === page ? '#0e73a9' : '#0e73a9'"
           [style.color]="currentPage === page ? 'white' : 'black'"
           (click)="changePage(page)">
           {{ page }}
@@ -172,9 +172,11 @@
       </div>
 
       <!-- Email Templates Button -->
-      <a class="bg-[#0e73a9] text-white px-4 py-2 rounded shadow-md hover:bg-blue-700 transition" routerLink="/message-template">
-        Email Templates
-      </a>
+      <button 
+      class="bg-[#0e73a9] hover:bg-blue-700 text-white px-4 py-2 rounded transition duration-300"
+      (click)="redirectToEmailTemplate()">
+      Email Template
+    </button>
     </div>
   </div>
 </div>   

@@ -5,6 +5,7 @@ import { BeforeLoginNidComponent } from './pages/before-login-nid/before-login-n
 import { SuccessfulAccountComponent } from './pages/successful-account/successful-account.component';
 import { AuthGuard } from './guards/auth.guard';
 import { CommunicationComponent } from './pages/communication/communication.component';
+import { EmailTemplateComponent } from './pages/email-template/email-template.component';
 
 export const routes: Routes = [
     {
@@ -32,7 +33,11 @@ export const routes: Routes = [
     },
     {
         path:'communication',
-        component: CommunicationComponent
+        component: CommunicationComponent,
 
-    }
+    },
+    {
+        path:'email-template',
+        component: EmailTemplateComponent
+    },
 ];

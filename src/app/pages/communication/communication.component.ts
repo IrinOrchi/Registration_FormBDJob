@@ -5,6 +5,7 @@ import { CommunicationService } from '../../Services/communication.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { SalesContactComponent } from '../../components/sales-contact/sales-contact.component';
 import { FooterComponent } from '../../components/footer/footer.component';
+import { Router } from '@angular/router';
 interface Job {
   job: string;
   publishDate: Date;
@@ -28,7 +29,7 @@ export class CommunicationComponent implements OnInit {
   totalPages = 1;
   totalPagesArray: number[] = [];
 
-  constructor(private communicationService: CommunicationService) {}
+  constructor(private communicationService: CommunicationService, private router: Router) {}
 
   ngOnInit(): void {
     this.fetchEmails();
@@ -86,6 +87,8 @@ export class CommunicationComponent implements OnInit {
       }
     });
   }
-  
+  redirectToEmailTemplate() {
+    this.router.navigate(['/email-template']);
+  } 
 }
 
