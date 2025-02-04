@@ -3,6 +3,8 @@ import { HeaderComponent } from "../../components/header/header.component";
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { CommunicationService } from '../../Services/communication.service';
 import { CommonModule, DatePipe } from '@angular/common';
+import { SalesContactComponent } from '../../components/sales-contact/sales-contact.component';
+import { FooterComponent } from '../../components/footer/footer.component';
 interface Job {
   title: string;
   publishedDate: Date;
@@ -12,7 +14,7 @@ interface Job {
 @Component({
   selector: 'app-communication',
   standalone: true,
-  imports: [HeaderComponent,ReactiveFormsModule , CommonModule],
+  imports: [HeaderComponent,ReactiveFormsModule , CommonModule, SalesContactComponent,FooterComponent],
   templateUrl: './communication.component.html',
   styleUrl: './communication.component.scss'
 })
