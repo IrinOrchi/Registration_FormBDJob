@@ -148,13 +148,18 @@
 
   <ng-template #noData>
     <tr>
-      <td colspan="4" class="px-6 py-4 text-center text-sm font-medium text-gray-500">
-        No data found
+      <td colspan="4" class="px-6 mt-16 py-4 text-center text-sm font-medium text-gray-500">
+        <div class="flex justify-center mb-2">
+          <i class="icon icon-envelope" style="font-size: 64px; color: gray;"></i>
+        </div>
+        <span class="text-[16px] font-semibold text-[#0e73a9]">No data found</span>
       </td>
     </tr>
   </ng-template>
+  
 
     <div class="flex flex-col items-start mt-4">
+
       <div class="flex space-x-2 mb-12 mt-2">
         <button
           *ngFor="let page of totalPagesArray"
