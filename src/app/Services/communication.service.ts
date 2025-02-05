@@ -11,9 +11,12 @@ export class CommunicationService {
   private apiUrl = 'https://localhost:7004/api/EmailsOverview/GetSentEmails';
   private jobEmailsUrl = 'https://localhost:7004/api/EmailTemplate/EmailTemplates';
 
-
+  private companyId: string = 'ZxU0PRC=';
   constructor(private http: HttpClient) {}
 
+  getCompanyId(): string {
+    return this.companyId;  
+  }
   getEmailsOverview(companyId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}?companyId=${companyId}`);
   }

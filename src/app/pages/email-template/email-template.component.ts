@@ -16,11 +16,14 @@ export class EmailTemplateComponent {
   constructor(private communicationService: CommunicationService, private router: Router) {}
 
   ngOnInit(): void {
-    this.loadEmailTemplates();
+    const companyId = history.state.companyId; 
+
+    if (companyId) {
+      this.loadEmailTemplates(companyId);  
+    }  
   }
 
-  loadEmailTemplates(): void {
-    const companyId = "ZxU0PRC=";
+  loadEmailTemplates(companyId: string): void {
     this.communicationService.getEmailTemplates(companyId).subscribe(templates => {
       this.emailTemplates.set(
         templates.map(template => ({
