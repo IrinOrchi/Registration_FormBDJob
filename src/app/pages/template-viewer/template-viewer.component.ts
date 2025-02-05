@@ -47,5 +47,8 @@ export class TemplateViewerComponent {
   editTemplate() {
     console.log('Editing template:', this.templateID);
   }
+  redirectTo(url: string) {
+    window.location.href = url;
+  }
 
 }
