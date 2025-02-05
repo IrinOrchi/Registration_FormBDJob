@@ -6,6 +6,7 @@ import { SuccessfulAccountComponent } from './pages/successful-account/successfu
 import { AuthGuard } from './guards/auth.guard';
 import { CommunicationComponent } from './pages/communication/communication.component';
 import { EmailTemplateComponent } from './pages/email-template/email-template.component';
+import { TemplateViewerComponent } from './pages/template-viewer/template-viewer.component';
 
 export const routes: Routes = [
     {
@@ -39,5 +40,9 @@ export const routes: Routes = [
     {
         path:'email-template',
         component: EmailTemplateComponent
+    },
+    {
+        path:'template-viewer',
+        component: TemplateViewerComponent
     },
 ];
