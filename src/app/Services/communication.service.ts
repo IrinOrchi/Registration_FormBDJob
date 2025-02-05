@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
+import { EmailTemplate } from '../Models/communication';
 
 @Injectable({
   providedIn: 'root'
@@ -8,6 +9,8 @@ import { Observable } from 'rxjs';
 export class CommunicationService {
 
   private apiUrl = 'https://localhost:7004/api/EmailsOverview/GetSentEmails';
+  private jobEmailsUrl = 'https://localhost:7004/api/EmailTemplate/EmailTemplates';
+
 
   constructor(private http: HttpClient) {}
 
@@ -22,6 +25,14 @@ export class CommunicationService {
   
     return this.http.get<any>(this.apiUrl, { params });
   }
+
+  getEmailTemplates(companyId: string): Observable<EmailTemplate[]> {
+    const params = new HttpParams().set('companyId', companyId);
+    return this.http.get<any>(this.jobEmailsUrl, { params }).pipe(
+      map((response: any) => response.data?.emailTemplates || [])
+    );
+  }
+  
   
 }
 

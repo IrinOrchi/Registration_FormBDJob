@@ -37,9 +37,9 @@
     </p>
   
     <!-- Table -->
-    <div class="bg-white  rounded-sm overflow-hidden">
+    <div class="bg-white  rounded-md overflow-hidden">
       <table class="w-full border border-gray-100">
-        <thead class="bg-gray-700 text-white">
+        <thead class="bg-[#595959] text-white">
           <tr>
             <th class="p-3 text-left pl-8 w-[5%]">#</th>
             <th class="p-3 text-left pl-8 w-[40%]">Template(s)</th>
@@ -51,20 +51,15 @@
           <tr *ngFor="let template of emailTemplatesList; let i = index" class="border-b">
             <!-- Serial Number -->
             <td class="p-3 text-left pl-8">
-              <span class="bg-gray-300 text-gray-700 rounded-full w-6 h-6 flex items-center justify-center font-bold">
+              <span class="bg-[#595959] text-white rounded-full w-[20px] h-[20px] flex items-center justify-center font-bold">
                 {{ i + 1 }}
               </span>
             </td>
         
-            <!-- Template Name -->
             <td class="p-3 text-left pl-6 text-gray-700">{{ template.name }}</td>
-        
-            <!-- Last Update (Pushed Right) -->
             <td class="p-3 text-left pl-20 text-gray-600">
               <i class="icon icon-calendar mr-1"></i> {{ template.lastUpdated | date: 'd MMM yyyy' }}
             </td>
-        
-            <!-- Action Buttons (Shifted Right) -->
             <td class="p-3 text-left pl-20">
               <div class="flex gap-3">
                 <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 flex items-center gap-1">

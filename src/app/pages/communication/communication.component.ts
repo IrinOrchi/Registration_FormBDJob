@@ -6,16 +6,12 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { SalesContactComponent } from '../../components/sales-contact/sales-contact.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { Router } from '@angular/router';
-interface Job {
-  job: string;
-  publishDate: Date;
-  sentEmail: number;
-  readEmail: number;
-}
+import { Job } from '../../Models/communication';
+
 @Component({
   selector: 'app-communication',
   standalone: true,
-  imports: [ReactiveFormsModule , CommonModule, SalesContactComponent],
+  imports: [ReactiveFormsModule , CommonModule, SalesContactComponent,],
   templateUrl: './communication.component.html',
   styleUrl: './communication.component.scss'
 })

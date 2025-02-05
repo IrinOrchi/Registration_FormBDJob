@@ -1,5 +1,7 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, signal, WritableSignal } from '@angular/core';
+import { CommunicationService } from '../../Services/communication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-email-template',
@@ -10,19 +12,24 @@ import { Component, signal, WritableSignal } from '@angular/core';
 })
 export class EmailTemplateComponent {
   
-  emailTemplates: WritableSignal<{ name: string; lastUpdated: Date }[]> = signal([
-    { name: 'Last Update : F', lastUpdated: new Date(2024, 11, 26) },
-    { name: 'test2', lastUpdated: new Date(2024, 11, 3) },
-    { name: 'test-mim', lastUpdated: new Date(2024, 10, 21) },
-    { name: 'Email Template', lastUpdated: new Date(2024, 0, 20) },
-    { name: 'tempet-113', lastUpdated: new Date(2023, 0, 17) },
-    { name: 'testtt', lastUpdated: new Date(2021, 9, 19) },
-    { name: 'testing-40', lastUpdated: new Date(2020, 10, 29) },
-    { name: 'ab_bn', lastUpdated: new Date(2020, 10, 5) },
-    { name: 'Test 6', lastUpdated: new Date(2017, 2, 9) },
-    { name: 'Test Template', lastUpdated: new Date(2017, 2, 8) },
-  ]);
+  emailTemplates: WritableSignal<{ name: string; lastUpdated: Date }[]> = signal([]);
+  constructor(private communicationService: CommunicationService, private router: Router) {}
 
+  ngOnInit(): void {
+    this.loadEmailTemplates();
+  }
+
+  loadEmailTemplates(): void {
+    const companyId = "ZxU0PRC=";
+    this.communicationService.getEmailTemplates(companyId).subscribe(templates => {
+      this.emailTemplates.set(
+        templates.map(template => ({
+          name: template.tmplateTitle,
+          lastUpdated: new Date(template.updatedOn)
+        }))
+      );
+    });
+  }
   get emailTemplatesList() {
     return this.emailTemplates(); 
   }
