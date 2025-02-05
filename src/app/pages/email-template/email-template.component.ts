@@ -14,6 +14,7 @@ export class EmailTemplateComponent {
   
   emailTemplates: WritableSignal<{ name: string; lastUpdated: Date }[]> = signal([]);
   constructor(private communicationService: CommunicationService, private router: Router) {}
+  rowHoverIndex: number | null = null;
 
   ngOnInit(): void {
     const companyId = history.state.companyId; 
@@ -22,7 +23,13 @@ export class EmailTemplateComponent {
       this.loadEmailTemplates(companyId);  
     }  
   }
+  onRowHover(index: number) {
+    this.rowHoverIndex = index;
+  }
 
+  onRowLeave() {
+    this.rowHoverIndex = null;
+  }
   loadEmailTemplates(companyId: string): void {
     this.communicationService.getEmailTemplates(companyId).subscribe(templates => {
       this.emailTemplates.set(
