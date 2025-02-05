@@ -1,7 +1,7 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, signal, WritableSignal } from '@angular/core';
 import { CommunicationService } from '../../Services/communication.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-email-template',
@@ -13,17 +13,25 @@ import { Router } from '@angular/router';
 export class EmailTemplateComponent {
   
   emailTemplates: WritableSignal<{  templateID: number; name: string; lastUpdated: Date }[]> = signal([]);
-  constructor(private communicationService: CommunicationService, private router: Router) {}
+  constructor(private communicationService: CommunicationService, private router: Router, private route:ActivatedRoute) {}
   rowHoverIndex: number | null = null;
   companyId: string = ''; 
   ngOnInit(): void {
-    this.companyId = history.state.companyId || this.communicationService.getCompanyId();
-    this.loadEmailTemplates(this.companyId);
- 
+    this.route.queryParams.subscribe(params => {
+      this.companyId = params['companyId'] || this.communicationService.getCompanyId();
+
+      if (!this.companyId) {
+        console.error('Company ID is missing in EmailTemplateComponent');
+        return;
+      }
+      this.communicationService.getCompanyId(); 
+      this.loadEmailTemplates(this.companyId);
+    });
   }
   onRowHover(index: number) {
     this.rowHoverIndex = index;
   }
+
 
   onRowLeave() {
     this.rowHoverIndex = null;

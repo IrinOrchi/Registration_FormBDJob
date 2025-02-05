@@ -24,12 +24,12 @@ export class CommunicationComponent implements OnInit {
   pageSize = 10;
   totalPages = 1;
   totalPagesArray: number[] = [];
-  companyId: string = '';
-
+  companyId: string = 'ZxU0PRC='; 
   constructor(private communicationService: CommunicationService, private router: Router) {}
 
   ngOnInit(): void {
-    this.companyId = this.communicationService.getCompanyId();
+    this.communicationService.setCompanyId(this.companyId);
+    this.communicationService.getCompanyId();
     this.fetchEmails();
     this.fetchJobs();
     this.totalPagesArray = Array.from({ length: this.totalPages }, (_, i) => i + 1);
@@ -85,10 +85,11 @@ export class CommunicationComponent implements OnInit {
       }
     });
   }
-  redirectToEmailTemplate() {
-    if (this.companyId) {
-      this.router.navigate(['/email-template'], { state: { companyId: this.companyId } });
-  } 
+  redirectToEmailTemplate(): void {
+    this.router.navigate(['/email-template'], { queryParams: { companyId: this.companyId } });
+  }
+  
 }
-}
+  
+
 

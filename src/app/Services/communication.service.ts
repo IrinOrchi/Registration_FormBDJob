@@ -12,9 +12,12 @@ export class CommunicationService {
   private jobEmailsUrl = 'https://localhost:7004/api/EmailTemplate/EmailTemplates';
   private viewTemplatesUrl = 'https://localhost:7004/api/EmailTemplate/EmailTemplateViewer';
 
-  // private companyId: string = 'ZxU0PRC=';
+  private companyId: string = 'ZxU0PRC=';
   constructor(private http: HttpClient) {}
 
+  setCompanyId(companyId: string): void {
+    sessionStorage.setItem('companyId', companyId);
+  }
   getCompanyId(): string {
     return sessionStorage.getItem('companyId') || ''; 
   }
