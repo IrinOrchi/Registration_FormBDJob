@@ -10,12 +10,13 @@ export class CommunicationService {
 
   private apiUrl = 'https://localhost:7004/api/EmailsOverview/GetSentEmails';
   private jobEmailsUrl = 'https://localhost:7004/api/EmailTemplate/EmailTemplates';
+  private viewTemplatesUrl = 'https://localhost:7004/api/EmailTemplate/EmailTemplateViewer';
 
-  private companyId: string = 'ZxU0PRC=';
+  // private companyId: string = 'ZxU0PRC=';
   constructor(private http: HttpClient) {}
 
   getCompanyId(): string {
-    return this.companyId;  
+    return sessionStorage.getItem('companyId') || ''; 
   }
   getEmailsOverview(companyId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}?companyId=${companyId}`);
@@ -36,6 +37,13 @@ export class CommunicationService {
     );
   }
   
+  getTemplateById(companyId: string, templateID: number): Observable<any> {
+    const params = new HttpParams()
+      .set('companyId', companyId)
+      .set('templateID', templateID);
+    
+    return this.http.get<any>(this.viewTemplatesUrl, { params });
+  }
   
 }
 

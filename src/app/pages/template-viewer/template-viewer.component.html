@@ -4,15 +4,22 @@
   role="main"
   aria-label="view email template section"
 >
-  <h3 class="vt-title text-xl font-semibold text-gray-800">Name of Email Template</h3>
-  <p class="vt-name text-gray-600">Last Update: F</p>
-  <h3 class="vt-title text-lg font-semibold text-gray-700 mt-4">Last Update</h3>
-  <p class="vt-name text-gray-600">5 Feb 2025</p>
-  <p class="text-gray-700">Ghumao</p>
-  <button
-    class="btn-primary mt-4"
-    (click)="editTemplate()"
-  >
-    Edit Template
-  </button>
+  <ng-container *ngIf="templateDetails() as template; else loading">
+    <h3 class="vt-title text-xl font-semibold text-gray-800">{{ template.name }}</h3>
+    <p class="vt-name text-gray-600">Last Update: {{ template.lastUpdated | date: 'medium' }}</p>
+    
+    <h3 class="vt-title text-lg font-semibold text-gray-700 mt-4"></h3>
+    <p class="text-gray-700">{{ template.content }}</p>
+
+    <button
+      class="btn-primary mt-4"
+      (click)="editTemplate()"
+    >
+      Edit Template
+    </button>
+  </ng-container>
+
+  <ng-template #loading>
+    <p class="text-gray-600">Loading email template...</p>
+  </ng-template>
 </div>

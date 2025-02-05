@@ -12,16 +12,14 @@ import { Router } from '@angular/router';
 })
 export class EmailTemplateComponent {
   
-  emailTemplates: WritableSignal<{ name: string; lastUpdated: Date }[]> = signal([]);
+  emailTemplates: WritableSignal<{  templateID: number; name: string; lastUpdated: Date }[]> = signal([]);
   constructor(private communicationService: CommunicationService, private router: Router) {}
   rowHoverIndex: number | null = null;
-
+  companyId: string = ''; 
   ngOnInit(): void {
-    const companyId = history.state.companyId; 
-
-    if (companyId) {
-      this.loadEmailTemplates(companyId);  
-    }  
+    this.companyId = history.state.companyId || this.communicationService.getCompanyId();
+    this.loadEmailTemplates(this.companyId);
+ 
   }
   onRowHover(index: number) {
     this.rowHoverIndex = index;
@@ -34,6 +32,7 @@ export class EmailTemplateComponent {
     this.communicationService.getEmailTemplates(companyId).subscribe(templates => {
       this.emailTemplates.set(
         templates.map(template => ({
+          templateID: template.templateID,
           name: template.tmplateTitle,
           lastUpdated: new Date(template.updatedOn)
         }))
@@ -46,5 +45,9 @@ export class EmailTemplateComponent {
   
   redirectTo(url: string) {
     window.location.href = url;
+  }
+
+  viewTemplate(templateID: number) {
+    this.router.navigate(['/template-viewer'], { queryParams: { templateID: templateID, companyId: this.companyId } });
   }
 }
