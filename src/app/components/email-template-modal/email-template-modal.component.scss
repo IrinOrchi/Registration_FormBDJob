@@ -1,0 +1,12 @@
+.modal {
+    @apply fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50;
+  }
+  
+  .modal-content {
+    @apply bg-white p-6 rounded-lg shadow-lg w-[500px];
+  }
+  
+  input, textarea {
+    @apply cursor-not-allowed;
+  }
+  

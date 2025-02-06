@@ -77,20 +77,17 @@
           You can type maximum <strong class="font-bold">15</strong> characters for a <strong>Template Name</strong>.</p>
         <p class="text-[14px] text-gray-700 mt-2 -ml-4">
             <strong class="font-bold">Template text</strong> is  simple paragraph that can be used as your email body which you are supposed to send.</p>
-      
-        <a
+
+        <a 
           href="javascript:void(0)"
           id="mail_sample"
           class="text-[#337ab7] text-[14px] hover:text-[#23527c] mt-3 inline-block -ml-4"
-          (click)="openExample()"
-          aria-label="View example of email template(s)">
+          (click)="openExample()">
           View example
         </a>
       </div>
-      
-  
         <ng-template #loading>
-          <p class="text-[#212121]">Loading email template...</p>
+          <p class="text-[#212121]"> <span class="icon icon-spinner animate-spin mr-1">Loading email template... </span></p>
         </ng-template>
       </div>
     </div>

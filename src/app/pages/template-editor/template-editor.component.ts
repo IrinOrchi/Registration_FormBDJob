@@ -1,13 +1,14 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, signal, ViewChild, WritableSignal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommunicationService } from '../../Services/communication.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { EmailTemplateModalComponent } from '../../components/email-template-modal/email-template-modal.component';
 
 @Component({
   selector: 'app-template-editor',
   standalone: true,
-  imports: [DatePipe,CommonModule, ReactiveFormsModule],
+  imports: [DatePipe,CommonModule, ReactiveFormsModule, EmailTemplateModalComponent],
   templateUrl: './template-editor.component.html',
   styleUrl: './template-editor.component.scss'
 })
@@ -20,6 +21,8 @@ export class TemplateEditorComponent {
     currentCharCount = 0;
     isTyping = false;
     isAccordionOpen = true;
+    @ViewChild('emailModal') emailModal!: EmailTemplateModalComponent;
+
 
     constructor(
       private route: ActivatedRoute, private communicationService: CommunicationService,private fb: FormBuilder, private router: Router) {}
@@ -101,9 +104,8 @@ export class TemplateEditorComponent {
   toggleAccordion() {
     this.isAccordionOpen = !this.isAccordionOpen;
   }
-
   openExample() {
-    window.open('TemplateExample_LCNew.html', '_blank', 'width=800,height=600');
+    this.emailModal.openModal();
   }
  
 }
