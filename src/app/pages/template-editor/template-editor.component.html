@@ -1,27 +1,63 @@
-<div class="bg-gray-100 h-[auto] w-[auto] p-8">
+<div class="bg-gray-100 h-auto w-auto p-8">
     <div class="max-w-6xl mx-auto">
-   <!-- Header Section -->
-   <div class="flex justify-between items-center mb-6">
-    <h2 class="text-2xl font-bold flex items-center gap-2">
-    </h2>
-    <div class="flex gap-2">
-      <button 
-        class="bg-[#0c6899] hover:bg-[#08547a] text-white px-3 py-2 rounded flex items-center gap-2 transition duration-300"
-        (click)="redirectTo('https://corporate3.bdjobs.com/cvsearch.asp')">
-        <i class="icon icon-search"></i> Search CV Bank
-      </button>
-    
-      <!-- Post a New Job Button -->
-      <button 
-        class="bg-[#008A22] hover:bg-[#006617] text-white px-3 py-2 rounded flex items-center gap-2 transition duration-300"
-        (click)="redirectTo('https://recruiter.bdjobs.com/jobposting/')">
-        <i class="icon icon-plus"></i> Post a New Job
-      </button>
+      <!-- Header Section -->
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold flex items-center gap-2"></h2>
+        <div class="flex gap-2">
+          <button
+            class="bg-[#0c6899] hover:bg-[#08547a] text-white px-3 py-2 rounded flex items-center gap-2 transition duration-300"
+            (click)="redirectTo('https://corporate3.bdjobs.com/cvsearch.asp')">
+            <i class="icon icon-search"></i> Search CV Bank
+          </button>
+  
+          <button
+            class="bg-[#008A22] hover:bg-[#006617] text-white px-3 py-2 rounded flex items-center gap-2 transition duration-300"
+            (click)="redirectTo('https://recruiter.bdjobs.com/jobposting/')">
+            <i class="icon icon-plus"></i> Post a New Job
+          </button>
+        </div>
+      </div>
+  
+      <h2 class="text-[22px] text-black font-semibold flex items-center gap-2 ml-7">
+        <i class="icon icon-eye text-black"></i> View Email Template
+      </h2>
+  
+      <div class="bg-white mt-4 rounded-lg border shadow-sm mb-2 p-8 mx-auto max-w-[1100px]">
+        <ng-container *ngIf="templateDetails() as template; else loading">
+          <form [formGroup]="templateForm">
+            <label class="block text-sm font-bold text-gray-700" for="name">Template Name</label>
+            <input
+              id="name"
+              type="text"
+              class="form-control search_box_content actionCaller w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Type template name"
+              formControlName="name"
+              maxlength="15" />
+  
+            <p class="text-gray-500 text-xs mt-1">Last Update: {{ template.lastUpdated | date: 'medium' }}</p>
+  
+            <label class="block mt-4 text-sm font-bold text-gray-700" for="content">Template Text</label>
+            <textarea
+              id="content"
+              class="form-control w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
+              formControlName="content"
+              rows="5"
+              maxlength="3000"></textarea>
+  
+            <button
+              type="button"
+              class="mt-4 text-[14px] bg-[#337ab7] hover:bg-[#2e6da4] text-white font-sans px-4 py-2 rounded-md transition duration-300"
+              [disabled]="templateForm.invalid"
+              (click)="saveTemplate()">
+              Submit
+            </button>
+          </form>
+        </ng-container>
+  
+        <ng-template #loading>
+          <p class="text-[#212121]">Loading email template...</p>
+        </ng-template>
+      </div>
     </div>
   </div>
-<h2 class=" text-[22px] text-black font-semibold flex items-center gap-2 ml-7">
-<i class="icon icon-edit text-black "></i>
-Email Template Editor
-</h2>
-
-</div>
+  
