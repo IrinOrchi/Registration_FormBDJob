@@ -19,6 +19,7 @@ export class TemplateEditorComponent {
     maxCharacters = 3400;
     currentCharCount = 0;
     isTyping = false;
+    isAccordionOpen = true;
 
     constructor(
       private route: ActivatedRoute, private communicationService: CommunicationService,private fb: FormBuilder, private router: Router) {}
@@ -95,6 +96,14 @@ export class TemplateEditorComponent {
     }
   redirectTo(url: string) {
     window.location.href = url;
+  }
+
+  toggleAccordion() {
+    this.isAccordionOpen = !this.isAccordionOpen;
+  }
+
+  openExample() {
+    window.open('TemplateExample_LCNew.html', '_blank', 'width=800,height=600');
   }
  
 }

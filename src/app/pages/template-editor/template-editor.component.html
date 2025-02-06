@@ -19,7 +19,8 @@
       </div>
   
       <h2 class="text-[22px] text-black font-semibold flex items-center gap-2 ml-7">
-        <i class="icon icon-eye text-black"></i> View Email Template
+        <i class="icon icon-edit text-black"></i>  Email Template Editor
+
       </h2>
   
       <div class="bg-white mt-4 rounded-lg border shadow-sm mb-2 p-8 mx-auto max-w-[1100px]">
@@ -57,11 +58,41 @@
             </button>
           </form>
         </ng-container>
+
+        <!-- FAQ Accordion Section -->
+        <button
+        class="mt-2 flex items-center w-full -ml-4 text-[14px] hover:text-[#23527c] text-left font-bold text-[#337ab7] py-2 px-4 rounded-md transition duration-300"
+        (click)="toggleAccordion()"
+        [attr.aria-expanded]="isAccordionOpen">
+        <span [class.rotate-180]="isAccordionOpen" class="icon icon-angle-top transition-transform duration-300"></span>
+        <span class="ml-1">What is Template Name and Template Text?</span>
+      </button>
+      
+      <div *ngIf="isAccordionOpen" class="accordionContent p-4 -mt-2 ">
+        <strong class="block  font-bold text-[14px] -ml-4">Template Name</strong>
+        <p class="text-[14px] text-gray-700  -ml-4">
+          A piece of text that makes a tag for an email template so that you can easily pick your desired one.
+        </p>
+        <p class="text-[14px] text-gray-700 mt-2 -ml-4">
+          You can type maximum <strong class="font-bold">15</strong> characters for a <strong>Template Name</strong>.</p>
+        <p class="text-[14px] text-gray-700 mt-2 -ml-4">
+            <strong class="font-bold">Template text</strong> is  simple paragraph that can be used as your email body which you are supposed to send.</p>
+      
+        <a
+          href="javascript:void(0)"
+          id="mail_sample"
+          class="text-[#337ab7] text-[14px] hover:text-[#23527c] mt-3 inline-block -ml-4"
+          (click)="openExample()"
+          aria-label="View example of email template(s)">
+          View example
+        </a>
+      </div>
+      
   
         <ng-template #loading>
           <p class="text-[#212121]">Loading email template...</p>
         </ng-template>
       </div>
     </div>
-  </div>
+  
   
