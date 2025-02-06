@@ -1,5 +1,5 @@
 import { Component, signal, WritableSignal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommunicationService } from '../../Services/communication.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -16,9 +16,12 @@ export class TemplateEditorComponent {
     templateID!: number;
     companyId!: string;
     templateForm!: FormGroup;
+    maxCharacters = 3400;
+    currentCharCount = 0;
+    isTyping = false;
 
     constructor(
-      private route: ActivatedRoute, private communicationService: CommunicationService,private fb: FormBuilder) {}
+      private route: ActivatedRoute, private communicationService: CommunicationService,private fb: FormBuilder, private router: Router) {}
   
     ngOnInit(): void {
       this.route.queryParams.subscribe(params => {
@@ -30,7 +33,7 @@ export class TemplateEditorComponent {
       });
       this.templateForm = this.fb.group({
         name: ['', [Validators.required, Validators.maxLength(15)]],
-        content: ['', [Validators.required, Validators.maxLength(3000)]],
+        content: ['', [Validators.required, Validators.maxLength(3400)]],
       });
     }
   
@@ -73,8 +76,7 @@ export class TemplateEditorComponent {
       this.communicationService.emailTemplateUpdate(this.companyId, updatedTemplate).subscribe(
         (response) => {
           if (response.responseCode === 1) { 
-            alert('Template updated successfully!');
-            this.loadTemplate();
+            this.router.navigate(['/email-template']); 
           } else {
             console.error('Error in response:', response);
           }
@@ -84,7 +86,13 @@ export class TemplateEditorComponent {
         }
       );
     }
-  
+    updateCharacterCount(): void {
+      const contentControl = this.templateForm.get('content');
+      if (contentControl) {
+        this.currentCharCount = contentControl.value.length;
+        this.isTyping = this.currentCharCount > 0;
+      }
+    }
   redirectTo(url: string) {
     window.location.href = url;
   }

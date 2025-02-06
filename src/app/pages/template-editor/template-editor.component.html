@@ -25,25 +25,29 @@
       <div class="bg-white mt-4 rounded-lg border shadow-sm mb-2 p-8 mx-auto max-w-[1100px]">
         <ng-container *ngIf="templateDetails() as template; else loading">
           <form [formGroup]="templateForm">
-            <label class="block text-sm font-bold text-gray-700" for="name">Template Name</label>
+            <label class="block text-sm font-bold mb-2 text-gray-700" for="name">Template Name (required)</label>
             <input
               id="name"
               type="text"
-              class="form-control search_box_content actionCaller w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
+              class="form-control search_box_content actionCaller w-full px-2 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
               placeholder="Type template name"
               formControlName="name"
               maxlength="15" />
   
-            <p class="text-gray-500 text-xs mt-1">Last Update: {{ template.lastUpdated | date: 'medium' }}</p>
+            <p class="text-black text-[14px] mt-1">Last Update: {{ template.lastUpdated | date: 'medium' }}</p>
   
-            <label class="block mt-4 text-sm font-bold text-gray-700" for="content">Template Text</label>
+            <label class="block mt-4 text-sm font-bold mb-2 text-gray-700" for="content">Template Text (required)</label>
             <textarea
               id="content"
               class="form-control w-full px-4 py-2 border rounded-md focus:ring-blue-500 focus:border-blue-500"
               formControlName="content"
               rows="5"
-              maxlength="3000"></textarea>
-  
+              maxlength="3400"
+              (input)="updateCharacterCount()"></textarea>
+              
+              <p *ngIf="isTyping" class="text-sm text-gray-600">
+                You can type maximum  <span class="text-red-500 mr-1">{{ maxCharacters - currentCharCount }}</span>character(s).
+              </p>
             <button
               type="button"
               class="mt-4 text-[14px] bg-[#337ab7] hover:bg-[#2e6da4] text-white font-sans px-4 py-2 rounded-md transition duration-300"
