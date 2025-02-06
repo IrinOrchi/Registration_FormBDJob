@@ -58,4 +58,7 @@ export class EmailTemplateComponent {
   viewTemplate(templateID: number) {
     this.router.navigate(['/template-viewer'], { queryParams: { templateID: templateID, companyId: this.companyId } });
   }
+  viewTemplateEditor(templateID: number) {
+    this.router.navigate(['/template-editor'], { queryParams: { templateID: templateID, companyId: this.companyId } });
+  }
 }

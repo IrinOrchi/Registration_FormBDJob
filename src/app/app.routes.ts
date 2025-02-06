@@ -7,6 +7,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { CommunicationComponent } from './pages/communication/communication.component';
 import { EmailTemplateComponent } from './pages/email-template/email-template.component';
 import { TemplateViewerComponent } from './pages/template-viewer/template-viewer.component';
+import { TemplateEditorComponent } from './pages/template-editor/template-editor.component';
 
 export const routes: Routes = [
     {
@@ -44,5 +45,9 @@ export const routes: Routes = [
     {
         path:'template-viewer',
         component: TemplateViewerComponent
+    },
+    {
+        path:'template-editor',
+        component: TemplateEditorComponent
     },
 ];

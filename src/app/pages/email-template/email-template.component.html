@@ -71,7 +71,8 @@
                 </button>
                 <button [style.backgroundColor]="rowHoverIndex === i ? '#008A22' : '#f0f0f0'" 
                 [style.color]="rowHoverIndex === i ? 'white' : '#4a4a4a'"
-                class="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 flex items-center gap-1 hover:text-white">
+                class="px-3 py-1 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 flex items-center gap-1 hover:text-white"
+                (click)="viewTemplateEditor(template.templateID)">
                   Edit
                 </button>
               </div>
