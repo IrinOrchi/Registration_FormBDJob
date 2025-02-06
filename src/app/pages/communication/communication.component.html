@@ -100,7 +100,7 @@
   
 
   <div class="bg-white mt-4 rounded-lg border shadow-sm mb-2 p-4">
-    <h2 class="text-lg font-semibold flex items-center gap-2">
+    <h2 class="text-lg font-semibold flex items-center -ml-4 gap-2">
       <span class="icon-envelope ml-4"></span> Jobwise emails sent to applicants
     </h2>
 
@@ -125,21 +125,27 @@
       <table class="min-w-full divide-y divide-gray-200 bg-white">
         <thead class="bg-gray-500">
           <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Job</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Published Date</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Sent Email(s)</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Read Email(s)</th>
+            <th class="p-3 pl-8 text-left text-[14px] font-medium text-white uppercase tracking-wider">#</th>
+            <th class="p-3 pl-8 text-left text-[14px] font-medium text-white uppercase tracking-wider">Job</th>
+            <th class="p-3 pl-8 text-left text-[14px] font-medium text-white uppercase tracking-wider">Published Date</th>
+            <th class="p-3 pl-8 text-left text-[14px] font-medium text-white uppercase tracking-wider">Sent Email(s)</th>
+            <th class="p-3 pl-8 text-left text-[14px] font-medium text-white uppercase tracking-wider">Read Email(s)</th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
           <ng-container *ngIf="jobs.length > 0; else noData">
-          <tr *ngFor="let job of jobs">
-            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ job.job }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+            <tr *ngFor="let job of jobs; let i = index">
+              <td class="p-3 text-left text-[12px] pl-8">
+                <span class="bg-[#595959] text-white rounded-full w-[18px] h-[18px] flex items-center justify-center font-bold">
+                  {{ i + 1 }}
+                </span>
+              </td>
+            <td class="p-3 pl-8 whitespace-nowrap text-sm font-medium text-gray-900">{{ job.job }}</td>
+            <td class="p-3 pl-8 whitespace-nowrap text-sm text-gray-500">
               <span class="icon icon-calendar mr-2"></span>{{ job.publishDate | date }}
             </td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ job.sentEmail }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ job.readEmail }}</td>
+            <td class="p-3 pl-8 whitespace-nowrap text-sm text-gray-500">{{ job.sentEmail }}</td>
+            <td class="p-3 pl-8 whitespace-nowrap text-sm text-gray-500">{{ job.readEmail }}</td>
           </tr>
       </ng-container>
       </tbody>
