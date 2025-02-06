@@ -1,5 +1,5 @@
 import { Component, signal, WritableSignal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommunicationService } from '../../Services/communication.service';
 import { CommonModule, DatePipe } from '@angular/common';
 
@@ -11,11 +11,11 @@ import { CommonModule, DatePipe } from '@angular/common';
   styleUrl: './template-viewer.component.scss'
 })
 export class TemplateViewerComponent {
-  templateDetails: WritableSignal<{ name: string; lastUpdated: Date; content: string } | null> = signal(null);
+  templateDetails: WritableSignal<{ name: string; lastUpdated: Date; content: string,templateID: number; } | null> = signal(null);
   templateID!: number;
   companyId!: string;
   constructor(
-    private route: ActivatedRoute, private communicationService: CommunicationService) {}
+      private route: ActivatedRoute, private router: Router, private communicationService: CommunicationService) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -34,7 +34,8 @@ export class TemplateViewerComponent {
           this.templateDetails.set({
             name: response.data.templateTitle, 
             lastUpdated: new Date(response.data.updatedOn),
-            content: response.data.templateText 
+            content: response.data.templateText ,
+            templateID: this.templateID 
           });
         }
       },
@@ -50,5 +51,7 @@ export class TemplateViewerComponent {
   redirectTo(url: string) {
     window.location.href = url;
   }
-
+  viewTemplateEditor(templateID: number) {
+    this.router.navigate(['/template-editor'], { queryParams: { templateID: templateID, companyId: this.companyId } });
+  }
 }
