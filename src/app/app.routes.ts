@@ -8,6 +8,7 @@ import { CommunicationComponent } from './pages/communication/communication.comp
 import { EmailTemplateComponent } from './pages/email-template/email-template.component';
 import { TemplateViewerComponent } from './pages/template-viewer/template-viewer.component';
 import { TemplateEditorComponent } from './pages/template-editor/template-editor.component';
+import { SentEmailsComponent } from './pages/sent-emails/sent-emails.component';
 
 export const routes: Routes = [
     {
@@ -49,5 +50,9 @@ export const routes: Routes = [
     {
         path:'template-editor',
         component: TemplateEditorComponent
+    },
+    {
+        path:"sent-emails",
+        component: SentEmailsComponent
     },
 ];
