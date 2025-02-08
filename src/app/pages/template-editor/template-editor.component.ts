@@ -107,5 +107,6 @@ export class TemplateEditorComponent {
   openExample() {
     this.emailModal.openModal();
   }
+  
  
 }
