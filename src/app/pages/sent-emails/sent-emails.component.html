@@ -37,7 +37,12 @@
           <td class="p-3">
             <input type="checkbox" />
           </td>
-          <td class="p-3">{{ email.name }}</td>
+          <td class="p-3 flex items-center gap-2">
+            <!-- Conditional icon with tooltip based on the isRead status -->
+            <span *ngIf="email.isRead" class="icon icon-check-double text-gray-500" title="Read"></span>
+            <span *ngIf="!email.isRead" class="icon icon-check text-gray-500" title="Unread"></span>
+            {{ email.name }}
+          </td>
           <td class="p-3 font-semibold">{{ email.subject }}</td>
           <td class="p-3 flex items-center gap-2">
             <span class="icon icon-calendar text-gray-500"></span> {{ email.date }}
@@ -49,6 +54,7 @@
           </td>
         </tr>
       </tbody>
+      
     </table>
   </div>
 
