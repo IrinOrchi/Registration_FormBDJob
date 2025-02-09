@@ -100,10 +100,10 @@ export class CommunicationComponent implements OnInit {
   redirectToEmailTemplate(): void {
     this.router.navigate(['/email-template'], { queryParams: { companyId: this.companyId } });
   }
-  redirectToSentEmails(): void {
-    this.router.navigate(['/sent-emails'], { queryParams: { companyId: this.companyId } });
+  redirectToSentEmails() {
+    console.log("Navigating to sent emails...");
+    this.router.navigate(['/sent-emails']); 
   }
-  
 }
   
 
