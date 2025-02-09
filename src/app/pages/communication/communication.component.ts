@@ -11,7 +11,7 @@ import { Job } from '../../Models/communication';
 @Component({
   selector: 'app-communication',
   standalone: true,
-  imports: [ReactiveFormsModule , CommonModule, SalesContactComponent,],
+  imports: [ReactiveFormsModule , CommonModule,],
   templateUrl: './communication.component.html',
   styleUrl: './communication.component.scss'
 })
@@ -32,34 +32,46 @@ export class CommunicationComponent implements OnInit {
     this.communicationService.getCompanyId();
     this.fetchEmails();
     this.fetchJobs();
-    this.totalPagesArray = Array.from({ length: this.totalPages }, (_, i) => i + 1);
 
   }
   redirectTo(url: string) {
     window.location.href = url;
   }
-  fetchJobs(searchQuery: string = ''): void {
-    const companyId = 'ZxU0PRC=';  
-    const pageNo = this.currentPage; 
+  // fetchJobs(searchQuery: string = ''): void {
+  //   const companyId = 'ZxU0PRC=';  
+  //   const pageNo = this.currentPage; 
     
-    this.communicationService.getJobEmails(companyId, pageNo, searchQuery).subscribe(response => {
-      if (response.data && response.data.list && response.data.list.length > 0) {
+  //   this.communicationService.getJobEmails(companyId, pageNo, searchQuery).subscribe(response => {
+  //     if (response.data && response.data.list && response.data.list.length > 0) {
+  //       this.jobs = response.data.list;
+  //     } else {
+  //       this.jobs = []; 
+  //     }
+  //   });
+  // }
+  
+  fetchJobs(searchQuery: string = ''): void {
+    this.communicationService.getJobEmails(this.companyId, this.currentPage, searchQuery).subscribe(response => {
+      if (response.data && response.data.list?.length > 0) {
         this.jobs = response.data.list;
+        this.totalPages = response.data.totalPages;
+        this.totalPagesArray = Array.from({ length: this.totalPages }, (_, i) => i + 1);
       } else {
-        this.jobs = []; 
+        this.jobs = [];
       }
     });
   }
-  
-
   onSearch(): void {
     const query = this.keyword.value?.trim();
     this.fetchJobs(query);
   }
 
   changePage(direction: number): void {
-    this.currentPage += direction;
-    this.fetchJobs();
+    const newPage = this.currentPage + direction;
+    if (newPage >= 1 && newPage <= this.totalPages) {
+      this.currentPage = newPage;
+      this.fetchJobs();
+    }
   }
   fetchEmails(): void {
     this.communicationService.getEmailsOverview('ZxU0PRC%3D').subscribe(response => {
@@ -87,6 +99,9 @@ export class CommunicationComponent implements OnInit {
   }
   redirectToEmailTemplate(): void {
     this.router.navigate(['/email-template'], { queryParams: { companyId: this.companyId } });
+  }
+  redirectToSentEmails(): void {
+    this.router.navigate(['/sent-emails'], { queryParams: { companyId: this.companyId } });
   }
   
 }

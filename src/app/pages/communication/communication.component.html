@@ -57,7 +57,8 @@
             <div class="flex items-center gap-1 text-gray-700">
               <i class="icon icon-check text-md text-gray-600"></i> 
               <span>Sent</span>
-              <span class="px-3  text-orange-700 bg-[#fbe9e9]  border border-[#ffab91] rounded-full text-sm font-semibold transition duration-300 hover:bg-orange-800 hover:text-white">
+              <span class="px-3  text-orange-700 bg-[#fbe9e9]  border border-[#ffab91] rounded-full text-sm font-semibold transition duration-300 hover:bg-orange-800 hover:text-white cursor-pointer"
+              (click)="redirectToSentEmails()">
                 {{ sentEmails().applicants }}
               </span>
             </div>

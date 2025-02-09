@@ -13,7 +13,6 @@ export class CommunicationService {
   private viewTemplatesUrl = 'https://localhost:7004/api/EmailTemplate/EmailTemplateViewer';
   private emailTemplateUrl = 'https://localhost:7004/api/EmailTemplate/EmailTemplateEditor';
   private emailUpdateTemplateUrl = 'https://localhost:7004/api/EmailTemplate/UpdateEmailTemplate';
-  // private companyId: string = 'ZxU0PRC=';
   constructor(private http: HttpClient) {}
 
   setCompanyId(companyId: string): void {
