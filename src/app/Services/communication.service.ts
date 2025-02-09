@@ -13,6 +13,8 @@ export class CommunicationService {
   private viewTemplatesUrl = 'https://localhost:7004/api/EmailTemplate/EmailTemplateViewer';
   private emailTemplateUrl = 'https://localhost:7004/api/EmailTemplate/EmailTemplateEditor';
   private emailUpdateTemplateUrl = 'https://localhost:7004/api/EmailTemplate/UpdateEmailTemplate';
+  private getemailsinboxUrl = 'https://localhost:7004/api/EmailsOverview/GetEmailsInbox';
+
   constructor(private http: HttpClient) {}
 
   setCompanyId(companyId: string): void {
@@ -56,6 +58,13 @@ export class CommunicationService {
   }
   emailTemplateUpdate(companyId: string, templateData: any): Observable<any> {
     return this.http.post<any>(this.emailUpdateTemplateUrl, { companyId, ...templateData });
+  }
+  getemailsinbox(companyId: string, c_Type: string = 'cv',): Observable<any> {
+    const params = new HttpParams()
+      .set('companyId', companyId)
+      .set('c_Type', c_Type);
+    
+    return this.http.get<any>(this.getemailsinboxUrl, { params });
   }
 }
 

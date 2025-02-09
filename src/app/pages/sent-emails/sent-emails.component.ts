@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { CommunicationService } from '../../Services/communication.service';
 
 @Component({
   selector: 'app-sent-emails',
@@ -9,17 +10,37 @@ import { Component } from '@angular/core';
   styleUrl: './sent-emails.component.scss'
 })
 export class SentEmailsComponent {
-  emails = [
-    { name: 'One Test Name', subject: 'CV bank detail send', date: '2 Oct 2017' },
-    { name: 'One Test Name', subject: 'CV summary', date: '2 Oct 2017' },
-    { name: 'Mst. Dilruba Khatun', subject: 'Invite test purpose CV detail', date: '27 Sep 2017' },
-    { name: 'Test tank', subject: 'CV details', date: '13 Aug 2017' },
-    { name: 'Susmita Mridha', subject: 'CV send mail', date: '8 May 2017' },
-    { name: 'Susmita Mridha', subject: 'CV summary', date: '8 May 2017' },
-    { name: 'Shuvashis Ghosh', subject: 'Test', date: '2 Apr 2017' },
-    { name: 'Rukaia Rafa', subject: 'Test', date: '25 Feb 2017' },
-    { name: 'Mst. Dilruba Khatun', subject: 'App test summary CV', date: '29 Jan 2017' },
-    { name: 'Ayesha Siddiqua', subject: 'kjgh', date: '29 Oct 2016' }
-  ];
+  emails: any[] = [];
+  totalRecords: number = 0;
+  totalPages: number = 0;
 
+  constructor(private communicationService: CommunicationService) {}
+
+  ngOnInit(): void {
+    this.loadSentEmails();
+  }
+
+  loadSentEmails(): void {
+    const companyId = this.communicationService.getCompanyId();
+    
+    if (!companyId) {
+      console.error('Company ID is missing');
+      return;
+    }
+
+    this.communicationService.getemailsinbox(companyId).subscribe({
+      next: (response) => {
+        if (response.responseType === 'success' && response.data) {
+          this.emails = response.data.emails;
+          this.totalRecords = response.data.totalRecords;
+          this.totalPages = response.data.totalPages;
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching sent emails:', error);
+      }
+    });
+  }
 }
+
+
