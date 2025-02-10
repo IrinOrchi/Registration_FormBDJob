@@ -28,32 +28,49 @@ export class SentEmailsComponent {
     this.loadSentEmails(this.currentPage);
   }
 
-  loadSentEmails(pageNo: number): void {
+  loadSentEmails(pageNo: number, r_Type?: number): void {
     this.loading.set(true);
     const companyId = this.communicationService.getCompanyId();
-    const r_Type = this.getReadStatusValue(this.selectedReadStatus()) ?? 0;
-
+  
     let category = this.selectedEmailCategory();
     if (this.isInviteChecked()) {
       category = 'iv'; 
     }
-
-    this.communicationService.getemailsinbox(companyId, pageNo, category, this.pageSize, r_Type)
-      .subscribe({
-        next: (response) => {
-          if (response.responseType === 'success' && response.data) {
-            this.emails = response.data.emails;
-            this.totalRecords = response.data.totalRecords;
-            this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-            this.currentPage = pageNo;
-          }
-          this.loading.set(false);
-        },
-        error: (error) => {
-          console.error('Error fetching sent emails:', error);
-        },
-      });
+  
+    if (r_Type === undefined) {
+      this.communicationService.getemailsinbox(companyId, pageNo, category, this.pageSize)
+        .subscribe({
+          next: (response) => {
+            this.handleResponse(response, pageNo);
+          },
+          error: (error) => {
+            console.error('Error fetching sent emails:', error);
+          },
+        });
+    } else {
+      this.communicationService.getemailsinbox(companyId, pageNo, category, this.pageSize, r_Type)
+        .subscribe({
+          next: (response) => {
+            this.handleResponse(response, pageNo);
+          },
+          error: (error) => {
+            console.error('Error fetching sent emails:', error);
+          },
+        });
+    }
   }
+  
+  handleResponse(response: any, pageNo: number): void {
+    if (response.responseType === 'success' && response.data) {
+      this.emails = response.data.emails;
+      this.totalRecords = response.data.totalRecords;
+      this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
+      this.currentPage = pageNo;
+    }
+    this.loading.set(false);
+  }
+  
+
 
   goToPage(pageNo: number): void {
     if (pageNo >= 1 && pageNo <= this.totalPages) {
@@ -69,8 +86,10 @@ export class SentEmailsComponent {
 
   updateReadStatus(status: string): void {
     this.selectedReadStatus.set(status);
-    this.loadSentEmails(1);
+    const r_Type = this.getReadStatusValue(status) ?? undefined;
+    this.loadSentEmails(1, r_Type);
   }
+  
 
   getReadStatusValue(status: string): number | null {
     if (status === 'read') return 1;

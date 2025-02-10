@@ -14,6 +14,7 @@ export class CommunicationService {
   private emailTemplateUrl = 'https://localhost:7004/api/EmailTemplate/EmailTemplateEditor';
   private emailUpdateTemplateUrl = 'https://localhost:7004/api/EmailTemplate/UpdateEmailTemplate';
   private getemailsinboxUrl = 'https://localhost:7004/api/EmailsOverview/GetEmailsInbox';
+  private emailDetails = 'https://localhost:7004/api/EmailsOverview/GetEmailsDetails';
 
   constructor(private http: HttpClient) {}
 
@@ -59,16 +60,25 @@ export class CommunicationService {
   emailTemplateUpdate(companyId: string, templateData: any): Observable<any> {
     return this.http.post<any>(this.emailUpdateTemplateUrl, { companyId, ...templateData });
   }
-  getemailsinbox(companyId: string, pageNo: number = 1, c_Type: string = 'cv', pageSize: number = 10,r_Type: number): Observable<any> {
-    const params = new HttpParams()
+  getemailsinbox(companyId: string, pageNo: number = 1, c_Type: string = 'cv', pageSize: number = 10,r_Type?: number): Observable<any> {
+    let params = new HttpParams()
       .set('companyId', companyId)
       .set('c_Type', c_Type)
       .set('pageNo', pageNo)
       .set('pageSize', pageSize)
-      .set('r_Type', r_Type); 
-     
+      if (r_Type !== undefined) {
+        params = params.set('r_Type', r_Type);
+      }
+         
     
     return this.http.get<any>(this.getemailsinboxUrl, { params });
+  }
+  getEmailDetails(rId: number, name: string): Observable<any> {
+    const params = new HttpParams()
+      .set('rId', rId)
+      .set('name', name);
+  
+    return this.http.get<any>(this.emailDetails, { params });
   }
   
   
