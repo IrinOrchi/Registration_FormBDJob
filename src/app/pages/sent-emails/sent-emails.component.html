@@ -85,27 +85,46 @@
         </ng-container>
       
         <!-- Data Table Rows -->
-        <ng-template #dataTable>
-          <tr *ngFor="let email of emails" class="border-t">
-            <td class="p-3">
-              <input type="checkbox" />
-            </td>
-            <td class="p-3 flex items-center gap-2">
-              <span *ngIf="email.isRead" class="icon icon-check-double text-gray-500" title="Read"></span>
-              <span *ngIf="!email.isRead" class="icon icon-check text-gray-500" title="Unread"></span>
-              {{ email.name }}
-            </td>
-            <td class="p-3 font-semibold">{{ email.subject }}</td>
-            <td class="p-3 flex items-center gap-2">
-              <span class="icon icon-calendar text-gray-500"></span> {{ email.date }}
-            </td>
-            <td class="p-3">
-              <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
-                Delete
-              </button>
-            </td>
-          </tr>
-        </ng-template>
+      <!-- Data Table Rows -->
+  <ng-template #dataTable>
+    <tr *ngFor="let email of emails; let i = index" class="border-t">
+      <td class="p-3">
+        <input type="checkbox" />
+      </td>
+      <td class="p-3 flex items-center gap-2 cursor-pointer" (click)="toggleEmailDetail(i)">
+        <span *ngIf="email.isRead" class="icon icon-check-double text-gray-500" title="Read"></span>
+        <span *ngIf="!email.isRead" class="icon icon-check text-gray-500" title="Unread"></span>
+        {{ email.name }}
+      </td>
+      <td class="p-3 font-semibold cursor-pointer" (click)="toggleEmailDetail(i)">
+        {{ email.subject }}
+      </td>
+      <td class="p-3 flex items-center gap-2">
+        <span class="icon icon-calendar text-gray-500"></span> {{ email.date }}
+      </td>
+      <td class="p-3">
+        <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+          Delete
+        </button>
+      </td>
+    </tr>
+    <!-- Expanded Email Content -->
+    <tr *ngIf="expandedEmailIndex === emails[0].rlId">
+      <td colspan="5" class="bg-gray-100 p-4">
+        <div class="text-lg font-semibold">Company: {{ emailDetail?.company }}</div>
+        <div class="text-gray-600">Date: {{ emailDetail?.date | date: 'medium' }}</div>
+        <div class="text-gray-700">Subject: {{ emailDetail?.subject }}</div>
+        <div class="mt-2">
+          <div class="font-medium">Sender: {{ emailDetail?.sender }}</div>
+          <div class="font-medium">Designation: {{ emailDetail?.designation }}</div>
+        </div>
+        <div class="mt-2">
+          <div class="font-semibold">Body:</div>
+          <div class="text-gray-700">{{ emailDetail?.body }}</div>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
       </tbody>  
     </table>
   </div>

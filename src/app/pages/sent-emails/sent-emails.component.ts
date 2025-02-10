@@ -16,6 +16,9 @@ export class SentEmailsComponent {
   currentPage: number = 1;
   pageSize: number = 10;
   loading = signal<boolean>(false); 
+  emailDetail: any = null; 
+  expandedEmailIndex: number | null = null;  
+
 
 
   selectedEmailCategory = signal<string>('cv');
@@ -68,6 +71,30 @@ export class SentEmailsComponent {
       this.currentPage = pageNo;
     }
     this.loading.set(false);
+  }
+  toggleEmailDetail(index: number): void {
+    if (this.expandedEmailIndex === index) {
+      this.expandedEmailIndex = null;  
+      this.emailDetail = null;  
+    } else {
+      this.expandedEmailIndex = index;  
+      const rId = this.emails[index].rId;
+      const name = this.emails[index].name;
+      this.getEmailDetails(rId, name);
+    }
+  }
+
+  getEmailDetails(rId: number, name: string): void {
+    this.communicationService.getEmailDetails(rId, name).subscribe({
+      next: (response) => {
+        if (response.responseType === 'success' && response.data) {
+          this.emailDetail = response.data;
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching email details:', error);
+      },
+    });
   }
   
 
