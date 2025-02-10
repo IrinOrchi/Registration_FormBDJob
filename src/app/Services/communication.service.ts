@@ -59,12 +59,14 @@ export class CommunicationService {
   emailTemplateUpdate(companyId: string, templateData: any): Observable<any> {
     return this.http.post<any>(this.emailUpdateTemplateUrl, { companyId, ...templateData });
   }
-  getemailsinbox(companyId: string, pageNo: number = 1, c_Type: string = 'cv', pageSize: number = 10): Observable<any> {
+  getemailsinbox(companyId: string, pageNo: number = 1, c_Type: string = 'cv', pageSize: number = 10,r_Type: number): Observable<any> {
     const params = new HttpParams()
       .set('companyId', companyId)
       .set('c_Type', c_Type)
       .set('pageNo', pageNo)
-      .set('pageSize', pageSize); 
+      .set('pageSize', pageSize)
+      .set('r_Type', r_Type); 
+     
     
     return this.http.get<any>(this.getemailsinboxUrl, { params });
   }

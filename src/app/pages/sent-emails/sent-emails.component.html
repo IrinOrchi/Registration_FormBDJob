@@ -7,28 +7,42 @@
     </button>
   </div>
 
-<!-- Filters -->
-<div class="mt-4 text-gray-700">
-  <!-- First group: Email categories -->
-  <div class="flex flex-wrap gap-4">
-    <label><input type="radio" name="emailCategory" class="mr-2" /> All sent emails</label>
-    <label><input type="radio" name="emailCategory" class="mr-2" checked /> Sent emails using CV Bank</label>
-    <label><input type="radio" name="emailCategory" class="mr-2" /> Sent emails to applicants</label>
-  </div>
+  <!-- Filters -->
+  <div class="mt-4 text-gray-700">
+    <div class="flex flex-wrap gap-4">
+      <label>
+        <input type="radio" name="emailCategory" class="mr-2" [checked]="selectedEmailCategory() === 'all'" (change)="updateEmailCategory('all')" />
+        All sent emails
+      </label>
+      <label>
+        <input type="radio" name="emailCategory" class="mr-2" [checked]="selectedEmailCategory() === 'cv'" (change)="updateEmailCategory('cv')" />
+        Sent emails using CV Bank
+      </label>
+      <label>
+        <input type="radio" name="emailCategory" class="mr-2" [checked]="selectedEmailCategory() === 'applicants'" (change)="updateEmailCategory('applicants')" />
+        Sent emails to applicants
+      </label>
+    </div>
 
-  <!-- Second group: Read status -->
-  <div class="flex flex-wrap gap-4 mt-2">
-    <label><input type="radio" name="readStatus" class="mr-2" /> Read</label>
-    <label><input type="radio" name="readStatus" class="mr-2" /> Unread</label>
-    <label><input type="radio" name="readStatus" class="mr-2" /> All</label>
-  </div>
+    <div class="flex flex-wrap gap-4 mt-2">
+      <label>
+        <input type="radio" name="readStatus" class="mr-2" [checked]="selectedReadStatus() === 'read'" (change)="updateReadStatus('read')" />
+        Read
+      </label>
+      <label>
+        <input type="radio" name="readStatus" class="mr-2" [checked]="selectedReadStatus() === 'unread'" (change)="updateReadStatus('unread')" />
+        Unread
+      </label>
+      <label>
+        <input type="radio" name="readStatus" class="mr-2" [checked]="selectedReadStatus() === 'all'" (change)="updateReadStatus('all')" />
+        All
+      </label>
+    </div>
 
-  <!-- Checkbox for Invite -->
-  <div class="mt-2">
-    <label><input type="checkbox" class="mr-2" /> Invite</label>
+    <div class="mt-2">
+      <label><input type="checkbox" class="mr-2" /> Invite</label>
+    </div>
   </div>
-</div>
-
 
   <!-- Table -->
   <div class="mt-4 bg-white shadow-md rounded-lg overflow-hidden">
@@ -50,7 +64,6 @@
             <input type="checkbox" />
           </td>
           <td class="p-3 flex items-center gap-2">
-            <!-- Conditional icon with tooltip based on the isRead status -->
             <span *ngIf="email.isRead" class="icon icon-check-double text-gray-500" title="Read"></span>
             <span *ngIf="!email.isRead" class="icon icon-check text-gray-500" title="Unread"></span>
             {{ email.name }}
@@ -66,54 +79,30 @@
           </td>
         </tr>
       </tbody>
-      
     </table>
   </div>
 
   <!-- Pagination -->
   <div class="mt-4 flex justify-center space-x-2">
-    <button
-      class="px-3 py-1 border rounded"
-      [class.bg-blue-500]="currentPage === 1"
-      [class.text-white]="currentPage === 1"
-      (click)="goToPage(1)"
-    >
+    <button class="px-3 py-1 border rounded" [class.bg-blue-500]="currentPage === 1" [class.text-white]="currentPage === 1" (click)="goToPage(1)">
       1
     </button>
 
-    <button
-      *ngIf="currentPage > 2"
-      class="px-3 py-1 border rounded"
-      (click)="goToPage(currentPage - 1)"
-    >
+    <button *ngIf="currentPage > 2" class="px-3 py-1 border rounded" (click)="goToPage(currentPage - 1)">
       Prev
     </button>
 
-    <button
-      *ngFor="let page of [currentPage - 1, currentPage, currentPage + 1]"
-      [hidden]="page < 2 || page > totalPages - 1"
-      class="px-3 py-1 border rounded"
-      [class.bg-blue-500]="page === currentPage"
-      [class.text-white]="page === currentPage"
-      (click)="goToPage(page)"
-    >
+    <button *ngFor="let page of [currentPage - 1, currentPage, currentPage + 1]" [hidden]="page < 2 || page > totalPages - 1"
+      class="px-3 py-1 border rounded" [class.bg-blue-500]="page === currentPage" [class.text-white]="page === currentPage" (click)="goToPage(page)">
       {{ page }}
     </button>
 
-    <button
-      *ngIf="currentPage < totalPages - 1"
-      class="px-3 py-1 border rounded"
-      (click)="goToPage(currentPage + 1)"
-    >
+    <button *ngIf="currentPage < totalPages - 1" class="px-3 py-1 border rounded" (click)="goToPage(currentPage + 1)">
       Next
     </button>
 
-    <button
-      class="px-3 py-1 border rounded"
-      [class.bg-blue-500]="currentPage === totalPages"
-      [class.text-white]="currentPage === totalPages"
-      (click)="goToPage(totalPages)"
-    >
+    <button class="px-3 py-1 border rounded" [class.bg-blue-500]="currentPage === totalPages" [class.text-white]="currentPage === totalPages"
+      (click)="goToPage(totalPages)">
       {{ totalPages }}
     </button>
   </div>
