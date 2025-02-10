@@ -121,9 +121,12 @@
         Search
       </button>
     </div>
-    
+      <!-- Loader -->
+<div *ngIf="loading()" class="flex justify-center items-center py-10">
+  <div class="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+</div>
     <!-- Job Emails Table -->
-    <div class="max-w-6xl mx-auto mt-4 rounded-lg border border-gray-200">
+    <div *ngIf="!loading()" class="max-w-6xl mx-auto mt-4 rounded-lg border border-gray-200">
       <table class="min-w-full divide-y divide-gray-200 bg-white">
         <thead class="bg-gray-500">
           <tr>

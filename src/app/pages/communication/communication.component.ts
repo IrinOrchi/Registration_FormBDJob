@@ -23,6 +23,8 @@ export class CommunicationComponent implements OnInit {
   currentPage = 1;
   pageSize = 10;
   totalPages = 1;
+  loading = signal<boolean>(false); 
+
   totalPagesArray: number[] = [];
   companyId: string = 'ZxU0PRC='; 
   constructor(private communicationService: CommunicationService, private router: Router) {}
@@ -51,6 +53,7 @@ export class CommunicationComponent implements OnInit {
   // }
   
   fetchJobs(searchQuery: string = ''): void {
+    this.loading.set(true);
     this.communicationService.getJobEmails(this.companyId, this.currentPage, searchQuery).subscribe(response => {
       if (response.data && response.data.list?.length > 0) {
         this.jobs = response.data.list;
@@ -59,6 +62,8 @@ export class CommunicationComponent implements OnInit {
       } else {
         this.jobs = [];
       }
+      this.loading.set(false);
+
     });
   }
   onSearch(): void {

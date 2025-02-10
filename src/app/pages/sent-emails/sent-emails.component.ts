@@ -15,6 +15,8 @@ export class SentEmailsComponent {
   totalPages: number = 0;
   currentPage: number = 1;
   pageSize: number = 10;
+  loading = signal<boolean>(false); 
+
 
   selectedEmailCategory = signal<string>('cv');
   selectedReadStatus = signal<string>('all');
@@ -27,6 +29,7 @@ export class SentEmailsComponent {
   }
 
   loadSentEmails(pageNo: number): void {
+    this.loading.set(true);
     const companyId = this.communicationService.getCompanyId();
     const r_Type = this.getReadStatusValue(this.selectedReadStatus()) ?? 0;
 
@@ -44,6 +47,7 @@ export class SentEmailsComponent {
             this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
             this.currentPage = pageNo;
           }
+          this.loading.set(false);
         },
         error: (error) => {
           console.error('Error fetching sent emails:', error);
