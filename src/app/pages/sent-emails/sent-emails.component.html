@@ -109,4 +109,25 @@
       </tbody>  
     </table>
   </div>
+
+ <!-- Pagination -->
+ <div class="mt-4 flex justify-center space-x-2">
+  <button class="px-3 py-1 border rounded" [class.bg-blue-500]="currentPage === 1" [class.text-white]="currentPage === 1" (click)="goToPage(1)">
+    1
+  </button>
+  <button *ngIf="currentPage > 2" class="px-3 py-1 border rounded" (click)="goToPage(currentPage - 1)">
+    Prev
+  </button>
+  <button *ngFor="let page of [currentPage - 1, currentPage, currentPage + 1]" [hidden]="page < 2 || page > totalPages - 1"
+    class="px-3 py-1 border rounded" [class.bg-blue-500]="page === currentPage" [class.text-white]="page === currentPage" (click)="goToPage(page)">
+    {{ page }}
+  </button>
+  <button *ngIf="currentPage < totalPages - 1" class="px-3 py-1 border rounded" (click)="goToPage(currentPage + 1)">
+    Next
+  </button>
+  <button class="px-3 py-1 border rounded" [class.bg-blue-500]="currentPage === totalPages" [class.text-white]="currentPage === totalPages"
+    (click)="goToPage(totalPages)">
+    {{ totalPages }}
+  </button>
+</div>
 </div>
