@@ -14,11 +14,11 @@ export class SentEmailsComponent {
   totalRecords: number = 0;
   totalPages: number = 0;
   currentPage: number = 1;
-  pageSize: number = 10; 
+  pageSize: number = 10;
 
-  
-  selectedEmailCategory = signal<string>('cv'); 
-  selectedReadStatus = signal<string>('all'); 
+  selectedEmailCategory = signal<string>('cv');
+  selectedReadStatus = signal<string>('all');
+  isInviteChecked = signal<boolean>(false); 
 
   constructor(private communicationService: CommunicationService) {}
 
@@ -30,7 +30,12 @@ export class SentEmailsComponent {
     const companyId = this.communicationService.getCompanyId();
     const r_Type = this.getReadStatusValue(this.selectedReadStatus()) ?? 0;
 
-    this.communicationService.getemailsinbox(companyId, pageNo, this.selectedEmailCategory(), this.pageSize, r_Type)
+    let category = this.selectedEmailCategory();
+    if (this.isInviteChecked()) {
+      category = 'iv'; 
+    }
+
+    this.communicationService.getemailsinbox(companyId, pageNo, category, this.pageSize, r_Type)
       .subscribe({
         next: (response) => {
           if (response.responseType === 'success' && response.data) {
@@ -54,7 +59,8 @@ export class SentEmailsComponent {
 
   updateEmailCategory(category: string): void {
     this.selectedEmailCategory.set(category);
-    this.loadSentEmails(1); 
+    this.isInviteChecked.set(false); 
+    this.loadSentEmails(1);
   }
 
   updateReadStatus(status: string): void {
@@ -65,6 +71,17 @@ export class SentEmailsComponent {
   getReadStatusValue(status: string): number | null {
     if (status === 'read') return 1;
     if (status === 'unread') return 0;
-    return null; 
+    return null;
+  }
+
+  isInviteDisabled(): boolean {
+    return this.selectedEmailCategory() === 'cv';
+  }
+
+  toggleInviteSelection(): void {
+    if (!this.isInviteDisabled()) {
+      this.isInviteChecked.set(!this.isInviteChecked());
+      this.loadSentEmails(1);
+    }
   }
 }
