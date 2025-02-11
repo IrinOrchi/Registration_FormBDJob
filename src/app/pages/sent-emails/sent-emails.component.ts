@@ -149,7 +149,4 @@ export class SentEmailsComponent {
       }
     });
   }
-  
-  
-  
 }
