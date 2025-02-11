@@ -84,8 +84,7 @@
           </tr>
         </ng-container>
       
-        <!-- Data Table Rows -->
-      <!-- Data Table Rows -->
+  <!-- Data Table Rows -->
   <ng-template #dataTable>
     <tr *ngFor="let email of emails; let i = index" class="border-t">
       <td class="p-3">
@@ -103,7 +102,8 @@
         <span class="icon icon-calendar text-gray-500"></span> {{ email.date }}
       </td>
       <td class="p-3">
-        <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">
+        <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+        (click)="deleteEmail(email.rId)">
           Delete
         </button>
       </td>

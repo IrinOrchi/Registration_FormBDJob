@@ -14,7 +14,8 @@ export class CommunicationService {
   private emailTemplateUrl = 'https://localhost:7004/api/EmailTemplate/EmailTemplateEditor';
   private emailUpdateTemplateUrl = 'https://localhost:7004/api/EmailTemplate/UpdateEmailTemplate';
   private getemailsinboxUrl = 'https://localhost:7004/api/EmailsOverview/GetEmailsInbox';
-  private emailDetails = 'https://localhost:7004/api/EmailsOverview/GetEmailsDetails';
+  private emailDetailsUrl = 'https://localhost:7004/api/EmailsOverview/GetEmailsDetails';
+  private deleteEmailUrl = 'https://localhost:7004/api/EmailsOverview/DeleteEmails';
 
   constructor(private http: HttpClient) {}
 
@@ -78,9 +79,12 @@ export class CommunicationService {
       .set('rId', rId)
       .set('name', name);
   
-    return this.http.get<any>(this.emailDetails, { params });
+    return this.http.get<any>(this.emailDetailsUrl, { params });
   }
   
+  deleteEmail(requestBody: any): Observable<any> {
+    return this.http.delete<any>(this.deleteEmailUrl, { body: requestBody });
+  }
   
 }
 

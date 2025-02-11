@@ -134,4 +134,22 @@ export class SentEmailsComponent {
       this.loadSentEmails(1);
     }
   }
+  deleteEmail(rId: number): void {
+    const companyId = this.communicationService.getCompanyId();
+    const requestPayload = { companyId, rIds: [rId] };
+  
+    this.communicationService.deleteEmail(requestPayload).subscribe({
+      next: (response) => {
+        if (response.responseType === 'Success') {
+          this.emails = this.emails.filter(email => email.rId !== rId);
+        }
+      },
+      error: (error) => {
+        console.error('Error during delete operation:', error);
+      }
+    });
+  }
+  
+  
+  
 }
