@@ -79,7 +79,7 @@ export class CommunicationComponent implements OnInit {
     }
   }
   fetchEmails(): void {
-    this.communicationService.getEmailsOverview('ZxU0PRC%3D').subscribe(response => {
+    this.communicationService.getEmailsOverview(this.companyId).subscribe(response => {
       if (response.responseType === 'success' && response.data?.list) {
         this.jobs = response.data.list.map((item: any) => ({
           title: item.job,
@@ -106,7 +106,6 @@ export class CommunicationComponent implements OnInit {
     this.router.navigate(['/email-template'], { queryParams: { companyId: this.companyId } });
   }
   redirectToSentEmails() {
-    console.log("Navigating to sent emails...");
     this.router.navigate(['/sent-emails']); 
   }
 }
