@@ -125,50 +125,49 @@
 <div *ngIf="loading()" class="flex justify-center items-center py-10">
   <div class="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
 </div>
-    <!-- Job Emails Table -->
-    <div *ngIf="!loading()" class="max-w-6xl mx-auto mt-4 rounded-lg border border-gray-200">
-      <table class="min-w-full divide-y divide-gray-200 bg-white">
-        <thead class="bg-gray-500">
-          <tr>
-            <th class="p-3 pl-8 text-left text-[14px] font-medium text-white uppercase tracking-wider">#</th>
-            <th class="p-3 pl-8 text-left text-[14px] font-medium text-white uppercase tracking-wider">Job</th>
-            <th class="p-3 pl-8 text-left text-[14px] font-medium text-white uppercase tracking-wider">Published Date</th>
-            <th class="p-3 pl-8 text-left text-[14px] font-medium text-white uppercase tracking-wider">Sent Email(s)</th>
-            <th class="p-3 pl-8 text-left text-[14px] font-medium text-white uppercase tracking-wider">Read Email(s)</th>
-          </tr>
-        </thead>
-        <tbody class="bg-white divide-y divide-gray-200">
-          <ng-container *ngIf="jobs.length > 0; else noData">
-            <tr *ngFor="let job of jobs; let i = index">
-              <td class="p-3 text-left text-[12px] pl-8">
-                <span class="bg-[#595959] text-white rounded-full w-[18px] h-[18px] flex items-center justify-center font-bold">
-                  {{ i + 1 }}
-                </span>
-              </td>
-            <td class="p-3 pl-8 whitespace-nowrap text-sm font-medium text-gray-900">{{ job.job }}</td>
-            <td class="p-3 pl-8 whitespace-nowrap text-sm text-gray-500">
-              <span class="icon icon-calendar mr-2"></span>{{ job.publishDate | date }}
-            </td>
-            <td class="p-3 pl-8 whitespace-nowrap text-sm text-gray-500">{{ job.sentEmail }}</td>
-            <td class="p-3 pl-8 whitespace-nowrap text-sm text-gray-500">{{ job.readEmail }}</td>
-          </tr>
+   <!-- Job Emails Table -->
+<div *ngIf="!loading()" class="max-w-6xl mx-auto mt-4 rounded-lg border border-gray-200">
+  <table class="min-w-full divide-y divide-gray-200 bg-white">
+    <thead class="bg-gray-500">
+      <tr>
+        <th class="p-3 text-center text-[14px] font-medium text-white uppercase tracking-wider">#</th>
+        <th class="p-3 text-left text-[14px] font-medium text-white uppercase tracking-wider">Job</th>
+        <th class="p-3 text-left text-[14px] font-medium text-white uppercase tracking-wider">Published Date</th>
+        <th class="p-3 text-center text-[14px] font-medium text-white uppercase tracking-wider">Sent Email(s)</th>
+        <th class="p-3 text-center text-[14px] font-medium text-white uppercase tracking-wider">Read Email(s)</th>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-200">
+      <ng-container *ngIf="jobs.length > 0; else noData">
+        <tr *ngFor="let job of jobs; let i = index">
+          <td class="p-3 text-center text-[12px]">
+            <span class="bg-[#595959] text-white rounded-full w-[18px] h-[18px] flex items-center justify-center font-bold">
+              {{ i + 1 }}
+            </span>
+          </td>
+          <td class="p-3 text-left whitespace-nowrap text-sm font-medium text-gray-900">{{ job.job }}</td>
+          <td class="p-3 text-left whitespace-nowrap text-sm text-gray-500">
+            <span class="icon icon-calendar mr-2"></span>{{ job.publishDate | date }}
+          </td>
+          <td class="p-3 text-center whitespace-nowrap text-sm text-gray-500">{{ job.sentEmail }}</td>
+          <td class="p-3 text-center whitespace-nowrap text-sm text-gray-500">{{ job.readEmail }}</td>
+        </tr>
       </ng-container>
-      </tbody>
-    </table>
-  </div>
+    </tbody>
+  </table>
+</div>
 
-  <ng-template #noData>
-    <tr>
-      <td colspan="4" class="px-6 mt-16 py-4 text-center text-sm font-medium text-gray-500">
-        <div class="flex justify-center mb-2">
-          <i class="icon icon-envelope" style="font-size: 64px; color: gray;"></i>
-        </div>
-        <span class="text-[16px] font-semibold text-[#0e73a9]">No data found</span>
-      </td>
-    </tr>
-  </ng-template>
-  
-
+<!-- No Data Found Message -->
+<ng-template #noData>
+  <tr>
+    <td colspan="5" class="px-6 py-16 text-center text-sm font-medium text-gray-500">
+      <div class="flex flex-col items-center">
+        <i class="icon icon-envelope text-gray-400" style="font-size: 64px;"></i>
+        <span class="text-[16px] font-semibold text-[#0e73a9] mt-2">No data found</span>
+      </div>
+    </td>
+  </tr>
+</ng-template>
     <div class="flex flex-col items-start mt-4">
       <div class="flex space-x-2 mb-12 mt-2">
         <button
