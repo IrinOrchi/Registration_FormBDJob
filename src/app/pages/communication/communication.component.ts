@@ -108,6 +108,9 @@ export class CommunicationComponent implements OnInit {
   redirectToSentEmails() {
     this.router.navigate(['/sent-emails']); 
   }
+  redirectToReadEmails() {
+    this.router.navigate(['/read-emails']);
+  }
 }
   
 

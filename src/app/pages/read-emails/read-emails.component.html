@@ -1,0 +1,153 @@
+<div class="container mx-auto p-4">
+    <!-- Search Bar -->
+    <div class="bg-gray-100 p-4 rounded-lg shadow-md flex items-center">
+      <input type="text" class="p-2 w-full rounded-md border" placeholder="Search by job title" />
+      <button class="ml-2 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
+        Search
+      </button>
+    </div>
+    <!-- Filters -->
+    <div class="mt-4 text-gray-700">
+      <div class="flex flex-wrap gap-4">
+        <label>
+          <input type="radio" name="emailCategory" class="mr-2" [checked]="selectedEmailCategory() === 'all'" (change)="updateEmailCategory('all')" />
+          All sent emails
+        </label>
+        <label>
+          <input type="radio" name="emailCategory" class="mr-2" [checked]="selectedEmailCategory() === 'cv'" (change)="updateEmailCategory('cv')" />
+          Sent emails using CV Bank
+        </label>
+        <label>
+          <input type="radio" name="emailCategory" class="mr-2" [checked]="selectedEmailCategory() === 'applicants'" (change)="updateEmailCategory('applicants')" />
+          Sent emails to applicants
+        </label>
+      </div>
+      <div class="flex flex-wrap gap-4 mt-2">
+        <label>
+          <input type="radio" name="readStatus" class="mr-2" [checked]="selectedReadStatus() === 'read'" (change)="updateReadStatus('read')" />
+          Read
+        </label>
+        <label>
+          <input type="radio" name="readStatus" class="mr-2" [checked]="selectedReadStatus() === 'unread'" (change)="updateReadStatus('unread')" />
+          Unread
+        </label>
+        <label>
+          <input type="radio" name="readStatus" class="mr-2" [checked]="selectedReadStatus() === 'all'" (change)="updateReadStatus('all')" />
+          All
+        </label>
+      </div>
+      <!-- Invite Checkbox -->
+      <div class="mt-2">
+        <label>
+          <input 
+            type="checkbox" 
+            class="mr-2" 
+            [disabled]="isInviteDisabled()" 
+            [checked]="isInviteChecked()" 
+            (change)="toggleInviteSelection()"
+            [style.cursor]="isInviteDisabled() ? 'not-allowed' : 'pointer'" 
+          />
+          Invite
+        </label>
+      </div>
+    </div>
+  
+    <!-- Loader -->
+  <div *ngIf="loading()" class="flex justify-center items-center py-10">
+    <div class="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+  </div>
+  
+    <!-- Table -->
+    <div *ngIf="!loading()" class="mt-4 bg-white shadow-md rounded-lg overflow-hidden">
+      <table class="w-full text-left border-collapse">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="p-3">
+              <input type="checkbox" />
+            </th>
+            <th class="p-3">Name</th>
+            <th class="p-3">Subject</th>
+            <th class="p-3">Date</th>
+            <th class="p-3">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="emails.length === 0; else dataTable">
+            <tr>
+              <td colspan="5" class="py-16 text-center text-sm font-medium text-gray-500">
+                <div class="flex flex-col justify-center items-center">
+                  <i class="icon icon-envelope text-gray-400 text-[64px] mb-2"></i>
+                  <span class="text-[16px] font-bold text-[#0e73a9]">No email is found
+                  </span>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        
+    <!-- Data Table Rows -->
+    <ng-template #dataTable>
+      <tr *ngFor="let email of emails; let i = index" class="border-t">
+        <td class="p-3">
+          <input type="checkbox" />
+        </td>
+        <td class="p-3 flex items-center gap-2 cursor-pointer" (click)="toggleEmailDetail(i)">
+          <span *ngIf="email.isRead" class="icon icon-check-double text-gray-500" title="Read"></span>
+          <span *ngIf="!email.isRead" class="icon icon-check text-gray-500" title="Unread"></span>
+          {{ email.name }}
+        </td>
+        <td class="p-3 font-semibold cursor-pointer" (click)="toggleEmailDetail(i)">
+          {{ email.subject }}
+        </td>
+        <td class="p-3 flex items-center gap-2">
+          <span class="icon icon-calendar text-gray-500"></span> {{ email.date }}
+        </td>
+        <td class="p-3">
+          <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+          (click)="deleteEmail(email.rId)">
+            Delete
+          </button>
+        </td>
+      </tr>
+      <!-- Expanded Email Content -->
+      <tr *ngIf="expandedEmailIndex === emails[0].rlId">
+        <td colspan="5" class="bg-gray-100 p-4">
+          <div class="text-lg font-semibold">Company: {{ emailDetail?.company }}</div>
+          <div class="text-gray-600">Date: {{ emailDetail?.date | date: 'medium' }}</div>
+          <div class="text-gray-700">Subject: {{ emailDetail?.subject }}</div>
+          <div class="mt-2">
+            <div class="font-medium">Sender: {{ emailDetail?.sender }}</div>
+            <div class="font-medium">Designation: {{ emailDetail?.designation }}</div>
+          </div>
+          <div class="mt-2">
+            <div class="font-semibold">Body:</div>
+            <div class="text-gray-700">{{ emailDetail?.body }}</div>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+        </tbody>  
+      </table>
+    </div>
+  
+  <!-- Pagination -->
+  <div class="mt-4 flex justify-center space-x-2">
+    <button class="px-3 py-1 border rounded" [class.bg-blue-500]="currentPage === 1" [class.text-white]="currentPage === 1" (click)="goToPage(1)">
+      1
+    </button>
+    <button *ngIf="currentPage > 2" class="px-3 py-1 border rounded" (click)="goToPage(currentPage - 1)">
+      Prev
+    </button>
+    <button *ngFor="let page of [currentPage - 1, currentPage, currentPage + 1]" [hidden]="page < 2 || page > totalPages - 1"
+      class="px-3 py-1 border rounded" [class.bg-blue-500]="page === currentPage" [class.text-white]="page === currentPage" (click)="goToPage(page)">
+      {{ page }}
+    </button>
+    <button *ngIf="currentPage < totalPages - 1" class="px-3 py-1 border rounded" (click)="goToPage(currentPage + 1)">
+      Next
+    </button>
+    <button class="px-3 py-1 border rounded" [class.bg-blue-500]="currentPage === totalPages" [class.text-white]="currentPage === totalPages"
+      (click)="goToPage(totalPages)">
+      {{ totalPages }}
+    </button>
+  </div>
+  
+  

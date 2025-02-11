@@ -40,9 +40,11 @@
             <div class="flex items-center gap-1 text-gray-700">
               <i class="icon icon-check-double text-gray-600"></i> 
               <span>Read</span>
-              <span class="px-3 text-green-700 bg-[#e8f5e9] border border-[#81c784] rounded-full text-sm font-semibold transition duration-300 hover:bg-green-800 hover:text-white">
+              <button class="px-3 text-green-700 bg-[#e8f5e9] border border-[#81c784] rounded-full text-sm font-semibold transition duration-300 hover:bg-green-800 hover:text-white"
+              (click)="redirectToReadEmails()">
+              
                 {{ readEmails().cv }}
-              </span>
+              </button>
             </div>
           </div>
         </div>
@@ -65,9 +67,10 @@
             <div class="flex items-center gap-1 text-gray-700">
               <i class="icon icon-check-double text-gray-600"></i> 
               <span>Read</span>
-              <span class="px-3 text-green-700 bg-[#e8f5e9] border border-[#81c784] rounded-full text-sm font-semibold transition duration-300 hover:bg-green-800 hover:text-white">
+              <button class="px-3 text-green-700 bg-[#e8f5e9] border border-[#81c784] rounded-full text-sm font-semibold transition duration-300 hover:bg-green-800 hover:text-white"
+              (click)="redirectToReadEmails()">
                 {{ readEmails().applicants }}
-              </span>
+              </button>
             </div>
           </div>
         </div>
@@ -81,7 +84,7 @@
               <i class="icon icon-check text-md text-gray-600"></i> 
               <span>Sent</span>
               <button class="px-3 text-orange-700 bg-[#fbe9e9] border border-orange-300 rounded-full text-sm font-semibold transition duration-300 hover:bg-orange-800 hover:text-white cursor-pointer"
-                      (click)="redirectToSentEmails()">
+                (click)="redirectToSentEmails()">
                 {{ sentEmails().invitation }}
               </button>
             </div>
@@ -90,9 +93,10 @@
             <div class="flex items-center gap-1 text-gray-700">
               <i class="icon icon-check-double text-gray-600"></i> 
               <span>Read</span>
-              <span class="px-3 text-green-700 bg-[#e8f5e9] border border-[#81c784] rounded-full text-sm font-semibold transition duration-300 hover:bg-green-800 hover:text-white">
+              <button class="px-3 text-green-700 bg-[#e8f5e9] border border-[#81c784] rounded-full text-sm font-semibold transition duration-300 hover:bg-green-800 hover:text-white cursor-pointer"
+                (click)="redirectToReadEmails()">
                 {{ readEmails().invitation }}
-              </span>
+              </button>
             </div>
           </div>
         </div>
