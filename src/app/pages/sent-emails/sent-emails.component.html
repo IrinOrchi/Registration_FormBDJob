@@ -155,8 +155,9 @@ Email Template(s)
       <span class="icon icon-calendar text-gray-500"></span> {{ email.date }}
     </td>
     <td class="p-3">
-      <ng-container *ngIf="selectedEmailCategory() === 'ap' || selectedEmailCategory() === 'al';">
-        {{ email.job }}
+      <ng-container *ngIf="selectedEmailCategory() === 'ap' || selectedEmailCategory() === 'al'">
+        <span *ngIf="email.job && email.job !== 'Null'; else noJob">{{ email.job }}</span>
+        <ng-template #noJob></ng-template>
       </ng-container>
     </td>
    

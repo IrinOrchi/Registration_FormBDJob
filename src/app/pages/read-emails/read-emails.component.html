@@ -154,9 +154,11 @@ Email Template(s)
     </td>
     <td class="p-3">
       <ng-container *ngIf="selectedEmailCategory() === 'ap' || selectedEmailCategory() === 'al'">
-        {{ email.job }}
+        <span *ngIf="email.job && email.job !== 'Null'; else noJob">{{ email.job }}</span>
+        <ng-template #noJob></ng-template>
       </ng-container>
     </td>
+    
    
     <td class="p-3">
       <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
