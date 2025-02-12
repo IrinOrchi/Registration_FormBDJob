@@ -38,7 +38,7 @@ Email Template(s)
       placeholder="Search by job title"
       [formControl]="keyword"
       (keyup.enter)="onSearch()" 
-      [disabled]="isInviteDisabled()" 
+      [disabled]="isInviteDisabled() " 
       [style.cursor]="isInviteDisabled() ? 'not-allowed' : 'pointer'" 
 
       />
@@ -133,6 +133,8 @@ Email Template(s)
       
  <!-- Data Table Rows -->
 <ng-template #dataTable>
+  <ng-container *ngIf="jobs.length > 0; else noData">
+
   <tr *ngFor="let email of emails; let i = index" class="border-t">
     <td class="p-3">
       <input type="checkbox" />
@@ -153,7 +155,7 @@ Email Template(s)
       <span class="icon icon-calendar text-gray-500"></span> {{ email.date }}
     </td>
     <td class="p-3">
-      <ng-container *ngIf="selectedEmailCategory() === 'ap' || selectedEmailCategory() === 'al'">
+      <ng-container *ngIf="selectedEmailCategory() === 'ap' || selectedEmailCategory() === 'al';">
         {{ email.job }}
       </ng-container>
     </td>
@@ -165,7 +167,18 @@ Email Template(s)
       </button>
     </td>
   </tr>
-   
+  </ng-container>
+<!-- No Data Found Message -->
+<ng-template #noData>
+  <tr>
+    <td colspan="5" class="px-6 py-16 text-center text-sm font-medium text-gray-500">
+      <div class="flex flex-col items-center">
+        <i class="icon icon-envelope text-gray-400" style="font-size: 64px;"></i>
+        <span class="text-[16px] font-semibold text-[#0e73a9] mt-2">No data found</span>
+      </div>
+    </td>
+  </tr>
+</ng-template>
 
    <ng-container *ngFor="let email of emails; let i = index">
   <tr *ngIf="expandedEmailIndex === i" class="border-t bg-gray-100">
