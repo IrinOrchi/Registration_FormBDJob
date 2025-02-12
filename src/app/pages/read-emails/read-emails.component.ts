@@ -1,16 +1,19 @@
 import { Component, signal } from '@angular/core';
 import { CommunicationService } from '../../Services/communication.service';
 import { CommonModule } from '@angular/common';
+import { Job } from '../../Models/communication';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-read-emails',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './read-emails.component.html',
   styleUrl: './read-emails.component.scss'
 })
 export class ReadEmailsComponent {
-   emails: any[] = [];
+    jobs: Job[] = [];
+    emails: any[] = [];
     totalRecords: number = 0;
     totalPages: number = 0;
     currentPage: number = 1;
@@ -18,7 +21,8 @@ export class ReadEmailsComponent {
     loading = signal<boolean>(false); 
     emailDetail: any = null; 
     expandedEmailIndex: number | null = null;  
-  
+    keyword = new FormControl('');
+   
   
   
     selectedEmailCategory = signal<string>('cv');
@@ -101,7 +105,23 @@ export class ReadEmailsComponent {
       });
     }
     
+    fetchJobs(searchQuery: string = ''): void {
+      const companyId = this.communicationService.getCompanyId();
+      this.loading.set(true);
+      this.communicationService.getJobEmails(companyId, this.currentPage, searchQuery).subscribe(response => {
+        if (response.data && response.data.list?.length > 0) {
+          this.jobs = response.data.list;
+        } else {
+          this.jobs = [];
+        }
+        this.loading.set(false);
   
+      });
+    }
+    onSearch(): void {
+      const query = this.keyword.value?.trim();
+      this.fetchJobs(query);
+    }
   
     goToPage(pageNo: number): void {
       if (pageNo >= 1 && pageNo <= this.totalPages) {
@@ -153,8 +173,14 @@ export class ReadEmailsComponent {
         }
       });
     }
-    
-    
+    updatePageSize(event: any): void {
+      this.pageSize = parseInt(event.target.value, 10);
+      this.currentPage = 1; 
+      this.loadSentEmails(this.currentPage);
+    }  
+    redirectTo(url: string) {
+      window.location.href = url;
+    }
     
   }
 

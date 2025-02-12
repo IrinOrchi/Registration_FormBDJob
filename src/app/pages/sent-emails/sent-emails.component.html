@@ -1,8 +1,50 @@
-<div class="container mx-auto p-4">
-  <!-- Search Bar -->
-  <div class="bg-gray-100 p-4 rounded-lg shadow-md flex items-center">
-    <input type="text" class="p-2 w-full rounded-md border" placeholder="Search by job title" />
-    <button class="ml-2 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
+<div class="bg-gray-100 h-[auto] w-[auto] p-8">
+  <div class="max-w-6xl mx-auto">
+    <!-- Header Section -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold flex items-center gap-2">
+      </h2>
+      <div class="flex gap-2">
+        <button 
+          class="bg-[#0c6899] hover:bg-[#08547a] text-white px-3 py-2 rounded flex items-center gap-2 transition duration-300"
+          (click)="redirectTo('https://corporate3.bdjobs.com/cvsearch.asp')">
+          <i class="icon icon-search"></i> Search CV Bank
+        </button>
+      
+        <!-- Post a New Job Button -->
+        <button 
+          class="bg-[#008A22] hover:bg-[#006617] text-white px-3 py-2 rounded flex items-center gap-2 transition duration-300"
+          (click)="redirectTo('https://recruiter.bdjobs.com/jobposting/')">
+          <i class="icon icon-plus"></i> Post a New Job
+        </button>
+      </div>
+    </div>
+
+
+<!-- Header -->
+<h2 class="ml-1 text-[18px] text-[#0c6899] font-bold flex items-center gap-2">
+<i class="icon icon-mail-sent text-[#0c6899] mr-18"></i>
+Email Template(s)
+</h2>
+  <div class="bg-white mt-4 rounded-sm border shadow-sm mb-2 p-4">
+  <!-- Description -->
+  <h3 class="text-[16px] font-bold text-gray-700 mb-2">Email Template(s)
+  </h3>  <!-- Search Bar -->
+   <!-- Search Bar -->
+   <div class="relative max-w-6xl mx-auto mt-4">
+    <input
+      type="text"
+      class="border p-1 rounded w-full outline-none focus:to-blue-300 pr-12"
+      placeholder="Search by job title"
+      [formControl]="keyword"
+      (keyup.enter)="onSearch()" 
+      [disabled]="isInviteDisabled()" 
+      [style.cursor]="isInviteDisabled() ? 'not-allowed' : 'pointer'" 
+
+      />
+    <button 
+    class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#008C23] text-white px-4 py-1 rounded hover:bg-[#006617] transition"
+    (click)="onSearch()">
       Search
     </button>
   </div>
@@ -10,7 +52,7 @@
   <div class="mt-4 text-gray-700">
     <div class="flex flex-wrap gap-4">
       <label>
-        <input type="radio" name="emailCategory" class="mr-2" [checked]="selectedEmailCategory() === 'all'" (change)="updateEmailCategory('all')" />
+        <input type="radio" name="emailCategory" class="mr-2" [checked]="selectedEmailCategory() === 'al'" (change)="updateEmailCategory('al')" />
         All sent emails
       </label>
       <label>
@@ -18,7 +60,7 @@
         Sent emails using CV Bank
       </label>
       <label>
-        <input type="radio" name="emailCategory" class="mr-2" [checked]="selectedEmailCategory() === 'applicants'" (change)="updateEmailCategory('applicants')" />
+        <input type="radio" name="emailCategory" class="mr-2" [checked]="selectedEmailCategory() === 'ap'" (change)="updateEmailCategory('ap')" />
         Sent emails to applicants
       </label>
     </div>
@@ -58,17 +100,22 @@
 </div>
 
   <!-- Table -->
-  <div *ngIf="!loading()" class="mt-4 bg-white shadow-md rounded-lg overflow-hidden">
-    <table class="w-full text-left border-collapse">
-      <thead class="bg-gray-200">
+  <div *ngIf="!loading()" class="bg-white  rounded-md overflow-hidden">
+    <table class="w-full border border-gray-100">
+      <thead class="bg-[#f5f5f5] text-black text-[14px] px-6 py-10">
         <tr>
           <th class="p-3">
             <input type="checkbox" />
           </th>
-          <th class="p-3">Name</th>
-          <th class="p-3">Subject</th>
-          <th class="p-3">Date</th>
-          <th class="p-3">Action</th>
+          <th class="p-3">view
+          <select class="border p-2 rounded" (change)="updatePageSize($event)">
+            <option *ngFor="let size of [10, 15, 20]" [value]="size">{{ size }}</option>
+          </select>
+        </th>
+          <th class="p-3"></th>
+          <th class="p-3"></th>
+          <th class="p-3"></th>
+          <th class="p-3"></th>
         </tr>
       </thead>
       <tbody>
@@ -106,18 +153,24 @@
       <span class="icon icon-calendar text-gray-500"></span> {{ email.date }}
     </td>
     <td class="p-3">
+      <ng-container *ngIf="selectedEmailCategory() === 'ap' || selectedEmailCategory() === 'al'">
+        {{ email.job }}
+      </ng-container>
+    </td>
+   
+    <td class="p-3">
       <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
       (click)="deleteEmail(email.rId)">
         Delete
       </button>
     </td>
   </tr>
+   
 
    <ng-container *ngFor="let email of emails; let i = index">
   <tr *ngIf="expandedEmailIndex === i" class="border-t bg-gray-100">
     <td colspan="5" class="p-4">
       <div class="relative">
-        <!-- Close Button -->
         <button class="absolute top-2 right-2 bg-gray-300 hover:bg-gray-400 text-gray-800 px-3 py-1 rounded-md"
           (click)="toggleEmailDetail(i)">
           Close <i class="icon-times ml-1"></i>
@@ -166,7 +219,7 @@
       </tbody>  
     </table>
   </div>
-</div>
+
 
 <!-- Pagination -->
 <div class="mt-4 flex justify-center space-x-2">
@@ -188,4 +241,7 @@
     {{ totalPages }}
   </button>
 </div>
+  </div>
+</div>
+
 

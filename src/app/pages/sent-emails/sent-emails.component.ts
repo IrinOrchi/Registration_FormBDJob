@@ -1,15 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { CommunicationService } from '../../Services/communication.service';
+import { Job } from '../../Models/communication';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-sent-emails',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './sent-emails.component.html',
   styleUrl: './sent-emails.component.scss'
 })
 export class SentEmailsComponent {
+  jobs: Job[] = [];
+
   emails: any[] = [];
   totalRecords: number = 0;
   totalPages: number = 0;
@@ -17,9 +21,8 @@ export class SentEmailsComponent {
   pageSize: number = 10;
   loading = signal<boolean>(false); 
   emailDetail: any = null; 
-  expandedEmailIndex: number | null = null;  
-
-
+  expandedEmailIndex: number | null = null; 
+  keyword = new FormControl('');
 
   selectedEmailCategory = signal<string>('cv');
   selectedReadStatus = signal<string>('all');
@@ -29,10 +32,13 @@ export class SentEmailsComponent {
 
   ngOnInit(): void {
     this.loadSentEmails(this.currentPage);
+    this.fetchJobs();
+
   }
 
   loadSentEmails(pageNo: number, r_Type?: number): void {
     this.loading.set(true);
+    this.emails = [];
     const companyId = this.communicationService.getCompanyId();
   
     let category = this.selectedEmailCategory();
@@ -65,7 +71,7 @@ export class SentEmailsComponent {
   
   handleResponse(response: any, pageNo: number): void {
     if (response.responseType === 'success' && response.data) {
-      this.emails = response.data.emails;
+      this.emails = [...response.data.emails];
       this.totalRecords = response.data.totalRecords;
       this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
       this.currentPage = pageNo;
@@ -83,6 +89,27 @@ export class SentEmailsComponent {
       this.getEmailDetails(rId, name);
     }
   }
+  redirectTo(url: string) {
+    window.location.href = url;
+  }
+  
+  fetchJobs(searchQuery: string = ''): void {
+    const companyId = this.communicationService.getCompanyId();
+    this.loading.set(true);
+    this.communicationService.getJobEmails(companyId, this.currentPage, searchQuery).subscribe(response => {
+      if (response.data && response.data.list?.length > 0) {
+        this.jobs = response.data.list;
+      } else {
+        this.jobs = [];
+      }
+      this.loading.set(false);
+
+    });
+  }
+  onSearch(): void {
+    const query = this.keyword.value?.trim();
+    this.fetchJobs(query);
+  }
 
   getEmailDetails(rId: number, name: string): void {
     this.communicationService.getEmailDetails(rId, name).subscribe({
@@ -96,15 +123,17 @@ export class SentEmailsComponent {
       },
     });
   }
-  
-
-
   goToPage(pageNo: number): void {
     if (pageNo >= 1 && pageNo <= this.totalPages) {
       this.loadSentEmails(pageNo);
     }
   }
-
+  updatePageSize(event: any): void {
+    this.pageSize = parseInt(event.target.value, 10);
+    this.currentPage = 1; 
+    this.loadSentEmails(this.currentPage);
+  }
+  
   updateEmailCategory(category: string): void {
     this.selectedEmailCategory.set(category);
     this.isInviteChecked.set(false); 
