@@ -26,7 +26,7 @@ export class CommunicationComponent implements OnInit {
   loading = signal<boolean>(false); 
 
   totalPagesArray: number[] = [];
-  companyId: string = 'ZxU0PRC='; 
+  companyId: string = 'IECwPxC='; 
   constructor(private communicationService: CommunicationService, private router: Router) {}
 
   ngOnInit(): void {

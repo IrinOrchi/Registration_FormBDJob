@@ -10,6 +10,7 @@ import { TemplateViewerComponent } from './pages/template-viewer/template-viewer
 import { TemplateEditorComponent } from './pages/template-editor/template-editor.component';
 import { SentEmailsComponent } from './pages/sent-emails/sent-emails.component';
 import { ReadEmailsComponent } from './pages/read-emails/read-emails.component';
+import { TemplateCreatorComponent } from './pages/template-creator/template-creator.component';
 
 export const routes: Routes = [
     {
@@ -59,5 +60,9 @@ export const routes: Routes = [
     {
         path:'read-emails',
         component: ReadEmailsComponent
+    },
+    {
+        path:'template-creator',
+        component: TemplateCreatorComponent
     }
 ];

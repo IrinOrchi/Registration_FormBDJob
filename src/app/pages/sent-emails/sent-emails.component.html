@@ -140,11 +140,10 @@ Email Template(s)
       <input type="checkbox" />
     </td>
     <td class="p-3">
-      <button class="flex items-center gap-2 cursor-pointer" (click)="toggleEmailDetail(i)">
+      <button class="flex items-center gap-4 cursor-pointer" (click)="toggleEmailDetail(i)">
         <span *ngIf="email.isRead" class="icon icon-check-double text-gray-500" title="Read"></span>
         <span *ngIf="!email.isRead" class="icon icon-check text-gray-500" title="Unread"></span>
-        {{ email.name }}
-      </button>
+        <span class="ml-8">{{ email.name }}</span>      </button>
     </td>
     <td class="p-3">
       <button class="font-semibold cursor-pointer" (click)="toggleEmailDetail(i)">
