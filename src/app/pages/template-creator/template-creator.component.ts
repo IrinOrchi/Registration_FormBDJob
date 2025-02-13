@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommunicationComponent } from '../communication/communication.component';
 import { CommunicationService } from '../../Services/communication.service';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
@@ -16,10 +16,13 @@ import { EmailTemplateModalComponent } from '../../components/email-template-mod
 export class TemplateCreatorComponent implements OnInit {
   templateForm!: FormGroup;
   companyId: string = '';
-  isAccordionOpen = false;
   isTyping = false;
   currentCharCount = 0;
   maxCharacters = 3400;
+  isAccordionOpen = true;
+
+  @ViewChild('emailModal') emailModal!: EmailTemplateModalComponent;
+  
 
   constructor(
     private router: Router, private activatedRoute: ActivatedRoute, private communicationService: CommunicationService, private fb: FormBuilder
@@ -47,10 +50,6 @@ export class TemplateCreatorComponent implements OnInit {
     this.isTyping = this.currentCharCount > 0;
   }
 
-  toggleAccordion() {
-    this.isAccordionOpen = !this.isAccordionOpen;
-  }
-
   saveTemplate() {
     if (this.templateForm.valid) {
       this.communicationService.createTemplate(this.templateForm.value).subscribe(
@@ -69,12 +68,16 @@ export class TemplateCreatorComponent implements OnInit {
   }
 
   redirectTo(url: string) {
-    window.open(url, '_blank');
+    window.location.href = url;
   }
 
-  openExample() {
-    console.log('Opening email example...');
+  toggleAccordion() {
+    this.isAccordionOpen = !this.isAccordionOpen;
   }
+  openExample() {
+    this.emailModal.openModal();
+  }
+  
 }
 
 

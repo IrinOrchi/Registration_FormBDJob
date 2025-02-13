@@ -53,7 +53,6 @@ export class TemplateEditorComponent {
               content: templateText
             });
   
-            // Update form fields dynamically
             this.templateForm.patchValue({
               name: templateTitle,
               content: templateText
