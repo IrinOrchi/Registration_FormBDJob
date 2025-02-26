@@ -8,7 +8,7 @@ import { SalesContactComponent } from './components/sales-contact/sales-contact.
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent,SalesContactComponent],
+  imports: [RouterOutlet, NavbarComponent,FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
