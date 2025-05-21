@@ -495,7 +495,7 @@ onNewIndustryAdded(event: { IndustryName: string }): void {
     });
   }
 
-onNewIndustryTypeChange(newIndustryId: Event): void {
+onNewIndustryTypeChange(newIndustryId: number): void {
   this.employeeForm.get('industryType')?.setValue(newIndustryId); 
 }
 onIndustryTypeChange(selectedIndustryId: string | number): void {
